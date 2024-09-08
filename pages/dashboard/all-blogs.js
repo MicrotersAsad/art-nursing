@@ -9,7 +9,6 @@ function AllBlogs() {
   const [blogs, setBlogs] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(''); // Single select
-  const [selectedLanguage, setSelectedLanguage] = useState(''); // Single select
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [blogsPerPage] = useState(10);
@@ -19,9 +18,6 @@ function AllBlogs() {
 
   useEffect(() => {
     fetchCategories();
-  }, []);
-
-  useEffect(() => {
     fetchBlogs();
   }, [showDrafts]);
 
@@ -63,10 +59,6 @@ function AllBlogs() {
     setSelectedCategory(e.target.value);
   };
 
-  const handleLanguageChange = (e) => {
-    setSelectedLanguage(e.target.value);
-  };
-
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this blog?')) {
       try {
@@ -85,28 +77,11 @@ function AllBlogs() {
     }
   };
 
-  const getCategoriesArray = (categories) => {
-    if (!categories) return [];
-    if (Array.isArray(categories)) {
-      return categories;
-    }
-    try {
-      return JSON.parse(categories);
-    } catch (e) {
-      return categories.split(',').map(cat => cat.trim());
-    }
-  };
-
-  const filteredBlogs = blogs.flatMap((blog) => {
-    const translations = blog.translations || {};
-    return Object.entries(translations).map(([language, translation]) => {
-      const categoryArray = getCategoriesArray(translation.category);
-      const categoryMatch = !selectedCategory || selectedCategory === 'All' || categoryArray.includes(selectedCategory);
-      const languageMatch = !selectedLanguage || selectedLanguage === 'All' || selectedLanguage === language;
-      const searchMatch = !search || translation.title.toLowerCase().includes(search.toLowerCase());
-      const draftMatch = showDrafts ? translation.isDraft : !translation.isDraft;
-      return categoryMatch && languageMatch && searchMatch && draftMatch ? { ...translation, _id: blog._id, language, languages: Object.keys(translations).join(', ') } : null;
-    }).filter(blog => blog !== null);
+  const filteredBlogs = blogs.filter((blog) => {
+    const categoryMatch = !selectedCategory || selectedCategory === 'All' || blog.category.includes(selectedCategory);
+    const searchMatch = !search || blog.title.toLowerCase().includes(search.toLowerCase());
+    const draftMatch = showDrafts ? blog.isDraft : !blog.isDraft;
+    return categoryMatch && searchMatch && draftMatch;
   });
 
   const indexOfLastBlog = currentPage * blogsPerPage;
@@ -159,30 +134,6 @@ function AllBlogs() {
               ))}
             </select>
           </div>
-          <div className="relative ml-0 md:ml-3 mb-3 md:mb-0">
-            <select
-              value={selectedLanguage}
-              onChange={handleLanguageChange}
-              className="block appearance-none w-full bg-white border border-gray-300 rounded-md py-2 px-4 text-sm leading-tight focus:outline-none focus:border-blue-500"
-            >
-              <option value="All">All Languages</option>
-              <option value="en">English</option>
-              <option value="fr">French</option>
-              <option value="zh-HANT">中国传统的</option>
-              <option value="zh-HANS">简体中文</option>
-              <option value="nl">Nederlands</option>
-              <option value="gu">ગુજરાતી</option>
-              <option value="hi">हिंदी</option>
-              <option value="it">Italiano</option>
-              <option value="ja">日本語</option>
-              <option value="ko">한국어</option>
-              <option value="pl">Polski</option>
-              <option value="pt">Português</option>
-              <option value="ru">Русский</option>
-              <option value="es">Español</option>
-              <option value="de">Deutsch</option>
-            </select>
-          </div>
           <div className="relative ml-0 md:ml-3 mb-3 md:mb-0 flex items-center">
             <label className="mr-2">Show Drafts</label>
             <input
@@ -210,7 +161,6 @@ function AllBlogs() {
                   </th>
                   <th className="py-2 px-4 border-b">Title</th>
                   <th className="py-2 px-4 border-b">Category</th>
-                  <th className="py-2 px-4 border-b">Languages</th>
                   <th className="py-2 px-4 border-b">Views</th>
                   <th className="py-2 px-4 border-b">Actions</th>
                 </tr>
@@ -226,12 +176,7 @@ function AllBlogs() {
                       />
                     </td>
                     <td className="py-2 px-4 border-b">{blog.title}</td>
-                    <td className="py-2 px-4 border-b">
-                      {Array.isArray(blog.category) ? blog.category.join(', ') : blog.category}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {blog.languages}
-                    </td>
+                    <td className="py-2 px-4 border-b">{blog.category}</td>
                     <td className="py-2 px-4 border-b">
                       <span className="flex items-center">
                         <FaEye className="mr-1" /> {blog.viewCount}

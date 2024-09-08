@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     cb(null, `${uniqueSuffix}-${file.originalname}`);
   },
 });
@@ -90,87 +90,39 @@ const handlePostRequest = async (req, res, blogs) => {
   try {
     await runMiddleware(req, res, upload.single('image'));
 
-    const formData = req.body;
-    const {
-      content,
-      title,
-      metaTitle,
-      description,
-      slug,
-      metaDescription,
-      category,
-      language,
-    
-    } = formData;
+    const { content, title, metaTitle, description, slug, metaDescription, category } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-    if (
-      !content ||
-      !title ||
-      !slug ||
-      !metaTitle ||
-      !description ||
-      !metaDescription ||
-      !category ||
-      !language 
-      
-    ) {
+    if (!content || !title || !slug || !metaTitle || !description || !metaDescription || !category) {
       return res.status(400).json({ message: 'Invalid request body' });
     }
 
-    const existingBlog = await blogs.findOne({ 'translations.slug': slug });
+    const existingBlog = await blogs.findOne({ slug });
 
     if (existingBlog) {
-      const updateDoc = {
-        $set: {
-          [`translations.${language}.title`]: title,
-          [`translations.${language}.content`]: content,
-          [`translations.${language}.metaTitle`]: metaTitle,
-          [`translations.${language}.description`]: description,
-          [`translations.${language}.metaDescription`]: metaDescription,
-          [`translations.${language}.category`]: category,
-          [`translations.${language}.image`]: image,
-          [`translations.${language}.slug`]: slug,
-        },
-      };
-
-      const result = await blogs.updateOne(
-        { _id: existingBlog._id },
-        updateDoc
-      );
-
-      if (result.modifiedCount === 1) {
-        return res.status(200).json({ message: 'Data updated successfully' });
-      } else {
-        return res.status(500).json({ message: 'Failed to update document' });
-      }
-    } else {
-      const doc = {
-        defaultLanguage: language,
-        translations: {
-          [language]: {
-            title,
-            content,
-            metaTitle,
-            description,
-            metaDescription,
-            category,
-            image,
-            slug,
-          },
-        },
-        viewCount: 0,
-        createdAt: new Date(),
-      };
-
-      const result = await blogs.insertOne(doc);
-
-      if (!result.insertedId) {
-        return res.status(500).json({ message: 'Failed to insert document' });
-      }
-
-      res.status(201).json(doc);
+      return res.status(400).json({ message: 'Slug already exists' });
     }
+
+    const doc = {
+      title,
+      content,
+      metaTitle,
+      description,
+      metaDescription,
+      category,
+      image,
+      slug,
+      viewCount: 0,
+      createdAt: new Date(),
+    };
+
+    const result = await blogs.insertOne(doc);
+
+    if (!result.insertedId) {
+      return res.status(500).json({ message: 'Failed to insert document' });
+    }
+
+    res.status(201).json(doc);
   } catch (error) {
     console.error('POST error:', error);
     res.status(500).json({ message: 'Internal server error' });
@@ -179,51 +131,32 @@ const handlePostRequest = async (req, res, blogs) => {
 
 const handlePutRequest = async (req, res, blogs, query) => {
   try {
-    // Connect to the database
-    const { db } = await connectToDatabase();
-    const categoriesCollection = db.collection('categories'); // Add this line
-
     await runMiddleware(req, res, upload.single('image'));
 
     const id = query.id;
-    const { language, category, ...updatedData } = req.body;
+    const { content, title, metaTitle, description, slug, metaDescription, category } = req.body;
 
     if (!id) {
       return res.status(400).json({ message: 'ID is required' });
     }
 
-    // Fetch the full category details based on the provided category ID
-    const categoryData = await categoriesCollection.findOne({ _id: new ObjectId(category) });
-
-    if (!categoryData) {
-      return res.status(400).json({ message: 'Invalid category ID' });
-    }
-
-    // Get the category name based on the selected language or default to English if not available
-    const categoryName = categoryData.translations[language]?.name || categoryData.translations['en'].name;
-    console.log(categoryName);
+    const updatedData = {
+      title,
+      content,
+      metaTitle,
+      description,
+      metaDescription,
+      category,
+      slug,
+    };
 
     if (req.file) {
       updatedData.image = `/uploads/${req.file.filename}`;
     }
 
-    const updateDoc = {
-      $set: {
-        [`translations.${language}.title`]: updatedData.title,
-        [`translations.${language}.content`]: updatedData.content,
-        [`translations.${language}.metaTitle`]: updatedData.metaTitle,
-        [`translations.${language}.description`]: updatedData.description,
-        [`translations.${language}.metaDescription`]: updatedData.metaDescription,
-        [`translations.${language}.category`]: categoryName, // Store category name instead of ID
-        [`translations.${language}.image`]: updatedData.image,
-        [`translations.${language}.slug`]: updatedData.slug,
-
-      },
-    };
-
     const result = await blogs.updateOne(
       { _id: new ObjectId(id) },
-      updateDoc
+      { $set: updatedData }
     );
 
     if (result.modifiedCount === 1) {
@@ -250,46 +183,16 @@ const handleGetRequest = async (req, res, blogs, query) => {
       res.status(200).json(result);
     } else if (query.slug) {
       const slug = query.slug;
-      const result = await blogs.findOne({ 'translations.slug': slug });
+      const result = await blogs.findOne({ slug });
 
       if (!result) {
         return res.status(404).json({ message: 'Resource not found' });
       }
 
       res.status(200).json(result);
-    } else if (query.name && query.role) {
-      // Filtering based on author/editor/developer name
-      const filter = { [query.role]: query.name };
-      const filteredBlogs = await blogs.find(filter).toArray();
-
-      if (filteredBlogs.length === 0) {
-        return res.status(404).json({ message: 'No posts found for this person' });
-      }
-
-      res.status(200).json(filteredBlogs);
     } else {
       const blogsArray = await blogs.find({}).limit(15).toArray();
-      const updatedBlogsArray = blogsArray.map((blog) => {
-        if (!blog.translations) {
-          blog.translations = {};
-        }
-        if (!blog.translations.en) {
-          const title = blog.title || blog.Title || '';
-          const content = blog.content || blog.Content || '';
-          blog.translations.en = {
-            title,
-            content,
-            metaTitle: blog.metaTitle || '',
-            description: blog.description || '',
-            metaDescription: blog.metaDescription || '',
-            category: blog.category || '',
-            image: blog.image || '',
-            slug: blog.slug || createSlug(title),
-          };
-        }
-        return blog;
-      });
-      res.status(200).json(updatedBlogsArray);
+      res.status(200).json(blogsArray);
     }
   } catch (error) {
     console.error('GET error:', error);
@@ -300,46 +203,17 @@ const handleGetRequest = async (req, res, blogs, query) => {
 const handleDeleteRequest = async (req, res, blogs, query) => {
   try {
     const id = query.id;
-    const language = query.language; // Assuming you pass the language in the query string
 
     if (!ObjectId.isValid(id)) {
       return res.status(400).json({ message: 'Invalid ID' });
     }
 
-    const blog = await blogs.findOne({ _id: new ObjectId(id) });
+    const result = await blogs.deleteOne({ _id: new ObjectId(id) });
 
-    if (!blog) {
-      return res.status(404).json({ message: 'Blog post not found' });
-    }
-
-    // Check if the language exists in the translations
-    if (blog.translations && blog.translations[language]) {
-      delete blog.translations[language]; // Remove the specific language translation
-
-      // If no translations remain, delete the entire blog post
-      if (Object.keys(blog.translations).length === 0) {
-        const result = await blogs.deleteOne({ _id: new ObjectId(id) });
-
-        if (result.deletedCount === 1) {
-          res.status(200).json({ message: 'Blog post deleted successfully as no translations remain.' });
-        } else {
-          res.status(500).json({ message: 'Failed to delete blog post.' });
-        }
-      } else {
-        // Otherwise, update the blog post with the remaining translations
-        const result = await blogs.updateOne(
-          { _id: new ObjectId(id) },
-          { $set: { translations: blog.translations } }
-        );
-
-        if (result.modifiedCount === 1) {
-          res.status(200).json({ message: `Translation for language ${language} deleted.` });
-        } else {
-          res.status(500).json({ message: 'Failed to delete the translation.' });
-        }
-      }
+    if (result.deletedCount === 1) {
+      res.status(200).json({ message: 'Blog post deleted successfully' });
     } else {
-      return res.status(404).json({ message: `Translation for language ${language} not found.` });
+      res.status(404).json({ message: 'Blog post not found' });
     }
   } catch (error) {
     console.error('DELETE error:', error);

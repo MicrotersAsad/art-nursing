@@ -11,7 +11,6 @@ function Blogs() {
   const [existingContents, setExistingContents] = useState([]);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedLanguage, setSelectedLanguage] = useState('en');
   const [slug, setSlug] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState('');
@@ -21,51 +20,42 @@ function Blogs() {
   const [image, setImage] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [categories, setCategories] = useState([]);
-  const [authors, setAuthors] = useState([]);
-  const [selectedAuthor, setSelectedAuthor] = useState('');
-  const [selectedEditor, setSelectedEditor] = useState('');
-  const [selectedDeveloper, setSelectedDeveloper] = useState('');
   const [isSlugEditable, setIsSlugEditable] = useState(false);
 
   useEffect(() => {
     fetchCategories();
-    fetchAuthors();
     const savedState = JSON.parse(localStorage.getItem('blogFormState'));
     if (savedState) {
       setQuillContent(savedState.quillContent || '');
       setSelectedCategory(savedState.selectedCategory || '');
-      setSelectedLanguage(savedState.selectedLanguage || 'en');
       setSlug(savedState.slug || '');
       setTitle(savedState.title || '');
       setMetaTitle(savedState.metaTitle || '');
       setDescription(savedState.description || '');
       setMetaDescription(savedState.metaDescription || '');
       setImage(savedState.image || null);
-      
     }
   }, []);
 
   useEffect(() => {
-    if (selectedCategory && selectedLanguage) {
+    if (selectedCategory) {
       fetchContent();
     }
-  }, [selectedCategory, selectedLanguage]);
+  }, [selectedCategory]);
 
   useEffect(() => {
     const formState = {
       quillContent,
       selectedCategory,
-      selectedLanguage,
       slug,
       title,
       metaTitle,
       description,
       metaDescription,
       image,
-  
     };
     localStorage.setItem('blogFormState', JSON.stringify(formState));
-  }, [quillContent, selectedCategory, selectedLanguage, slug, title, metaTitle, description, metaDescription, image,]);
+  }, [quillContent, selectedCategory, slug, title, metaTitle, description, metaDescription, image]);
 
   const fetchCategories = async () => {
     try {
@@ -80,22 +70,9 @@ function Blogs() {
     }
   };
 
-  const fetchAuthors = async () => {
-    try {
-      const response = await fetch('/api/authors');
-      if (!response.ok) {
-        throw new Error('Failed to fetch authors');
-      }
-      const data = await response.json();
-      setAuthors(data);
-    } catch (error) {
-      console.error('Error fetching authors:', error.message);
-    }
-  };
-
   const fetchContent = async () => {
     try {
-      const response = await fetch(`/api/blogs?category=${selectedCategory}&language=${selectedLanguage}`);
+      const response = await fetch(`/api/blogs?category=${selectedCategory}`);
       if (!response.ok) {
         throw new Error('Failed to fetch content');
       }
@@ -109,7 +86,7 @@ function Blogs() {
   };
 
   const handleSubmit = async () => {
-    if (!title || !quillContent || !metaDescription || !metaTitle || !description || !selectedCategory || !selectedLanguage) {
+    if (!title || !quillContent || !metaDescription || !metaTitle || !description || !selectedCategory) {
       setError('Please fill in all the fields.');
       return;
     }
@@ -123,12 +100,10 @@ function Blogs() {
       formData.append('metaTitle', metaTitle);
       formData.append('description', description);
       formData.append('metaDescription', metaDescription);
-      formData.append('language', selectedLanguage);
       formData.append('category', selectedCategory);
       if (imageFile) {
         formData.append('image', imageFile); // Use the image file
       }
-      
       formData.append('slug', slug);
       formData.append('createdAt', new Date().toISOString());
       formData.append('isDraft', JSON.stringify(false));
@@ -161,11 +136,6 @@ function Blogs() {
     setSelectedCategory(e.target.value);
   };
 
-  const handleLanguageChange = (e) => {
-    setSelectedLanguage(e.target.value);
-    setSelectedCategory(''); // Reset selected category when language changes
-  };
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -195,31 +165,6 @@ function Blogs() {
         <h2 className="text-3xl font-semibold mb-6">Add Post</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="col-span-2">
-          <div className="mb-6">
-              <label htmlFor="language" className="block mb-2 text-lg font-medium">Language*</label>
-              <select
-                id="language"
-                value={selectedLanguage}
-                onChange={handleLanguageChange}
-                className="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
-              >
-                <option value="en">English</option>
-                <option value="fr">French</option>
-                <option value="zh-HANT">中国传统的</option>
-                <option value="zh-HANS">简体中文</option>
-                <option value="nl">Nederlands</option>
-                <option value="gu">ગુજરાતી</option>
-                <option value="hi">हिंदी</option>
-                <option value="it">Italiano</option>
-                <option value="ja">日本語</option>
-                <option value="ko">한국어</option>
-                <option value="pl">Polski</option>
-                <option value="pt">Português</option>
-                <option value="ru">Русский</option>
-                <option value="es">Español</option>
-                <option value="de">Deutsch</option>
-              </select>
-            </div>
             <div className="mb-6">
               <label htmlFor="metaTitle" className="block mb-2 text-lg font-medium">Meta Title</label>
               <input
@@ -297,17 +242,13 @@ function Blogs() {
                 className="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
               >
                 <option value="" disabled>Select a category</option>
-                {categories
-                  .filter((category) => category.translations && category.translations[selectedLanguage])
-                  .map((category) => (
-                    <option key={category._id} value={category._id}>
-                      {category.translations[selectedLanguage].name}
-                    </option>
-                  ))}
+                {categories.map((category) => (
+                  <option key={category._id} value={category._id}>
+                    {category.name}
+                  </option>
+                ))}
               </select>
             </div>
-           
-           
             <div className="mb-3">
               <label htmlFor="image" className="block mb-2 text-lg font-medium">Image</label>
               <input

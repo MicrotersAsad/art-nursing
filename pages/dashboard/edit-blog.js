@@ -22,21 +22,15 @@ function EditBlog() {
   const [image, setImage] = useState(null);
   const [categories, setCategories] = useState([]);
   const [isDraft, setIsDraft] = useState(false);
-  const [language, setLanguage] = useState('en'); // Default language
   const [initialImage, setInitialImage] = useState(null);
-  const [authors, setAuthors] = useState([]); // Authors list
-  const [selectedAuthor, setSelectedAuthor] = useState(''); // Selected author
-  const [selectedEditor, setSelectedEditor] = useState(''); // Selected editor
-  const [selectedDeveloper, setSelectedDeveloper] = useState(''); // Selected developer
   const [isSlugEditable, setIsSlugEditable] = useState(false); // Track if slug is editable
 
   useEffect(() => {
     fetchCategories();
-    fetchAuthors();
     if (id) {
-      fetchBlogData(id, language);
+      fetchBlogData(id);
     }
-  }, [id, language]);
+  }, [id]);
 
   useEffect(() => {
     // Automatically generate a slug from the title
@@ -69,20 +63,7 @@ function EditBlog() {
     }
   };
 
-  const fetchAuthors = async () => {
-    try {
-      const response = await fetch('/api/authors');
-      if (!response.ok) {
-        throw new Error('Failed to fetch authors');
-      }
-      const data = await response.json();
-      setAuthors(data);
-    } catch (error) {
-      console.error('Error fetching authors:', error.message);
-    }
-  };
-
-  const fetchBlogData = async (id, lang) => {
+  const fetchBlogData = async (id) => {
     try {
       const response = await fetch(`/api/blogs?id=${id}`);
       if (!response.ok) {
@@ -90,30 +71,15 @@ function EditBlog() {
       }
       const data = await response.json();
 
-      if (data.translations && data.translations[lang]) {
-        const translation = data.translations[lang];
-
-        // Set the state with the fetched data
-        setQuillContent(translation.content || '');
-        setSelectedCategory(translation.category?._id || '');
-        setTitle(translation.title || '');
-        setMetaTitle(translation.metaTitle || '');
-        setSlug(translation.slug || '');
-        setMetaDescription(translation.metaDescription || '');
-        setDescription(translation.description || '');
-        setInitialImage(translation.image || '');
-
-      } else {
-        // Handle the case where translation for the selected language does not exist
-        setQuillContent('');
-        setSelectedCategory('');
-        setTitle('');
-        setSlug('');
-        setMetaTitle('');
-        setMetaDescription('');
-        setDescription('');
-        
-      }
+      // Set the state with the fetched data
+      setQuillContent(data.content || '');
+      setSelectedCategory(data.category?._id || '');
+      setTitle(data.title || '');
+      setMetaTitle(data.metaTitle || '');
+      setSlug(data.slug || '');
+      setMetaDescription(data.metaDescription || '');
+      setDescription(data.description || '');
+      setInitialImage(data.image || '');
       setIsDraft(data.isDraft || false);
     } catch (error) {
       console.error('Error fetching blog data:', error.message);
@@ -140,7 +106,6 @@ function EditBlog() {
       formData.append('category', selectedCategory); // Save category ID
       formData.append('createdAt', new Date().toISOString());
       formData.append('isDraft', JSON.stringify(isDraft));
-      formData.append('language', language); // Append language
 
       const response = await fetch(`/api/blogs?id=${id}`, {
         method,
@@ -159,7 +124,7 @@ function EditBlog() {
       console.error('Error updating content:', error.message);
       setError(error.message);
     }
-  }, [quillContent, selectedCategory, metaTitle, metaDescription, description, title, slug, image, initialImage, isDraft, id, router, language]);
+  }, [quillContent, selectedCategory, metaTitle, metaDescription, description, title, slug, image, initialImage, isDraft, id, router]);
 
   const handleQuillChange = useCallback((newContent) => {
     setQuillContent(newContent);
@@ -180,26 +145,6 @@ function EditBlog() {
     setIsDraft(e.target.value === 'Draft');
   };
 
-  const handleLanguageChange = (e) => {
-    setLanguage(e.target.value);
-    setSelectedCategory(''); // Reset selected category when language changes
-    if (id) {
-      fetchBlogData(id, e.target.value); // Refetch blog data for the new language
-    }
-  };
-
-  const handleAuthorChange = (e) => {
-    setSelectedAuthor(e.target.value);
-  };
-
-  const handleEditorChange = (e) => {
-    setSelectedEditor(e.target.value);
-  };
-
-  const handleDeveloperChange = (e) => {
-    setSelectedDeveloper(e.target.value);
-  };
-
   const toggleSlugEditable = () => {
     setIsSlugEditable(!isSlugEditable);
   };
@@ -209,32 +154,6 @@ function EditBlog() {
       <div className="container mx-auto p-5 bg-gray-100 rounded-lg shadow-md">
         <h2 className="text-3xl font-semibold mb-6">Edit Blog</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="mb-3">
-            <label htmlFor="language" className="block mb-2 text-lg font-medium">Language*</label>
-            <select
-              id="language"
-              value={language}
-              onChange={handleLanguageChange}
-              className="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
-            >
-              <option value="en">English</option>
-              <option value="fr">French</option>
-              <option value="zh-HANT">中国传统的</option>
-              <option value="zh-HANS">简体中文</option>
-              <option value="nl">Nederlands</option>
-              <option value="gu">ગુજરાતી</option>
-              <option value="hi">हिंदी</option>
-              <option value="it">Italiano</option>
-              <option value="ja">日本語</option>
-              <option value="ko">한국어</option>
-              <option value="pl">Polski</option>
-              <option value="pt">Português</option>
-              <option value="ru">Русский</option>
-              <option value="es">Español</option>
-              <option value="de">Deutsch</option>
-              {/* Add more languages as needed */}
-            </select>
-          </div>
           <div className="mb-3">
             <label htmlFor="metaTitle" className="block mb-2 text-lg font-medium">Meta Title</label>
             <input
@@ -254,13 +173,11 @@ function EditBlog() {
               className="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
             >
               <option value="" disabled>Select a category</option>
-              {categories
-                .filter((category) => category.translations && category.translations[language])
-                .map((category) => (
-                  <option key={category._id} value={category._id}>
-                    {category.translations[language].name || category.translations['en'].name}
-                  </option>
-                ))}
+              {categories.map((category) => (
+                <option key={category._id} value={category._id}>
+                  {category.name}
+                </option>
+              ))}
             </select>
           </div>
           <div className="mb-3">
@@ -324,9 +241,6 @@ function EditBlog() {
             />
             <p className="text-gray-600 text-sm mt-1">Description max 200 characters</p>
           </div>
-       
-       
-        
           <div className="mb-3">
             <label htmlFor="image" className="block mb-2 text-lg font-medium">Image</label>
             <input
