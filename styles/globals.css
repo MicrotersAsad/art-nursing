@@ -1,0 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Raleway', sans-serif;
+}
+header{
+    width: 100vw!important;
+}
+/* styles/custom.css */
+.header-background {
+    background-image: url('../public/img/Untitled-design.png'); /* Update the path to your background image */
+    background-size: cover;
+    background-position: center;
+    height: 150px;
+  }
+  
+  .header-logo {
+    height: 100px;
+    width: 100px;
+  }
+  
+ 
+  
+  .nav-item:hover {
+    background-color: #004c99; /* Exact hover background color */
+  }
+  
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 999;
+    top: 100%;
+    left: 0;
+    width: 200px;
+  }
+  
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+  
+  .dropdown-menu a {
+    display: block;
+    padding: 5px 10px;
+    color: black;
+  }
+  
+  .dropdown-menu a:hover {
+    background-color: #f2f2f2;
+  }
+  
+  .top-bar {
+    background-color: #003366;
+    height: 35px;
+    font-size: 14px;
+  }
+  
+  .top-bar a {
+    color: #ffcc00;
+  }
+  
+  .navbar {
+    background-color: #00509e;
+    height: 50px;
+  }
+  
+  .nav-link {
+    font-size: 16px;
+    color: white;
+    padding: 0 15px;
+    line-height: 50px;
+  }
+  
+  .nav-link:hover {
+    color: #ffcc00;
+  }
+  
+  /* Custom Colors for Exact Match */
+.bg-top-bar {
+    background-color: #004080; /* Matches the exact dark blue */
+  }
+  
+  .text-highlight {
+    color: #ffcc00; /* Matches the exact yellow */
+  }
+  
+  .navbar-background {
+    background-color: #00509e; /* For the navigation bar */
+  }
+  
+  .dropdown-hover-bg {
+    background-color: #004c99; /* Dropdown background on hover */
+  }
+  
+  .dropdown-item-hover {
+    background-color: #f2f2f2; /* Slightly lighter background for dropdown hover */
+  }
+  /* styles/custom.css */
+.group:hover .group-hover\\:block {
+    display: block;
+  }
+  
+  .dropdown-menu {
+    display: none;
+  }
+  
+  .group:hover .dropdown-menu {
+    display: block;
+  }
+  
+  nav a {
+    padding: 0.75rem 1.5rem;
+    display: inline-block;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  nav a:hover {
+    color: #ffcc00;
+  }
+  /* For hover button effect with borders and background color */
+
+  
+  .navbar-item:hover {
+    background-color: #ffcc00;
+    color: #004080;
+  }
+  
+  .navbar-item:hover .dropdown-menu {
+    display: block;
+  }
+  
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #004080;
+    border-radius: 0.5rem;
+    z-index: 10;
+  }
+  
+  .dropdown-menu a {
+    display: block;
+    padding: 10px;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+  
+  .dropdown-menu a:hover {
+    background-color: #ffcc00;
+    color: #004080;
+  }
+  
+  /* Responsive for Mobile */
+  @media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+    }
+  
+    .navbar-item {
+      width: 100%;
+      text-align: left;
+    }
+  
+    .dropdown-menu {
+      position: static;
+      width: 100%;
+    }
+  }
+  
+  .sidebar {
+    width: 250px;
+    transition: width 0.3s ease;
+    background-color: #f8f9fa;
+  }
+  
+  .sidebar.collapsed {
+    width: 80px;
+  }
+  
+  .main-content {
+    margin-left: 250px; /* Adjust to match sidebar width */
+    transition: margin-left 0.3s ease;
+  }
+  
+  .sidebar.collapsed + .main-content {
+    margin-left: 80px;
+  }
+  
+  .profile-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px;
+  }
+  
+  .profile-picture {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .profile-name {
+    margin-left: 10px;
+    font-size: 16px;
+    color: #333;
+  }
+  
