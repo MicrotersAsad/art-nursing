@@ -1,4 +1,3 @@
-import bcrypt from 'bcryptjs'; // bcryptjs is commonly used in Node.js apps
 import jwt from 'jsonwebtoken';
 import { connectToDatabase } from '../../utils/mongodb';
 
@@ -9,47 +8,39 @@ export default async function handler(req, res) {
 
   const { email, password } = req.body;
 
-  // Ensure email and password are provided
   if (!email || !password) {
     return res.status(400).json({ message: 'Email and password are required' });
   }
 
-  // Check if the JWT secret is present in the environment variables
   if (!process.env.NEXT_PUBLIC_JWT_SECRET) {
     return res.status(500).json({ message: 'Server configuration error. Missing JWT Secret.' });
   }
 
   try {
-    // Connect to the database
     const { db } = await connectToDatabase();
-  
-    // Find user by email, only retrieve necessary fields (including profileImage)
+
+    // Find user by email, retrieve profileImage field
     const user = await db.collection('user').findOne(
       { email },
       { projection: { _id: 1, email: 1, password: 1, username: 1, role: 1, profileImage: 1 } }
     );
-  
-    console.log('User found:', user); // Add this line to log the user object
-  
-    // Validate if the user exists
+
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
-  
-    // Compare the hashed password with the user's input
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+
+    // Remove bcrypt for plain password comparison
+    if (password !== user.password) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
-  
-    // Generate JWT token for the authenticated user
+
+    // Include profileImage in JWT token
     const token = jwt.sign(
-      { id: user._id, email: user.email, username: user.username, role: user.role },
+      { id: user._id, email: user.email, username: user.username, role: user.role, profileImage: user.profileImage },
       process.env.NEXT_PUBLIC_JWT_SECRET,
-      { expiresIn: '1y' } // Set token expiration to 1 year
+      { expiresIn: '1y' }
     );
-  
-    // Return the token along with user profile information
+
     return res.status(200).json({
       message: 'Login successful',
       token,
@@ -58,14 +49,11 @@ export default async function handler(req, res) {
         email: user.email,
         username: user.username,
         role: user.role,
-        profileImage: user.profileImage || null, // Include profileImage if it exists
+        profileImage: user.profileImage || null,
       },
     });
   } catch (error) {
-    // Log the error for debugging
     console.error('Login Error:', error);
-  
-    // Return a generic error message
     return res.status(500).json({ message: 'Internal server error' });
   }
-}  
+}

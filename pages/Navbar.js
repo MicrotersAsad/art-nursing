@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { FaAngleDown } from 'react-icons/fa'; // Import arrow icon from react-icons
 import logo from "../public/img/logo (3).png"; // Ensure this is your logo path
+import Link from 'next/link';
 
 
 const Header = () => {
@@ -74,11 +75,11 @@ const Header = () => {
                 className="header-logo"
               />
               <div>
-                <a href="/">
+                <Link href="/">
                   <h1 className="text-3xl font-bold text-[#004080]">
                     Art Nursing College
                   </h1>
-                </a>
+                </Link>
                 <p className="text-sm text-black">Start Here Succeed Here</p>
               </div>
             </div>
@@ -119,9 +120,9 @@ const Header = () => {
   </button>
   {openDropdown === "aboutFiu" && (
     <div className="absolute z-10 text-white shadow-lg rounded py-2 w-48 left-0 top-full bg-[#004080]">
-      <a href="#" className="block px-4 py-2 hover:bg-[#F4A139] text-white">About Us</a>
-      <a href="#" className="block px-4 py-2 hover:bg-[#F4A139] text-white">Board of Trustees</a>
-      <a href="#" className="block px-4 py-2 hover:bg-[#F4A139] text-white">Syndicate</a>
+     <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139] text-white">About Us</Link>
+     <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139] text-white">Board of Trustees</Link>
+     <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139] text-white">Syndicate</Link>
     </div>
   )}
 </div>
@@ -137,12 +138,12 @@ const Header = () => {
               </button>
               {openDropdown === "administration" && (
                <div className="absolute z-10  text-white shadow-lg rounded  py-2 w-64  left-0 top-full bg-[#004080]"> {/* Adjusted position */}
-                  <a href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Office of Vice Chancellor</a>
-                  <a href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Office of Treasurer</a>
-                  <a href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Office of Registrar</a>
-                  <a href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Controller of Examinations</a>
-                  <a href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Office of Librarian</a>
-                  <a href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Office of Public Relations</a>
+                 <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Office of Vice Chancellor</Link>
+                 <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Office of Treasurer</Link>
+                 <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Office of Registrar</Link>
+                 <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Controller of Examinations</Link>
+                 <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Office of Librarian</Link>
+                 <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Office of Public Relations</Link>
                 </div>
               )}
             </div>
@@ -157,10 +158,10 @@ const Header = () => {
               </button>
               {openDropdown === "academics" && (
                  <div className="absolute z-10  text-white shadow-lg rounded  py-2 w-60  left-0 top-full bg-[#004080]"> {/* Adjusted position */}
-                  <a href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Faculty of Business</a>
-                  <a href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Faculty of Engineering</a>
-                  <a href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Faculty of Law</a>
-                  <a href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Faculty of Science</a>
+                 <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Faculty of Business</Link>
+                 <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Faculty of Engineering</Link>
+                 <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Faculty of Law</Link>
+                 <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Faculty of Science</Link>
                 </div>
               )}
             </div>
@@ -175,9 +176,9 @@ const Header = () => {
               </button>
               {openDropdown === "admission" && (
                 <div className="absolute z-10  text-white shadow-lg rounded  py-2 w-60 left-0 top-full bg-[#004080]"> {/* Adjusted position */}
-                  <a href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Admission Requirements</a>
-                  <a href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Tuition Fees</a>
-                  <a href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Admission Form</a>
+                 <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Admission Requirements</Link>
+                 <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Tuition Fees</Link>
+                 <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Admission Form</Link>
                 </div>
               )}
             </div>
@@ -192,16 +193,16 @@ const Header = () => {
               </button>
               {openDropdown === "fiuWings" && (
                <div className="absolute z-10  text-white shadow-lg rounded  py-2 w-64  left-0 top-full bg-[#004080]"> {/* Adjusted position */}
-                  <a href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Subcategory 1</a>
-                  <a href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Subcategory 2</a>
-                  <a href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Subcategory 3</a>
+                 <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Subcategory 1</Link>
+                 <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Subcategory 2</Link>
+                 <Link href="#" className="block px-4 py-2 hover:bg-[#F4A139]  text-white">Subcategory 3</Link>
                 </div>
               )}
             </div>
 
-            <a href="#" className="hover:bg-[#F4A139] md:border-l md:border-r border-white px-4 py-2 whitespace-nowrap">Career</a>
-            <a href="#" className="hover:bg-[#F4A139] md:border-l md:border-r border-white px-4 py-2 whitespace-nowrap">Contact Us</a>
-            <a href="#" className="hover:bg-[#F4A139] md:border-l md:border-r border-white px-4 py-2 whitespace-nowrap">Web-Mail</a>
+           <Link href="#" className="hover:bg-[#F4A139] md:border-l md:border-r border-white px-4 py-2 whitespace-nowrap">Career</Link>
+           <Link href="#" className="hover:bg-[#F4A139] md:border-l md:border-r border-white px-4 py-2 whitespace-nowrap">Contact Us</Link>
+           <Link href="#" className="hover:bg-[#F4A139] md:border-l md:border-r border-white px-4 py-2 whitespace-nowrap">Web-Mail</Link>
           </nav>
         </div>
       </div>

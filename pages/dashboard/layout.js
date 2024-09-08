@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../contexts/AuthContext';
@@ -20,6 +20,7 @@ import {
   FaUsers,
   FaPlus,
   FaMinus,
+  FaSignOutAlt,
 } from 'react-icons/fa';
 import Image from 'next/image';
 import logo from "../../public/img/logo (3).png";  // Add the logo path here
@@ -28,9 +29,8 @@ const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false); // Handles sidebar collapse
   const [menuOpen, setMenuOpen] = useState('');  // This stores the currently open menu
-
-  const { user } = useAuth();
-  console.log(user); 
+  const [profileDropdown, setProfileDropdown] = useState(false); // Handles the profile dropdown menu
+  const { user, logout } = useAuth();
   
   const router = useRouter();
 
@@ -41,7 +41,21 @@ const Layout = ({ children }) => {
   const isActiveRoute = (route) => {
     return router.pathname === route;
   };
+  const handleLogout = () => {
+    logout(); // Call the logout function to log the user out
+    router.push('/login'); // Redirect to the login page after logout
+  };
 
+
+  // Function to get the correct profile image path
+  const getProfileImagePath = (imagePath) => {
+    if (imagePath) {
+      return imagePath.startsWith('/uploads/')
+        ? imagePath
+        : `/uploads/profileImages/${imagePath}`;
+    }
+    return null;
+  };
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Background Overlay for mobile */}
@@ -177,10 +191,10 @@ const Layout = ({ children }) => {
                 <Link href="/dashboard/categories" passHref>
                   <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Categories</p>
                 </Link>
-                <Link href="/dashboard/all-posts" passHref>
+                <Link href="/dashboard/all-blogs" passHref>
                   <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">All Posts</p>
                 </Link>
-                <Link href="/dashboard/add-post" passHref>
+                <Link href="/dashboard/blogs" passHref>
                   <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Add New Post</p>
                 </Link>
               </div>
@@ -249,7 +263,7 @@ const Layout = ({ children }) => {
                 <Link href="/dashboard/teacher" passHref>
                   <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Teacher's Information</p>
                 </Link>
-                <Link href="/dashboard/achievements" passHref>
+                <Link href="/dashboard/achievement" passHref>
                   <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Achievements</p>
                 </Link>
               </div>
@@ -351,19 +365,19 @@ const Layout = ({ children }) => {
                 <Link href="/dashboard/theme-settings" passHref>
                   <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Theme Settings</p>
                 </Link>
-                <Link href="/dashboard/contact-page" passHref>
+                <Link href="/dashboard/contact" passHref>
                   <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Contact Page</p>
                 </Link>
-                <Link href="/dashboard/all-contact" passHref>
+                <Link href="/dashboard/allcontact" passHref>
                   <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">All Contact</p>
                 </Link>
-                <Link href="/dashboard/smtp-settings" passHref>
+                <Link href="/dashboard/smtp" passHref>
                   <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">SMTP Settings</p>
                 </Link>
                 <Link href="/dashboard/comments" passHref>
                   <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Comments</p>
                 </Link>
-                <Link href="/dashboard/media-upload" passHref>
+                <Link href="/dashboard/media" passHref>
                   <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Media Upload</p>
                 </Link>
                 <Link href="/dashboard/menu-management" passHref>
@@ -402,7 +416,35 @@ const Layout = ({ children }) => {
             />
             <FaSearch className="absolute top-3 right-3 text-gray-400" />
           </div>
-          <Image src={user?.profileImage} width={64} height={64} className='rounded-full border'/>
+         {/* Profile Image and Dropdown */}
+         <div className="relative">
+            {user?.profileImage ? (
+              <div onClick={() => setProfileDropdown(!profileDropdown)} className="cursor-pointer">
+                <Image
+                  src={getProfileImagePath(user.profileImage)} // Ensure correct image path is used
+                  width={64}
+                  height={64}
+                  className="rounded-full border"
+                  alt="Profile Image"
+                  unoptimized
+                />
+              </div>
+            ) : (
+              <p>No Profile Image</p>
+            )}
+
+            {profileDropdown && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-20">
+                <button
+                  onClick={handleLogout}
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full text-left"
+                >
+                  <FaSignOutAlt className="inline mr-2" />
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
           {/* Search Input */}
           <div className="relative">
             <input

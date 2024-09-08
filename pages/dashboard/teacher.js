@@ -134,7 +134,7 @@ const TeacherDashboard = () => {
     <Layout>
       <div className="p-8 bg-gray-50 min-h-screen">
         <div className="max-w-6xl mx-auto bg-white shadow-md rounded-lg p-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6 text-center">teacher Dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-6 text-center">Teacher Dashboard</h1>
 
           {/* teacher Form */}
           <div className="mb-10">

@@ -3,7 +3,7 @@ import Layout from './layout';
 import { ClipLoader } from 'react-spinners';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { FaEnvelope, FaTrashAlt, FaTimes } from 'react-icons/fa';
+import { FaEnvelope, FaTrashAlt, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Users = () => {
   const [users, setUsers] = useState([]); // Ensure users is initialized as an empty array
@@ -18,6 +18,7 @@ const Users = () => {
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [sendingAll, setSendingAll] = useState(false); // To differentiate between single and multiple email sends
   const [sendingEmail, setSendingEmail] = useState(false); // To track email sending status
+  const [visiblePasswords, setVisiblePasswords] = useState({}); // To track the visibility of passwords
 
   useEffect(() => {
     fetchUsers();
@@ -34,15 +35,13 @@ const Users = () => {
           'Authorization': `Bearer ${token}`,
         },
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to fetch users');
       }
-  
+
       const result = await response.json();
-      console.log(result);
       if (result.success && Array.isArray(result.data)) {
-        // Filter out only verified users
         const verifiedUsers = result.data.filter(user => user.verified);
         setUsers(verifiedUsers);
       } else {
@@ -54,7 +53,6 @@ const Users = () => {
       setLoading(false);
     }
   };
-  
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
@@ -80,21 +78,13 @@ const Users = () => {
     }
   };
 
-  const calculateRemainingDays = (date) => {
-    const today = new Date();
-    const subscriptionDate = new Date(date);
-    const differenceInTime = subscriptionDate - today;
-    const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-    return differenceInDays >= 0 ? differenceInDays : 0;
-  };
-
   const handleSendEmail = async (emails) => {
     if (!emailSubject.trim() || !emailMessage.trim()) {
       toast.error('Subject and message cannot be empty');
       return;
     }
 
-    setSendingEmail(true); // Start loading
+    setSendingEmail(true);
     try {
       const response = await fetch('/api/send-email', {
         method: 'POST',
@@ -118,7 +108,7 @@ const Users = () => {
     } catch (error) {
       toast.error('Failed to send email');
     } finally {
-      setSendingEmail(false); // End loading
+      setSendingEmail(false);
     }
   };
 
@@ -158,12 +148,19 @@ const Users = () => {
     });
   };
 
+  const togglePasswordVisibility = (email) => {
+    setVisiblePasswords((prevState) => ({
+      ...prevState,
+      [email]: !prevState[email],
+    }));
+  };
+
   return (
     <Layout>
       <div className="min-h-screen bg-gray-100 p-4 md:p-8">
         <ToastContainer />
         <div className="bg-white p-4 md:p-8 rounded-lg shadow-lg">
-          <h2 className="text-2xl md:text-3xl font-semibold text-gray-700 mb-4 md:mb-6 text-center">All Users</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold text-gray-700 mb-4 md:mb-6 text-center">All Admin</h2>
           {error && <div className="text-red-500 mb-4">{error}</div>}
           {loading ? (
             <div className="flex justify-center items-center h-64">
@@ -177,11 +174,11 @@ const Users = () => {
                     <th className="py-2 px-4 border-b">
                       <input type="checkbox" onChange={handleSelectAllUsers} checked={selectedUsers.length === users.length} />
                     </th>
-                    <th className="py-2 px-4 border-b">Email</th>
                     <th className="py-2 px-4 border-b">Profile Image</th>
-                    <th className="py-2 px-4 border-b">Payment Info</th>
-                    <th className="py-2 px-4 border-b">Subscription Plan</th>
-                    <th className="py-2 px-4 border-b">Subscription Valid</th>
+                    <th className="py-2 px-4 border-b">Email</th>
+                    <th className="py-2 px-4 border-b">Username</th>
+                    <th className="py-2 px-4 border-b">Designation</th>
+                    <th className="py-2 px-4 border-b">Password</th>
                     <th className="py-2 px-4 border-b">Actions</th>
                   </tr>
                 </thead>
@@ -189,9 +186,12 @@ const Users = () => {
                   {users.map((user) => (
                     <tr key={user._id} className="hover:bg-gray-100">
                       <td className="py-2 px-4 border-b">
-                        <input type="checkbox" onChange={() => handleSelectUser(user.email)} checked={selectedUsers.includes(user.email)} />
+                        <input
+                          type="checkbox"
+                          onChange={() => handleSelectUser(user.email)}
+                          checked={selectedUsers.includes(user.email)}
+                        />
                       </td>
-                      <td className="py-2 px-4 border-b">{user.email}</td>
                       <td className="py-2 px-4 border-b">
                         {user.profileImage ? (
                           <img
@@ -203,12 +203,24 @@ const Users = () => {
                           <span className="text-gray-500">No Image</span>
                         )}
                       </td>
-                      <td className="py-2 px-4 border-b">{user.paymentStatus || 'N/A'}</td>
-                      <td className="py-2 px-4 border-b">{user.subscriptionPlan || 'N/A'}</td>
+                      <td className="py-2 px-4 border-b">{user.email}</td>
+                      <td className="py-2 px-4 border-b">{user.username || 'N/A'}</td>
+                      <td className="py-2 px-4 border-b">{user.designation || 'N/A'}</td>
                       <td className="py-2 px-4 border-b">
-                        {user.subscriptionValidUntil
-                          ? `${user.subscriptionValidUntil} (${calculateRemainingDays(user.subscriptionValidUntil)} days left)`
-                          : 'N/A'}
+                        <div className="flex items-center">
+                          <input
+                            type={visiblePasswords[user.email] ? 'text' : 'password'}
+                            value={user.password}
+                            readOnly
+                            className="border border-gray-300 rounded px-2 py-1 text-gray-700 w-24"
+                          />
+                          <button
+                            className="ml-2 text-gray-600 focus:outline-none"
+                            onClick={() => togglePasswordVisibility(user.email)}
+                          >
+                            {visiblePasswords[user.email] ? <FaEyeSlash /> : <FaEye />}
+                          </button>
+                        </div>
                       </td>
                       <td className="py-2 px-4 mt-3 text-center d-flex">
                         {user.role !== 'admin' && (
@@ -217,14 +229,13 @@ const Users = () => {
                               className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200"
                               onClick={() => handleDelete(user._id)}
                             >
-                              <FaTrashAlt/>
+                              <FaTrashAlt />
                             </button>
-                           
                             <button
                               className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-200 ml-2"
                               onClick={() => openEmailModal(user)}
                             >
-                             <FaEnvelope/>
+                              <FaEnvelope />
                             </button>
                           </>
                         )}
@@ -256,7 +267,7 @@ const Users = () => {
               <FaTimes size={24} />
             </button>
             <h2 className="text-xl font-semibold mb-4">Send Email</h2>
-          <label>Your Subject</label>
+            <label>Your Subject</label>
             <input
               type="text"
               value={emailSubject}
@@ -281,8 +292,8 @@ const Users = () => {
               </button>
               <button
                 className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-200"
-                onClick={() => handleSendEmail(sendingAll ? selectedUsers : [selectedUser])} // Send to all selected users or single user based on the context
-                disabled={sendingEmail} // Disable the button when sending email
+                onClick={() => handleSendEmail(sendingAll ? selectedUsers : [selectedUser])}
+                disabled={sendingEmail}
               >
                 {sendingEmail ? <ClipLoader size={20} color={"#fff"} /> : 'Send'}
               </button>
