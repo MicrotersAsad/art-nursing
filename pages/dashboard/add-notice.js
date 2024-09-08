@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Layout from './layout';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
 // Dynamically import the Quill editor to prevent SSR issues
 const QuillWrapper = dynamic(() => import('../../components/EditorWrapper'), { ssr: false });
@@ -180,14 +181,14 @@ const NoticeDashboard = () => {
               {existingPdfPath && !formData.pdf && (
                 <div className="mb-4">
                   <p className="text-sm text-gray-600">Existing PDF:</p>
-                  <a
+                  <Link
                     href={`/uploads/${existingPdfPath.split('/').pop()}`}
                     className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     View PDF
-                  </a>
+                  </Link>
                 </div>
               )}
 
@@ -259,14 +260,14 @@ const NoticeDashboard = () => {
                         </td>
                         <td className="py-2 px-4">
                           {notice.filePath ? (
-                            <a
+                            <Link
                               href={`/uploads/${notice.filePath.split('/').pop()}`}
                               className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
                               target="_blank"
                               rel="noopener noreferrer"
                             >
                               View PDF
-                            </a>
+                            </Link>
                           ) : (
                             <p className="text-gray-500 text-sm">No PDF available</p>
                           )}

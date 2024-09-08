@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function Banner() {
@@ -97,20 +98,20 @@ export default function Banner() {
                 {slider.subHeading}
               </p>
               <div className="d-flex gap-2 mt-3">
-                <a
+                <Link
                   href={slider.buttonLink}
                   className="btn btn-primary px-4 py-2"
                   style={{ fontSize: '1rem' }}
                 >
                   {slider.buttonText || 'FOR WINDOWS'}
-                </a>
-                <a
+                </Link>
+                <Link
                   href={slider.buttonLink}
                   className="btn btn-secondary px-4 py-2"
                   style={{ fontSize: '1rem' }}
                 >
                   FOR MAC
-                </a>
+                </Link>
               </div>
             </div>
           </div>

@@ -14,6 +14,7 @@ import {
   FaEdit,
 } from 'react-icons/fa';
 import Layout from './layout';
+import Link from 'next/link';
 
 const ContactDashboard = () => {
   const [contactInfo, setContactInfo] = useState({
@@ -266,36 +267,36 @@ const ContactDashboard = () => {
                     <td className="py-2 px-4 border-b">{contact.callToUs}</td>
                     <td className="py-2 px-4 border-b">{contact.email}</td>
                     <td className="py-2 px-4 border-b">
-                      <a href={contact.locationLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                      <Link href={contact.locationLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
                         Location
-                      </a>
+                      </Link>
                     </td>
                     <td className="py-2 px-4 border-b">
                       <div className="flex space-x-2">
                         {contact.socialLinks.facebook && (
-                          <a href={contact.socialLinks.facebook} target="_blank" rel="noopener noreferrer">
+                          <Link href={contact.socialLinks.facebook} target="_blank" rel="noopener noreferrer">
                             <FaFacebook className="text-blue-600" />
-                          </a>
+                          </Link>
                         )}
                         {contact.socialLinks.twitter && (
-                          <a href={contact.socialLinks.twitter} target="_blank" rel="noopener noreferrer">
+                          <Link href={contact.socialLinks.twitter} target="_blank" rel="noopener noreferrer">
                             <FaTwitter className="text-blue-400" />
-                          </a>
+                          </Link>
                         )}
                         {contact.socialLinks.linkedin && (
-                          <a href={contact.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
+                          <Link href={contact.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
                             <FaLinkedin className="text-blue-800" />
-                          </a>
+                          </Link>
                         )}
                         {contact.socialLinks.instagram && (
-                          <a href={contact.socialLinks.instagram} target="_blank" rel="noopener noreferrer">
+                          <Link href={contact.socialLinks.instagram} target="_blank" rel="noopener noreferrer">
                             <FaInstagram className="text-pink-600" />
-                          </a>
+                          </Link>
                         )}
                         {contact.socialLinks.youtube && (
-                          <a href={contact.socialLinks.youtube} target="_blank" rel="noopener noreferrer">
+                          <Link href={contact.socialLinks.youtube} target="_blank" rel="noopener noreferrer">
                             <FaYoutube className="text-red-600" />
-                          </a>
+                          </Link>
                         )}
                       </div>
                     </td>

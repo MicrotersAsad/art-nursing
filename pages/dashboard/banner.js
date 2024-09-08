@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Layout from './layout';
+import Link from 'next/link';
 
 export default function Dashboard() {
   const [formData, setFormData] = useState({
@@ -275,9 +276,9 @@ export default function Dashboard() {
                       <td className="px-6 py-4">{slider.subHeading}</td>
                       <td className="px-6 py-4">{slider.buttonText}</td>
                       <td className="px-6 py-4">
-                        <a href={slider.buttonLink} className="text-indigo-500 hover:underline">
+                        <Link href={slider.buttonLink} className="text-indigo-500 hover:underline">
                           {slider.buttonLink}
-                        </a>
+                        </Link>
                       </td>
                       <td className="px-6 py-4 flex space-x-2">
                         <button

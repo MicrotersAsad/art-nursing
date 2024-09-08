@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image'; // Import Next.js Image component
 import logo from "../public/img/logo (3).png"; // Ensure this is the correct path to your logo image
 import { FaFacebook, FaYoutube } from 'react-icons/fa';
+import Link from 'next/link';
 
 const Footer = () => {
   return (
@@ -23,12 +24,12 @@ const Footer = () => {
           </p>
           {/* Social Icons */}
           <div className="flex space-x-4 mt-4">
-            <a href="#" className="text-white bg-blue-600 p-2 rounded-full">
+            <Link href="#" className="text-white bg-blue-600 p-2 rounded-full">
              <FaFacebook/>
-            </a>
-            <a href="#" className="text-white bg-red-600 p-2 rounded-full">
+            </Link>
+            <Link href="#" className="text-white bg-red-600 p-2 rounded-full">
              <FaYoutube/>
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -37,22 +38,22 @@ const Footer = () => {
           <h3 className="text-xl font-bold mb-4">Featured Links</h3>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="text-gray-300 hover:text-pink-500">About Us</a>
+              <Link href="#" className="text-gray-300 hover:text-pink-500">About Us</Link>
             </li>
             <li>
-              <a href="#" className="text-gray-300 hover:text-pink-500">Brochure</a>
+              <Link href="#" className="text-gray-300 hover:text-pink-500">Brochure</Link>
             </li>
             <li>
-              <a href="#" className="text-gray-300 hover:text-pink-500">News</a>
+              <Link href="#" className="text-gray-300 hover:text-pink-500">News</Link>
             </li>
             <li>
-              <a href="#" className="text-gray-300 hover:text-pink-500">Corona Information</a>
+              <Link href="#" className="text-gray-300 hover:text-pink-500">Corona Information</Link>
             </li>
             <li>
-              <a href="#" className="text-gray-300 hover:text-pink-500">Our Department</a>
+              <Link href="#" className="text-gray-300 hover:text-pink-500">Our Department</Link>
             </li>
             <li>
-              <a href="#" className="text-gray-300 hover:text-pink-500">Contact</a>
+              <Link href="#" className="text-gray-300 hover:text-pink-500">Contact</Link>
             </li>
           </ul>
         </div>
@@ -66,21 +67,21 @@ const Footer = () => {
           <ul className="space-y-2">
             <li className="flex items-center">
               <i className="fas fa-phone-alt mr-2"></i>
-              <a href="tel:01733852842" className="text-gray-300 hover:text-pink-500">01733852842</a>
+              <Link href="tel:01733852842" className="text-gray-300 hover:text-pink-500">01733852842</Link>
             </li>
             <li className="flex items-center">
               <i className="fas fa-phone-alt mr-2"></i>
-              <a href="tel:01730363166" className="text-gray-300 hover:text-pink-500">01730363166</a>
+              <Link href="tel:01730363166" className="text-gray-300 hover:text-pink-500">01730363166</Link>
             </li>
             <li className="flex items-center">
               <i className="fas fa-phone-alt mr-2"></i>
-              <a href="tel:01730363188" className="text-gray-300 hover:text-pink-500">01730363188</a>
+              <Link href="tel:01730363188" className="text-gray-300 hover:text-pink-500">01730363188</Link>
             </li>
             <li className="flex items-center">
               <i className="fas fa-envelope mr-2"></i>
-              <a href="mailto:victorianursingcollege@gmail.com" className="text-gray-300 hover:text-pink-500">
+              <Link href="mailto:victorianursingcollege@gmail.com" className="text-gray-300 hover:text-pink-500">
                 victorianursingcollege@gmail.com
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -91,7 +92,7 @@ const Footer = () => {
         <div className="container mx-auto text-center">
           <p className="text-gray-400">
             © 2024 Victoria Nursing College. All rights reserved. Developed by{" "}
-            <a href="#" className="text-pink-500 hover:underline">Webo Developer</a>
+            <Link href="#" className="text-pink-500 hover:underline">Webo Developer</Link>
           </p>
         </div>
       </div>

@@ -163,13 +163,13 @@ function LoginOrResetPassword() {
                   </span>
                 </div>
                 <div className="text-right mb-4">
-                  <a
+                  <Link
                     href="#"
                     className="text-sm text-red-500 hover:underline"
                     onClick={() => setIsResettingPassword(true)}
                   >
                     Forgot Password
-                  </a>
+                  </Link>
                 </div>
                 {error && <div className="alert alert-danger mb-4" role="alert">{error}</div>}
                 <button

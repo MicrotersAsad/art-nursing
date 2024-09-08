@@ -18,9 +18,9 @@ const TableOfContents = ({ headings }) => {
         <div className="toc-list" style={{ marginTop: '10px' }}>
           {headings.map((item) => (
             <div key={item.id} className={`ml-${item.level * 2}`}>
-              <a href={`#${item.id}`} className="text-blue-500 hover:underline">
+              <Link href={`#${item.id}`} className="text-blue-500 hover:underline">
                 {item.title}
-              </a>
+              </Link>
             </div>
           ))}
         </div>
