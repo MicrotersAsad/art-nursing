@@ -113,16 +113,12 @@ const Layout = ({ children }) => {
             </p>
             {menuOpen === 'noticeBoard' && !isCollapsed && (
           <div className="ml-6">
-          <Link href="/dashboard/all-notice" passHref>
-            <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">
-              All Notice
-            </p>
-          </Link>
-          <Link href="/dashboard/add-notice" passHref>
-            <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">
-              Add New Notice
-            </p>
-          </Link>
+         <Link href="/dashboard/all-notice" passHref>
+         <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">All Notice</p>
+</Link>
+<Link href="/dashboard/add-notice" passHref>
+<p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Add New Notice</p>
+</Link>
         </div>
         
           
@@ -144,10 +140,10 @@ const Layout = ({ children }) => {
             {menuOpen === 'gallery' && !isCollapsed && (
               <div className="ml-6">
                 <Link href="/dashboard/photo-gallery" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Photo Gallery</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Photo Gallery</p>
                 </Link>
                 <Link href="/dashboard/video-gallery" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Video Gallery</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Video Gallery</p>
                 </Link>
               </div>
             )}
@@ -168,7 +164,7 @@ const Layout = ({ children }) => {
             {menuOpen === 'banner' && !isCollapsed && (
               <div className="ml-6">
                 <Link href="/dashboard/banner" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Banner</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Banner</p>
                 </Link>
               </div>
             )}
@@ -189,13 +185,13 @@ const Layout = ({ children }) => {
             {menuOpen === 'blog' && !isCollapsed && (
               <div className="ml-6">
                 <Link href="/dashboard/categories" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Categories</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Categories</p>
                 </Link>
                 <Link href="/dashboard/all-blogs" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">All Posts</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">All Posts</p>
                 </Link>
                 <Link href="/dashboard/blogs" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Add New Post</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Add New Post</p>
                 </Link>
               </div>
             )}
@@ -216,10 +212,10 @@ const Layout = ({ children }) => {
             {menuOpen === 'pages' && !isCollapsed && (
               <div className="ml-6">
                 <Link href="/dashboard/all-pages" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">All Pages</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">All Pages</p>
                 </Link>
                 <Link href="/dashboard/add-page" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Add New Page</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Add New Page</p>
                 </Link>
               </div>
             )}
@@ -252,19 +248,19 @@ const Layout = ({ children }) => {
             {menuOpen === 'about' && !isCollapsed && (
               <div className="ml-6">
                 <Link href="/dashboard/about" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">About Us</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">About Us</p>
                 </Link>
                 <Link href="/dashboard/governing" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Governing Body</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Governing Body</p>
                 </Link>
                 <Link href="/dashboard/staff" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Staff Information</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Staff Information</p>
                 </Link>
                 <Link href="/dashboard/teacher" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Teacher's Information</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Teacher's Information</p>
                 </Link>
                 <Link href="/dashboard/achievement" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Achievements</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Achievements</p>
                 </Link>
               </div>
             )}
@@ -285,10 +281,10 @@ const Layout = ({ children }) => {
             {menuOpen === 'users' && !isCollapsed && (
               <div className="ml-6">
                 <Link href="/dashboard/admin-list" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Admin List</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Admin List</p>
                 </Link>
                 <Link href="/dashboard/add-admin" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Add New Admin</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Add New Admin</p>
                 </Link>
               </div>
             )}
@@ -309,13 +305,13 @@ const Layout = ({ children }) => {
             {menuOpen === 'admission' && !isCollapsed && (
               <div className="ml-6">
                 <Link href="/dashboard/admission-requirements" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Admission Requirements</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Admission Requirements</p>
                 </Link>
                 <Link href="/dashboard/tuition-fees" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Tuition Fees</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Tuition Fees</p>
                 </Link>
                 <Link href="/dashboard/admission-form" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Admission Form</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Admission Form</p>
                 </Link>
               </div>
             )}
@@ -336,13 +332,13 @@ const Layout = ({ children }) => {
             {menuOpen === 'program' && !isCollapsed && (
               <div className="ml-6">
                 <Link href="/dashboard/program-1" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Program Name 1</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Program Name 1</p>
                 </Link>
                 <Link href="/dashboard/program-2" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Program Name 2</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Program Name 2</p>
                 </Link>
                 <Link href="/dashboard/program-3" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Program Name 3</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Program Name 3</p>
                 </Link>
               </div>
             )}
@@ -363,25 +359,25 @@ const Layout = ({ children }) => {
             {menuOpen === 'appearance' && !isCollapsed && (
               <div className="ml-6">
                 <Link href="/dashboard/theme-settings" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Theme Settings</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Theme Settings</p>
                 </Link>
                 <Link href="/dashboard/contact" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Contact Page</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Contact Page</p>
                 </Link>
                 <Link href="/dashboard/allcontact" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">All Contact</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">All Contact</p>
                 </Link>
                 <Link href="/dashboard/smtp" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">SMTP Settings</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">SMTP Settings</p>
                 </Link>
                 <Link href="/dashboard/comments" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Comments</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Comments</p>
                 </Link>
                 <Link href="/dashboard/media" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Media Upload</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Media Upload</p>
                 </Link>
                 <Link href="/dashboard/menu-management" passHref>
-                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-['\2022'] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Menu Management</p>
+                  <p className="relative py-2 px-6 cursor-pointer text-white hover:bg-gray-600 hover:text-white before:content-[&apos;\2022&apos;] before:absolute before:left-0 before:text-white before:text-xs before:mt-1.5">Menu Management</p>
                 </Link>
               </div>
             )}
