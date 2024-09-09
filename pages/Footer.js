@@ -92,7 +92,7 @@ const Footer = () => {
         <div className="container mx-auto text-center">
           <p className="text-gray-400">
             © 2024 Victoria Nursing College. All rights reserved. Developed by{" "}
-            <Link href="#" className="text-pink-500 hover:underline">Webo Developer</Link>
+            <Link target='_blank' href="https://microters.com/" className="text-pink-500 hover:underline">Microters</Link>
           </p>
         </div>
       </div>
