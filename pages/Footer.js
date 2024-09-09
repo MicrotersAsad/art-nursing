@@ -7,7 +7,7 @@ import Link from 'next/link';
 const Footer = () => {
   return (
     <footer className="bg-[#00254c] text-white py-10">
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
         {/* Left Section - Logo and Description */}
         <div>
           {/* Use Image component from Next.js for optimized image loading */}
