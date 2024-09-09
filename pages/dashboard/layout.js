@@ -123,24 +123,24 @@ const Layout = React.memo(({ children }) => {
       <p
         className={`flex items-center py-2 px-6 cursor-pointer rounded-md ${
           isActiveRoute("/dashboard/all-notice") ||
-          isActiveRoute("/dashboard/add-notice")
+          isActiveRoute("/dashboard/addnotice")
             ? "bg-gray-300 text-gray-700"
-            : menuOpen === "noticeBoard"
+            : menuOpen === "notice"
             ? "bg-gray-300 text-gray-700"
             : "hover:bg-gray-300 hover:text-white"
         }`}
-        onClick={() => toggleMenu("noticeBoard")}
+        onClick={() => toggleMenu("notice")}
       >
-        <FaBell className="mr-3 text-pink-500" />
-        {!isCollapsed && <span>Notice Board</span>}
+        <FaPhotoVideo className="mr-3 text-green-500" />
+        {!isCollapsed && <span>Notice</span>}
         {!isCollapsed && (
           <span className="ml-auto">
-            {menuOpen === "noticeBoard" ? <FaMinus /> : <FaPlus />}
+            {menuOpen === "notice" ? <FaMinus /> : <FaPlus />}
           </span>
         )}
       </p>
 
-      {(menuOpen === "noticeBoard" ||
+      {(menuOpen === "notice" ||
         isActiveRoute("/dashboard/all-notice") ||
         isActiveRoute("/dashboard/addnotice")) &&
         !isCollapsed && (
@@ -166,7 +166,7 @@ const Layout = React.memo(({ children }) => {
                 }`}
               >
                 <FaCircle className="mr-2 text-xs" />
-                Add Notice
+               Add Notice
               </p>
             </Link>
           </div>

@@ -139,7 +139,7 @@ const NoticeDashboard = () => {
     }
   };
 
-  if (loading) return <p className="text-center text-lg">Loading...</p>;
+  
 
   return (
     <Layout>
