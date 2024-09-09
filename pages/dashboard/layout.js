@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useAuth } from "../../contexts/AuthContext";
@@ -23,7 +23,7 @@ import {
 import Image from "next/image";
 import logo from "../../public/img/logo (3).png";
 
-const Layout = ({ children }) => {
+const Layout = React.memo(({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [menuOpen, setMenuOpen] = useState("");
@@ -142,7 +142,7 @@ const Layout = ({ children }) => {
 
       {(menuOpen === "noticeBoard" ||
         isActiveRoute("/dashboard/all-notice") ||
-        isActiveRoute("/dashboard/add-notice")) &&
+        isActiveRoute("/dashboard/addnotice")) &&
         !isCollapsed && (
           <div className="ml-6">
             <Link href="/dashboard/all-notice" passHref>
@@ -157,10 +157,10 @@ const Layout = ({ children }) => {
                 All Notice
               </p>
             </Link>
-            <Link href="/dashboard/add-notice" passHref>
+            <Link href="/dashboard/addnotice" passHref>
               <p
                 className={`relative flex items-center py-2 px-6 cursor-pointer ${
-                  isActiveRoute("/dashboard/add-notice")
+                  isActiveRoute("/dashboard/addnotice")
                     ? "text-blue-400"
                     : "hover:bg-gray-600 hover:text-white"
                 }`}
@@ -763,7 +763,6 @@ const Layout = ({ children }) => {
 </div>
 
     </div>
-  );
-};
-
+ );
+});
 export default Layout;
