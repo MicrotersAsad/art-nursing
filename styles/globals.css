@@ -5,6 +5,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hide scroll bar for all elements */
+
+
 
 body {
     position: relative;
@@ -216,4 +219,18 @@ header{
     font-size: 16px;
     color: #333;
   }
-  
+
+.carousel-item {
+  position: relative;
+}
+
+.carousel-item .carousel-caption {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+.slick-dots{
+  margin-top: -10px;
+}

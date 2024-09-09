@@ -18,7 +18,8 @@ import {
   FaMinus,
   FaSignOutAlt,
   FaClipboardList,
-  FaCircle 
+  FaCircle, 
+  FaUser
 } from "react-icons/fa";
 import Image from "next/image";
 import logo from "../../public/img/logo (3).png";
@@ -30,6 +31,7 @@ const Layout = React.memo(({ children }) => {
   const [profileDropdown, setProfileDropdown] = useState(false);
   const { user, logout } = useAuth();
   const router = useRouter();
+console.log(user);
 
   useEffect(() => {
     const savedMenu = localStorage.getItem("activeMenu");
@@ -131,7 +133,7 @@ const Layout = React.memo(({ children }) => {
         }`}
         onClick={() => toggleMenu("notice")}
       >
-        <FaPhotoVideo className="mr-3 text-green-500" />
+        <FaBell className="mr-3 text-green-500" />
         {!isCollapsed && <span>Notice</span>}
         {!isCollapsed && (
           <span className="ml-auto">
@@ -227,6 +229,46 @@ const Layout = React.memo(({ children }) => {
           </div>
         )}
     </div>
+  {/* Banner Management */}
+<div className="mt-3">
+  <p
+    className={`flex items-center py-2 px-6 cursor-pointer rounded-md ${
+      isActiveRoute("/dashboard/banner")
+        ? "bg-gray-300 text-gray-700"
+        : menuOpen === "banner"
+        ? "bg-gray-300 text-gray-700"
+        : "hover:bg-gray-300 hover:text-white"
+    }`}
+    onClick={() => toggleMenu("banner")}
+  >
+    <FaPhotoVideo className="mr-3 text-green-500" />
+    {!isCollapsed && <span>Banner Management</span>}
+    {!isCollapsed && (
+      <span className="ml-auto">
+        {menuOpen === "banner" ? <FaMinus /> : <FaPlus />}
+      </span>
+    )}
+  </p>
+
+  {(menuOpen === "banner" || isActiveRoute("/dashboard/banner")) && !isCollapsed && (
+    <div className="ml-6">
+      <Link href="/dashboard/banner" passHref>
+        <p
+          className={`relative flex items-center py-2 px-6 cursor-pointer ${
+            isActiveRoute("/dashboard/banner")
+              ? "text-blue-400"
+              : "hover:bg-gray-600 hover:text-white"
+          }`}
+        >
+          <FaCircle className="mr-2 text-xs" />
+          Manage Banners
+        </p>
+      </Link>
+   
+    </div>
+  )}
+</div>
+
 
     {/* Blog */}
     <div className="mt-3">
@@ -682,7 +724,7 @@ const Layout = React.memo(({ children }) => {
       {/* Main content area */}
 <div className="flex-1 flex flex-col overflow-hidden">
   {/* Top Bar */}
-  <header className="flex items-center justify-between px-6 py-4 bg-white border-b-4 border-gray-200">
+  <header className="flex justify-between items-center px-4 py-2 bg-white border-b-4 border-gray-200">
     {/* Sidebar Collapse Button for Desktop (hidden on mobile) */}
     <button
       className="ml-3 text-gray-500 focus:outline-none hidden lg:block" // Hidden on mobile, shown on larger screens
@@ -701,15 +743,15 @@ const Layout = React.memo(({ children }) => {
     
 
       
-      {/* Search Input for Mobile (hidden on desktop) */}
-    <div className="relative block lg:hidden"> {/* Shown only on mobile */}
-      <input
-        type="text"
-        className="w-full px-4 py-2 rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 text-sm"
-        placeholder="Search"
-      />
-      <FaSearch className="absolute top-3 right-3 text-gray-400" />
-    </div>
+   {/* Search Input for Mobile (hidden on desktop) */}
+  <div className="relative block lg:hidden"> {/* Shown only on mobile */}
+    <input
+      type="text"
+      className="w-full px-4 py-2 rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 text-sm"
+      placeholder="Search"
+    />
+    <FaSearch className="absolute top-3 right-3 text-gray-400" />
+  </div>
     {/* Search Input for Desktop (hidden on mobile) */}
     <div className="relative hidden lg:block"> {/* Hidden on mobile */}
       <input
@@ -720,36 +762,81 @@ const Layout = React.memo(({ children }) => {
       <FaSearch className="absolute top-3 right-3 text-gray-400" />
     </div>
    <div>
-   <div className="relative">
-   {user?.profileImage ? (
-        <div onClick={() => setProfileDropdown(!profileDropdown)} className="cursor-pointer">
+   {/* Profile & Notification */}
+   <div className="relative ms-5">
+  <div
+    onClick={() => setProfileDropdown(!profileDropdown)}
+    className="cursor-pointer flex items-center"
+  >
+    {/* Profile Image in circle */}
+    {user?.profileImage ? (
+      <Image
+        src={getProfileImagePath(user?.profileImage)}
+        width={40}
+        height={40}
+        className="rounded-full border"
+        alt="Profile Image"
+        unoptimized
+      />
+    ) : (
+      <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+        <span className="text-gray-500 font-bold text-xl">
+          {user?.userName?.charAt(0).toUpperCase()}
+        </span>
+      </div>
+    )}
+  </div>
+
+  {profileDropdown && (
+    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-20">
+      <div className="px-4 py-2 flex items-center">
+        {/* Show profile image next to username */}
+        {user?.profileImage ? (
           <Image
-            src={getProfileImagePath(user.profileImage)} // Ensure correct image path is used
-            width={64}
-            height={64}
+            src={getProfileImagePath(user?.profileImage)}
+            width={30}
+            height={30}
             className="rounded-full border"
             alt="Profile Image"
             unoptimized
           />
+        ) : (
+          <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
+            <span className="text-gray-500 font-bold text-sm">
+              {user?.username?.charAt(0).toUpperCase()}
+            </span>
+          </div>
+        )}
+        <div className="ml-3">
+          <p className="font-semibold text-blue-500">
+            {user?.username || "Username"}
+          </p>
+          <p className="text-gray-500 text-sm">
+            {user?.role || "Role"}
+          </p>
         </div>
-      ) : (
-        <p>No Profile Image</p>
-      )}
+      </div>
+      <hr />
+      <Link href="/profile" passHref>
+        <button className="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-100">
+          <FaUser className="mr-3" />
+          Profile
+        </button>
+      </Link>
 
-      {profileDropdown && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-20">
-          <button
-            onClick={handleLogout}
-            className="block px-4 py-2 text-gray-800 hover:bg-gray-100 w-full text-left"
-          >
-            <FaSignOutAlt className="inline mr-2" />
-            Logout
-          </button>
-        </div>
-      )}
-   </div>
+      <button
+        onClick={handleLogout}
+        className="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
+      >
+        <FaSignOutAlt className="mr-3" />
+        Sign Out
+      </button>
     </div>
+  )}
+</div>
 
+
+</div>
     {/* Profile Image and Dropdown */}
     <div className="relative">
       

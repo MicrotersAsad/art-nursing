@@ -1,5 +1,9 @@
+import React, { useEffect, useState } from 'react';
+import Slider from 'react-slick'; // Import Slider from react-slick
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import 'slick-carousel/slick/slick.css'; // slick slider CSS
+import 'slick-carousel/slick/slick-theme.css'; // slick slider theme
+
 
 export default function Banner() {
   const [sliders, setSliders] = useState([]);
@@ -33,57 +37,66 @@ export default function Banner() {
     return <div>No sliders available.</div>; // Show fallback if no sliders are present
   }
 
-  return (
-    <div id="carouselExampleCaptions" className="carousel slide" data-bs-ride="carousel">
-      <div className="carousel-indicators">
-        {sliders.map((slider, index) => (
-          <button
-            key={index}
-            type="button"
-            data-bs-target="#carouselExampleCaptions"
-            data-bs-slide-to={index}
-            className={index === 0 ? 'active' : ''}
-            aria-current={index === 0 ? 'true' : 'false'}
-            aria-label={`Slide ${index + 1}`}
-          ></button>
-        ))}
-      </div>
+  // Slider settings for react-slick
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    arrows: true,
+  };
 
-      <div className="carousel-inner">
+  return (
+    <div>
+      <Slider {...settings}>
         {sliders.map((slider, index) => (
           <div
             key={index}
-            className={`carousel-item ${index === 0 ? 'active' : ''}`}
-            style={{ position: 'relative', height: '100vh', minHeight: '400px' }} // Responsive height
+            className="carousel-item"
+            style={{
+              position: 'relative',
+              height: '600px', // Ensure fixed height for the slider
+              overflow: 'hidden', // Prevents overflow of elements
+            }}
           >
-            {/* Image with shadow overlay */}
+            {/* Image with shadow overlay and custom styles */}
             <div
               style={{
                 position: 'absolute',
                 top: 0,
                 left: 0,
-                width: '100vw',
-                height: '100vh', // Fill the full height of the container
+                width: '100%',
+                height: '600px', // Fixed height
                 backgroundImage: `url(${slider.img})`,
                 backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                filter: 'brightness(60%)', // Darken the image for better contrast
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center', // Center the background image
+                zIndex: 0,
+                filter: 'brightness(60%)', // Darken the image for contrast
               }}
             ></div>
 
             {/* Text and buttons with responsive styling */}
             <div
-              className="carousel-caption d-flex flex-column justify-content-center align-items-start"
-              style={{ position: 'relative', zIndex: 1, height: '100%', padding: '0 15px' }} // Center vertically and add padding for small devices
+              className="carousel-caption d-flex flex-column justify-content-center align-items-start max-w-7xl mx-auto"
+              style={{
+                position: 'relative',
+                zIndex: 1,
+                height: '100%',
+                padding: '0 15px', // Padding for small devices
+              }}
             >
               <h1
                 style={{
                   fontSize: '3rem',
                   color: 'white',
                   fontWeight: 'bold',
-                  textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)',
+                  textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)', // Adds shadow to text
+                  marginBottom: '1rem',
                 }}
-                className="mb-3"
               >
                 {slider.heading}
               </h1>
@@ -91,51 +104,42 @@ export default function Banner() {
                 style={{
                   fontSize: '1.2rem',
                   color: 'white',
-                  textShadow: '2px 2px 6px rgba(0, 0, 0, 0.7)',
+                  textShadow: '2px 2px 6px rgba(0, 0, 0, 0.7)', // Adds shadow to text
+                  marginBottom: '1.5rem',
                 }}
-                className="mb-4"
               >
                 {slider.subHeading}
               </p>
               <div className="d-flex gap-2 mt-3">
-                <Link
-                  href={slider.buttonLink}
-                  className="btn btn-primary px-4 py-2"
-                  style={{ fontSize: '1rem' }}
-                >
-                  {slider.buttonText || 'FOR WINDOWS'}
+                <Link href={slider.buttonLink} passHref>
+                  <p
+                    className="btn btn-primary px-4 py-2"
+                    style={{
+                      fontSize: '1rem',
+                      backgroundColor: '#007bff', // Customize button color
+                      color: '#fff', // White text color
+                      borderRadius: '4px', // Rounded corners
+                      padding: '10px 20px', // Padding for button
+                      cursor: 'pointer', // Pointer on hover
+                    }}
+                  >
+                    {slider.buttonText || 'FOR WINDOWS'}
+                  </p>
                 </Link>
-                <Link
-                  href={slider.buttonLink}
-                  className="btn btn-secondary px-4 py-2"
-                  style={{ fontSize: '1rem' }}
-                >
-                  FOR MAC
-                </Link>
+                
               </div>
             </div>
           </div>
         ))}
-      </div>
+      </Slider>
+      <style jsx>{`
+         .carousel-item,
+.slick-slide {
+  height: 600px !important; /* Ensure the height is applied */
+}
 
-      <button
-        className="carousel-control-prev"
-        type="button"
-        data-bs-target="#carouselExampleCaptions"
-        data-bs-slide="prev"
-      >
-        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span className="visually-hidden">Previous</span>
-      </button>
-      <button
-        className="carousel-control-next"
-        type="button"
-        data-bs-target="#carouselExampleCaptions"
-        data-bs-slide="next"
-      >
-        <span className="carousel-control-next-icon" aria-hidden="true"></span>
-        <span className="visually-hidden">Next</span>
-      </button>
+      `}</style>
+
     </div>
   );
 }
