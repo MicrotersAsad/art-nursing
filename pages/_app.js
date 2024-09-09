@@ -10,6 +10,7 @@ import '../styles/globals.css';
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const isDashboard = router.pathname.startsWith('/dashboard'); // Check if the current route is dashboard
+  const isLoginPage = router.pathname === '/login'; // Check if the current route is login
 
   return (
     <>
@@ -46,7 +47,7 @@ function MyApp({ Component, pageProps }) {
         {/* Conditionally render Navbar and Footer only if not in the dashboard */}
         {!isDashboard && <Navbar />}
 
-        <AuthGuard isDashboard={isDashboard}>
+        <AuthGuard isDashboard={isDashboard} isLoginPage={isLoginPage}>
           <div className={isDashboard ? 'dashboard-container' : 'site-container'}>
             <Component {...pageProps} />
           </div>
@@ -58,24 +59,38 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-// AuthGuard component for protecting routes
-const AuthGuard = ({ children, isDashboard }) => {
+// AuthGuard component for protecting routes and handling redirection
+const AuthGuard = ({ children, isDashboard, isLoginPage }) => {
   const { user, loading } = useAuth(); // Assume useAuth provides user and loading state
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect to login if not logged in and trying to access the dashboard
-    if (!loading && isDashboard && !user) {
+    // If loading, do nothing
+    if (loading) return;
+
+    // If user is logged in and on the login page, redirect to the dashboard
+    if (user && isLoginPage) {
+      router.push('/dashboard/dashboard');
+    }
+
+    // If user is not logged in and trying to access dashboard, redirect to login
+    if (!user && isDashboard) {
       router.push('/login');
     }
-  }, [loading, user, isDashboard, router]);
+  }, [loading, user, isDashboard, isLoginPage, router]);
 
+  // While loading, show a loader
   if (loading) {
-    return <div>Loading...</div>; // Show a loading state while checking auth
+    return <div>Loading...</div>;
   }
 
-  // Render children only if the user is authenticated or not in the dashboard route
-  return isDashboard && !user ? null : children;
+  // If user is on the login page and logged in, don't render login page
+  if (isLoginPage && user) {
+    return null;
+  }
+
+  // Render the content for all other cases
+  return children;
 };
 
 export default MyApp;
