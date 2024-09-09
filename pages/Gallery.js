@@ -104,74 +104,77 @@ const PhotoGallery = () => {
       </Slider>
 
       {/* Modal to display the clicked image with slider */}
+     
       <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="Image Modal"
-        shouldCloseOnOverlayClick={false} // Prevent modal from closing on overlay click
+  isOpen={modalIsOpen}
+  onRequestClose={closeModal}
+  contentLabel="Image Modal"
+  shouldCloseOnOverlayClick={false} // Prevent modal from closing on overlay click
+  style={{
+    overlay: { zIndex: 9999, backgroundColor: 'rgba(0, 0, 0, 0.8)' },
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      maxWidth: '90%',
+      maxHeight: '90vh', // Use full height of viewport
+      padding: 0, // Remove padding to fit content
+      overflow: 'hidden', // Hide overflow
+    }
+  }}
+>
+  {photos.length > 0 && (
+    <div>
+      <Slider {...modalSettings}>
+        {photos.map((photo, index) => (
+          <div key={index}>
+            <Zoom>
+              <img
+                src={photo.img}
+                alt={`Modal Image ${index}`}
+                style={{ width: '100%', height: 'auto', maxHeight: '90vh', objectFit: 'contain' }} // Ensure full height utilization
+              />
+            </Zoom>
+          </div>
+        ))}
+      </Slider>
+
+      {/* Close button */}
+      <button
+        onClick={closeModal}
         style={{
-          overlay: { zIndex: 9999, backgroundColor: 'rgba(0, 0, 0, 0.8)' },
-          content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            transform: 'translate(-50%, -50%)',
-            maxWidth: '90%',
-            maxHeight: '90vh',
-            overflow: 'auto', // Allow scrolling inside the modal if content exceeds viewport height
-          }
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          background: 'red',
+          color: 'white',
+          border: 'none',
+          padding: '5px 10px',
+          cursor: 'pointer',
         }}
       >
-        {photos.length > 0 && (
-          <div>
-            <Slider {...modalSettings}>
-              {photos.map((photo, index) => (
-                <div key={index}>
-                  <Zoom>
-                    <img
-                      src={photo.img}
-                      alt={`Modal Image ${index}`}
-                      style={{ width: '100%', maxHeight: '90vh', objectFit: 'contain' }}
-                    />
-                  </Zoom>
-                </div>
-              ))}
-            </Slider>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+  )}
+</Modal>
 
-            {/* Close button */}
-            <button
-              onClick={closeModal}
-              style={{
-                position: 'absolute',
-                top: '10px',
-                right: '10px',
-                background: 'red',
-                color: 'white',
-                border: 'none',
-                padding: '5px 10px',
-                cursor: 'pointer',
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-        )}
-      </Modal>
     </div>
   );
 }

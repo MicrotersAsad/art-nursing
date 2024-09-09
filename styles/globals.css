@@ -142,7 +142,9 @@ header{
   .navbar-item:hover .dropdown-menu {
     display: block;
   }
-  
+  .nav-gap{
+    margin-left: -23px;
+  }
   .dropdown-menu {
     display: none;
     position: absolute;
@@ -231,6 +233,38 @@ header{
   transform: translateY(-50%);
   z-index: 1;
 }
-.slick-dots{
+
+.slick-dots {
+  position: absolute;
+  bottom: 24px!important;
+  display: block;
+  width: 12px; /* Increase the size */
+  height: 12px; /* Increase the size */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  text-align: center;
+  font-size: 12px
+}
+
+.slick-dots li button {
+  width: 12px; /* Increase the size */
+  height: 12px; /* Increase the size */
+  border-radius: 50%;
+  background-color: #F4A139; /* Dot color */
+  font-size: 12px;
+  border: none;
+}
+
+.slick-dots li.slick-active button {
+  background-color: #F4A139; /* Active dot color */
+}
+
+.slick-dots li button:before {
+  font-size: 12px; /* Adjust size if needed */
+  color: #F4A139; /* Dot color */
+}
+
+footer{
   margin-top: -10px;
 }
