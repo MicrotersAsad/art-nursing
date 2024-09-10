@@ -3,7 +3,7 @@ import Layout from './layout';
 import Link from 'next/link';
 
 const AllNotice = () => {
-  const [notices, setNotices] = useState([]);
+  const [results, setResults] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,12 +11,12 @@ const AllNotice = () => {
   useEffect(() => {
     const fetchNoticesAndDepartments = async () => {
       try {
-        const noticeResponse = await fetch('/api/notice');
+        const noticeResponse = await fetch('/api/result');
         if (!noticeResponse.ok) {
           throw new Error('Failed to fetch notices');
         }
         const noticeData = await noticeResponse.json();
-        setNotices(noticeData);
+        setResults(noticeData);
 
         const departmentResponse = await fetch('/api/department');
         if (!departmentResponse.ok) {
@@ -46,10 +46,10 @@ const AllNotice = () => {
   return (
     <Layout>
       <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">All Notices</h1>
+        <h1 className="text-2xl font-bold mb-4">All Result</h1>
 
-        {notices.length === 0 ? (
-          <p>No notices found.</p>
+        {results.length === 0 ? (
+          <p>No result found.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full table-auto">
@@ -62,19 +62,19 @@ const AllNotice = () => {
                 </tr>
               </thead>
               <tbody>
-                {notices.map((notice) => (
-                  <tr key={notice._id} className="bg-white border-b hover:bg-gray-100">
-                    <td className="px-4 py-2">{getDepartmentName(notice.department)}</td>
+                {results.map((result) => (
+                  <tr key={result._id} className="bg-white border-b hover:bg-gray-100">
+                    <td className="px-4 py-2">{getDepartmentName(result.department)}</td>
                     <td className="px-4 py-2">
-                      <Link href={`/notices/${notice.slug}`}>
-                        <p className="text-blue-600 hover:underline">{notice.title}</p>
+                      <Link href={`/results/${result.slug}`}>
+                        <p className="text-blue-600 hover:underline">{result.title}</p>
                       </Link>
                     </td>
-                    <td className="px-4 py-2">{new Date(notice.date).toLocaleDateString()}</td>
+                    <td className="px-4 py-2">{new Date(result.date).toLocaleDateString()}</td>
                     <td className="py-2 px-4">
-                      {notice.filePath ? (
+                      {result.filePath ? (
                         <Link
-                          href={`/uploads/${notice.filePath.split('/').pop()}`}
+                          href={`/uploads/${result.filePath.split('/').pop()}`}
                           className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
                           target="_blank"
                           rel="noopener noreferrer"

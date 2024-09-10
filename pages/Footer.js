@@ -90,7 +90,7 @@ const Footer = () => {
             </li>
             <li className="flex items-center">
               <FaImages className="mr-2" />
-              <Link href="#" className="text-gray-300 hover:text-pink-500">Gallery</Link>
+              <Link href="photo-gallery" className="text-gray-300 hover:text-pink-500">Gallery</Link>
             </li>
           </ul>
         </div>

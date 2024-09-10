@@ -1,7 +1,5 @@
 import multer from 'multer';
-import bcrypt from 'bcryptjs';
 import { connectToDatabase } from '../../utils/mongodb';
-import { sendVerificationEmail } from '../../utils/sendVerificationEmail';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import fs from 'fs';
@@ -55,31 +53,21 @@ export default async function handler(req, res) {
       // Set role directly as 'super admin'
       const finalRole = 'super admin';
 
-      // Hash the password
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      // Generate a verification token
-      const verificationToken = uuidv4();
-
       // Connect to the database
       const { db } = await connectToDatabase();
 
-      // Insert user data into the database
+      // Insert user data into the database without hashing the password or verification
       const result = await db.collection('user').insertOne({
         username,
         email,
-        password: hashedPassword,
+        password, // Store password as is
         profileImage: profileImagePath, // Save image path instead of base64
-        verificationToken,
-        verified: false,
+        verified: true, // Automatically set to verified (no need for email verification)
         role: finalRole, // Automatically assign 'super admin' role
         createdAt: new Date(),
       });
 
-      // Send verification email
-      await sendVerificationEmail(email, username, verificationToken);
-
-      res.status(201).json({ message: 'Registration successful! Please check your email to verify.' });
+      res.status(201).json({ message: 'Registration successful!' });
     });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });

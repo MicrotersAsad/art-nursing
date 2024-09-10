@@ -78,10 +78,10 @@ const handler = async (req, res) => {
         date: currentDate,
       };
 
-      const result = await db.collection('notices').insertOne(notice);
+      const result = await db.collection('results').insertOne(notice);
       
       // Fetch the inserted document using insertedId
-      const createdNotice = await db.collection('notices').findOne({ _id: result.insertedId });
+      const createdNotice = await db.collection('results').findOne({ _id: result.insertedId });
       
       return res.status(201).json({ message: 'Notice created successfully!', notice: createdNotice });
     } catch (error) {
@@ -94,25 +94,25 @@ const handler = async (req, res) => {
     try {
       if (id) {
         // Fetch a specific notice by its ID
-        const notice = await db.collection('notices').findOne({ _id: new ObjectId(id) });
+        const notice = await db.collection('results').findOne({ _id: new ObjectId(id) });
         if (!notice) {
           return res.status(404).json({ message: 'Notice not found' });
         }
         return res.status(200).json(notice);
       } else if (slug) {
         // Fetch a specific notice by its slug
-        const notice = await db.collection('notices').findOne({ slug });
+        const notice = await db.collection('results').findOne({ slug });
         if (!notice) {
           return res.status(404).json({ message: 'Notice not found' });
         }
         return res.status(200).json(notice);
       } else {
-        // Fetch all notices
-        const notices = await db.collection('notices').find({}).toArray();
-        return res.status(200).json(notices);
+        // Fetch all results
+        const results = await db.collection('results').find({}).toArray();
+        return res.status(200).json(results);
       }
     } catch (error) {
-      return res.status(500).json({ message: 'Failed to fetch notices', error });
+      return res.status(500).json({ message: 'Failed to fetch results', error });
     }
   }
 
@@ -138,7 +138,7 @@ const handler = async (req, res) => {
         ...(filePath && { filePath }),   // Include file path if a new file is uploaded
       };
 
-      const result = await db.collection('notices').updateOne(
+      const result = await db.collection('results').updateOne(
         { _id: new ObjectId(id) },
         { $set: updateData }
       );
@@ -147,7 +147,7 @@ const handler = async (req, res) => {
         return res.status(404).json({ message: 'Notice not found.' });
       }
 
-      const updatedNotice = await db.collection('notices').findOne({ _id: new ObjectId(id) });
+      const updatedNotice = await db.collection('results').findOne({ _id: new ObjectId(id) });
       return res.status(200).json({ message: 'Notice updated successfully!', notice: updatedNotice });
     } catch (error) {
       console.error('Error updating notice:', error);
@@ -163,7 +163,7 @@ const handler = async (req, res) => {
         return res.status(400).json({ message: 'ID is required to delete a notice.' });
       }
 
-      const result = await db.collection('notices').deleteOne({ _id: new ObjectId(id) });
+      const result = await db.collection('results').deleteOne({ _id: new ObjectId(id) });
 
       if (result.deletedCount === 0) {
         return res.status(404).json({ message: 'Notice not found.' });

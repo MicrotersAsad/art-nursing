@@ -15,7 +15,7 @@ export default function NoticesAndBlogs() {
       try {
         const response = await fetch('/api/notice');
         const data = await response.json();
-        setNotices(data); // Keep all notices, limit display by scrolling
+        setNotices(data);
       } catch (error) {
         console.error('Error fetching notices:', error);
       } finally {
@@ -31,7 +31,7 @@ export default function NoticesAndBlogs() {
       try {
         const response = await fetch('/api/blog');
         const data = await response.json();
-        setBlogs(data); // Keep all blogs, limit display by scrolling
+        setBlogs(data);
       } catch (error) {
         console.error('Error fetching blogs:', error);
       } finally {
@@ -54,7 +54,7 @@ export default function NoticesAndBlogs() {
   return (
     <div className="w-full bg-gray-100 py-12">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Existing Notices Section */}
+        {/* Notices Section */}
         <div className="bg-white p-6 shadow-md rounded-lg" data-aos="fade-right">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Existing Notices</h2>
           <input
@@ -68,53 +68,41 @@ export default function NoticesAndBlogs() {
             <div>Loading notices...</div>
           ) : (
             <div className="overflow-x-auto">
-              {/* Set a fixed height for the table container and allow scrolling */}
               <div className="max-h-48 overflow-y-auto">
-                <table className="min-w-full bg-white border border-gray-200">
-                  <thead>
-                    <tr className="bg-gray-100">
-                      <th className="py-2 px-4 border-b text-left text-gray-700 font-medium">Title</th>
-                      <th className="py-2 px-4 border-b text-left text-gray-700 font-medium">Date</th>
-                      <th className="py-2 px-4 border-b text-left text-gray-700 font-medium">PDF</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredNotices.length === 0 ? (
-                      <tr>
-                        <td colSpan="3" className="text-center py-4 text-gray-600">
-                          No notices available.
-                        </td>
-                      </tr>
-                    ) : (
-                      filteredNotices.map((notice) => (
-                        <tr key={notice._id} className="border-t">
-                          <td className="py-2 px-4">{notice.title}</td>
-                          <td className="py-2 px-4">{new Date(notice.date).toLocaleDateString()}</td>
-                          <td className="py-2 px-4">
-                            {notice.filePath ? (
-                              <Link
-                                href={`/uploads/${notice.filePath.split('/').pop()}`}
-                                className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                View PDF
-                              </Link>
-                            ) : (
-                              <p className="text-gray-500 text-sm">No PDF available</p>
-                            )}
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
+                {filteredNotices.length === 0 ? (
+                  <div className="text-center py-4 text-gray-600">No notices available.</div>
+                ) : (
+                  filteredNotices.map((notice) => (
+                    <div key={notice._id} className="flex items-center mb-4">
+                      {/* Date Box */}
+                      <div className="flex flex-col items-center justify-center text-white rounded-md overflow-hidden w-20 h-20">
+                        <div className="bg-blue-900 w-full text-center py-1 text-3xl font-bold">
+                          {new Date(notice.date).getDate()}
+                        </div>
+                        <div className="bg-blue-500 w-full text-center py-1 text-xs">
+                          {new Date(notice.date).toLocaleString('default', { month: 'short' })}-{new Date(notice.date).getFullYear()}
+                        </div>
+                      </div>
+                      {/* Notice Title */}
+                      <div className="ml-4">
+                        <Link
+                          href={`notices/${notice?.slug}`}
+                          className="text-blue-600 hover:underline font-medium"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {notice.title}
+                        </Link>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           )}
         </div>
 
-        {/* Latest Blogs Section */}
+        {/* Blogs Section */}
         <div className="bg-white p-6 shadow-md rounded-lg" data-aos="fade-left">
           <h2 className="text-xl font-semibold mb-4">Latest Blogs</h2>
           <input
@@ -128,30 +116,34 @@ export default function NoticesAndBlogs() {
             <div>Loading blogs...</div>
           ) : (
             <div className="max-h-48 overflow-y-auto">
-              <table className="w-full table-auto border-collapse">
-                <thead>
-                  <tr className="bg-gray-200">
-                    <th className="px-4 py-2 border">Title</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredBlogs.length > 0 ? (
-                    filteredBlogs.map(blog => (
-                      <tr key={blog.id} className="hover:bg-gray-100">
-                        <td className="px-4 py-2 border">
-                          <Link href="#" className="text-blue-500 hover:underline">
-                            {blog.title}
-                          </Link>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td className="px-4 py-2 border text-center">No blogs found</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+              {filteredBlogs.length === 0 ? (
+                <div className="text-center py-4 text-gray-600">No blogs available.</div>
+              ) : (
+                filteredBlogs.map((blog) => (
+                  <div key={blog._id} className="flex items-center mb-4">
+                    {/* Date Box */}
+                    <div className="flex flex-col items-center justify-center text-white rounded-md overflow-hidden w-16 h-16">
+                      <div className="bg-blue-900 w-full text-center py-1 text-xl font-bold">
+                        {new Date(blog.date).getDate()}
+                      </div>
+                      <div className="bg-blue-500 w-full text-center py-1 text-xs">
+                        {new Date(blog.date).toLocaleString('default', { month: 'short' })}-{new Date(blog.date).getFullYear()}
+                      </div>
+                    </div>
+                    {/* Blog Title */}
+                    <div className="ml-4">
+                      <Link
+                        href={`/blogs/${blog.id}`}
+                        className="text-blue-600 hover:underline font-medium"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {blog.title}
+                      </Link>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           )}
         </div>

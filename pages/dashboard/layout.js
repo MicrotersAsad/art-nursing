@@ -171,6 +171,18 @@ console.log(user);
                Add Notice
               </p>
             </Link>
+            <Link href="/dashboard/adddepartment" passHref>
+              <p
+                className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                  isActiveRoute("/dashboard/adddepartment")
+                    ? "text-blue-400"
+                    : "hover:bg-gray-600 hover:text-white"
+                }`}
+              >
+                <FaCircle className="mr-2 text-xs" />
+               Add Department
+              </p>
+            </Link>
           </div>
         )}
     </div>
@@ -392,19 +404,61 @@ console.log(user);
     </div>
 
     {/* Result */}
+
+    
     <div className="mt-3">
-      <Link
-        href="/dashboard/result"
-        passHref
+      <p
         className={`flex items-center py-2 px-6 cursor-pointer rounded-md ${
-          isActiveRoute("/dashboard/result")
+          isActiveRoute("/dashboard/all-result") ||
+          isActiveRoute("/dashboard/add-result")
             ? "bg-gray-300 text-gray-700"
-            : "hover:bg-gray-700 hover:text-white"
+            : menuOpen === "result"
+            ? "bg-gray-300 text-gray-700"
+            : "hover:bg-gray-300 hover:text-white"
         }`}
+        onClick={() => toggleMenu("result")}
       >
-        <FaClipboardList className="mr-3 text-blue-500" />
+        <FaBell className="mr-3 text-green-500" />
         {!isCollapsed && <span>Result</span>}
-      </Link>
+        {!isCollapsed && (
+          <span className="ml-auto">
+            {menuOpen === "result" ? <FaMinus /> : <FaPlus />}
+          </span>
+        )}
+      </p>
+
+      {(menuOpen === "result" ||
+        isActiveRoute("/dashboard/all-result") ||
+        isActiveRoute("/dashboard/add-result")) &&
+        !isCollapsed && (
+          <div className="ml-6">
+            <Link href="/dashboard/all-result" passHref>
+              <p
+                className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                  isActiveRoute("/dashboard/all-result")
+                    ? "text-blue-400"
+                    : "hover:bg-gray-600 hover:text-white"
+                }`}
+              >
+                <FaCircle className="mr-2 text-xs" />
+                All Result
+              </p>
+            </Link>
+            <Link href="/dashboard/add-result" passHref>
+              <p
+                className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                  isActiveRoute("/dashboard/add-result")
+                    ? "text-blue-400"
+                    : "hover:bg-gray-600 hover:text-white"
+                }`}
+              >
+                <FaCircle className="mr-2 text-xs" />
+               Add Result
+              </p>
+            </Link>
+           
+          </div>
+        )}
     </div>
 
     {/* Manage Users */}

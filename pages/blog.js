@@ -11,6 +11,7 @@ const BlogSection = ({ initialBlogs }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState('');
   const [blogsData, setBlogsData] = useState(initialBlogs);
+  const [departments, setDepartments] = useState([]);
   const blogsPerPage = 9;
 
   const currentBlogs = blogsData.slice((currentPage - 1) * blogsPerPage, currentPage * blogsPerPage);
@@ -28,6 +29,27 @@ const BlogSection = ({ initialBlogs }) => {
       setLoading(false);
     }
   }, []);
+  // Fetch existing departments
+  useEffect(() => {
+    fetchDepartments();
+  }, []);
+
+  const fetchDepartments = async () => {
+    try {
+      const response = await axios.get('/api/categories');
+      setDepartments(response.data);
+      console.log(departments);
+      
+    } catch (error) {
+      console.error('Error fetching departments:', error);
+    }
+  };
+  const getDepartmentName = (departmentId) => {
+    const department = departments.find((dept) => dept._id === departmentId);
+    console.log(department);
+    
+    return department ? department.name : 'Unknown Department';
+  };
 
   useEffect(() => {
     if (!initialBlogs.length) {
@@ -38,7 +60,11 @@ const BlogSection = ({ initialBlogs }) => {
   }, [fetchBlogs, initialBlogs]);
 
   const parseCategories = (category) => {
-    return category ? category.split(',') : [];
+    // Ensure category is a string and correctly split it, else return an empty array
+    if (typeof category === 'string') {
+      return category.split(',').map(cat => cat.trim());
+    }
+    return [];
   };
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -95,9 +121,7 @@ const BlogSection = ({ initialBlogs }) => {
                   <p className="text-gray-600 mb-4">{blog.description}</p>
                   <p className="text-gray-500 text-sm">By {blog.author} · {new Date(blog.createdAt).toLocaleDateString()}</p>
                   <div className="mt-2">
-                    {parseCategories(blog.category).map((category, i) => (
-                      <span key={i} className="text-sm bg-gray-200 text-gray-700 rounded-full px-2 py-1 mr-2">{category}</span>
-                    ))}
+                  <td className="px-4 py-2">{getDepartmentName(blog.name)}</td>
                   </div>
                 </div>
               </div>

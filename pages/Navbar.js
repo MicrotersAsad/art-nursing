@@ -226,25 +226,25 @@ const Header = () => {
 
               {/* Static Links */}
               <Link
-                href="#"
+                href="notices"
                 className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r"
               >
                 Notice Board
               </Link>
               <Link
-                href="#"
+                href="results"
                 className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r"
               >
                 Results
               </Link>
               <Link
-                href="#"
+                href="blog"
                 className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r"
               >
                 Blog
               </Link>
               <Link
-                href="#"
+                href="contact"
                 className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all"
               >
                 Contact Us

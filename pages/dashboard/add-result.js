@@ -7,7 +7,7 @@ import Link from 'next/link';
 // Dynamically import the Quill editor to prevent SSR issues
 const QuillWrapper = dynamic(() => import('../../components/EditorWrapper'), { ssr: false });
 
-const NoticeDashboard = () => {
+const ResultDashboard = () => {
   const [notices, setNotices] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState('');
@@ -28,7 +28,7 @@ const NoticeDashboard = () => {
   useEffect(() => {
     async function fetchNotices() {
       try {
-        const response = await axios.get('/api/notice');
+        const response = await axios.get('/api/result');
         setNotices(response.data);
       } catch (error) {
         console.error('Error fetching notices:', error);
@@ -101,7 +101,7 @@ const NoticeDashboard = () => {
     try {
       if (editing) {
         // Edit existing notice
-        const response = await axios.put(`/api/notice`, {
+        const response = await axios.put(`/api/result`, {
           id: currentEditId,
           title: formData.title,
           department: formData.department,
@@ -118,7 +118,7 @@ const NoticeDashboard = () => {
         setExistingPdfPath(null); // Reset existing PDF path after editing
       } else {
         // Create new notice
-        const response = await axios.post('/api/notice', formDataObj, {
+        const response = await axios.post('/api/result', formDataObj, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -134,7 +134,7 @@ const NoticeDashboard = () => {
         content: '', // Reset the editor content
       });
     } catch (error) {
-      console.error('Error uploading notice:', error);
+      console.error('Error uploading result:', error);
     } finally {
       setUploading(false);
     }
@@ -155,7 +155,7 @@ const NoticeDashboard = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/notice?id=${id}`);
+      await axios.delete(`/api/result?id=${id}`);
       setNotices(notices.filter((notice) => notice._id !== id));
     } catch (error) {
       console.error('Error deleting notice:', error);
@@ -167,7 +167,7 @@ const NoticeDashboard = () => {
       <div className="p-8 bg-gray-50 min-h-screen">
         <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-6 text-center">
-            {editing ? 'Edit Notice' : 'Notice Dashboard'}
+            {editing ? 'Edit Result' : 'Result Dashboard'}
           </h1>
 
           {/* Upload Form */}
@@ -242,7 +242,7 @@ const NoticeDashboard = () => {
 
               {/* Rich Text Editor */}
               <div>
-                <label className="block text-lg font-medium text-gray-700">Content</label>
+                <label className="block text-lg font-medium text-gray-700">Result</label>
                 <div className="mt-2">
                   <QuillWrapper
                     value={formData.content}
@@ -260,7 +260,7 @@ const NoticeDashboard = () => {
                   className="inline-flex items-center px-5 py-3 border border-transparent text-lg font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   disabled={uploading}
                 >
-                  {uploading ? 'Uploading...' : editing ? 'Update Notice' : 'Upload Notice'}
+                  {uploading ? 'Uploading...' : editing ? 'Update Result' : 'Upload Result'}
                 </button>
               </div>
             </form>
@@ -268,7 +268,7 @@ const NoticeDashboard = () => {
 
           {/* Display Notices in a Table */}
           <div>
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Existing Notices</h2>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Existing Result</h2>
             <div className="overflow-x-auto">
               <table className="min-w-full bg-white border border-gray-200">
                 <thead>
@@ -285,12 +285,12 @@ const NoticeDashboard = () => {
   {notices.length === 0 ? (
     <tr>
       <td colSpan="5" className="text-center py-4 text-gray-600">
-        No notices available.
+        No Result available.
       </td>
     </tr>
   ) : (
     notices.map((notice) => {
-      const departmentName = departments.find(dept => dept._id === notice.department)?.name || "Unknown Department";
+      const departmentName = departments.find(dept => dept._id === notice.department)?.name || "Unknown Result";
 
       return (
         <tr key={notice._id} className="border-t">
@@ -343,4 +343,4 @@ const NoticeDashboard = () => {
   );
 };
 
-export default NoticeDashboard;
+export default ResultDashboard;
