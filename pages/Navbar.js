@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
-import { FaAngleDown, FaEnvelope, FaPhone, FaRegArrowAltCircleRight } from 'react-icons/fa'; // Import arrow icon from react-icons
+import { FaAngleDown, FaEnvelope, FaPhone, FaPhoneAlt, FaRegArrowAltCircleRight } from 'react-icons/fa'; // Import arrow icon from react-icons
 import logo from "../public/img/logo (3).png"; // Ensure this is your logo path
 import Link from 'next/link';
 
@@ -25,12 +25,12 @@ const Header = () => {
     {/* Phone, Email, and Online Certificate Verification together on desktop */}
     <div className="flex flex-col md:flex-row items-center space-x-4">
       <span className="flex items-center whitespace-nowrap">
-        <FaPhone className="text-[#F4A139] me-2" />
+      <FaPhoneAlt className="text-[#F4A139] me-2" />
         +8802222291453
       </span>
       <span className="flex items-center whitespace-nowrap">
         <FaEnvelope className="text-[#F4A139] me-2" />
-        info@fiu.edu.bd
+        info@art.edu.bd
       </span>
       
       {/* On mobile, this will move below */}

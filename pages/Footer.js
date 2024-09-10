@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#00254c] text-white py-10">
+    <footer className="bg-[#00254c] text-white py-10 px-4 md:px-10"> {/* Added px-4 for padding on mobile, px-10 for medium screens */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
         {/* Left Section - Logo and Description */}
         <div>

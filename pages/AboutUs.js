@@ -5,7 +5,7 @@ import campus from '../public/img/campus.png'; // Make sure the path is correct
 
 export default function AboutSection() {
   return (
-    <div className="max-w-7xl mx-auto bg-white py-12">
+    <div className="max-w-7xl mx-auto bg-white py-12 px-4 md:px-10">
       <div className="max-w-7xl  mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
         
         {/* Left Content Section */}
