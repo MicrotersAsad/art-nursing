@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Slider from 'react-slick'; // Import Slider from react-slick
+import Slider from 'react-slick';
 import Link from 'next/link';
-import 'slick-carousel/slick/slick.css'; // slick slider CSS
-import 'slick-carousel/slick/slick-theme.css'; // slick slider theme
-
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import AOS from 'aos';
+import 'aos/dist/aos.css'; // Import AOS styles
 
 export default function Banner() {
   const [sliders, setSliders] = useState([]);
@@ -13,7 +14,7 @@ export default function Banner() {
   useEffect(() => {
     async function fetchSliders() {
       try {
-        const response = await fetch('/api/banner'); // Make sure the API endpoint is correct
+        const response = await fetch('/api/banner');
         const data = await response.json();
         if (Array.isArray(data)) {
           setSliders(data);
@@ -23,21 +24,30 @@ export default function Banner() {
       } catch (error) {
         console.error('Error fetching sliders:', error);
       } finally {
-        setLoading(false); // Finish loading once the data has been fetched
+        setLoading(false);
       }
     }
     fetchSliders();
+
+    // Initialize AOS for animations
+    AOS.init({
+      duration: 1000, // Animation duration in ms
+      once: false, // Animation only happens once
+    });
   }, []);
 
   if (loading) {
-    return <div>Loading sliders...</div>; // Show a loading message while fetching data
+    return (
+      <div className="loader-container">
+        <div className="loader"></div>
+      </div>
+    );
   }
 
   if (sliders.length === 0) {
-    return <div>No sliders available.</div>; // Show fallback if no sliders are present
+    return <div>No sliders available.</div>;
   }
 
-  // Slider settings for react-slick
   const settings = {
     dots: true,
     infinite: true,
@@ -58,88 +68,93 @@ export default function Banner() {
             className="carousel-item"
             style={{
               position: 'relative',
-              height: '600px', // Ensure fixed height for the slider
-              overflow: 'hidden', // Prevents overflow of elements
+              height: '600px',
+              overflow: 'hidden',
             }}
           >
-            {/* Image with shadow overlay and custom styles */}
             <div
               style={{
                 position: 'absolute',
                 top: 0,
                 left: 0,
                 width: '100%',
-                height: '600px', // Fixed height
+                height: '600px',
                 backgroundImage: `url(${slider.img})`,
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center', // Center the background image
+                backgroundPosition: 'center',
                 zIndex: 0,
-                filter: 'brightness(60%)', // Darken the image for contrast
+                filter: 'brightness(60%)',
               }}
             ></div>
 
-            {/* Text and buttons with responsive styling */}
             <div
               className="carousel-caption d-flex flex-column justify-content-center align-items-start max-w-7xl mx-auto"
               style={{
                 position: 'relative',
                 zIndex: 1,
                 height: '100%',
-                padding: '0 15px', // Padding for small devices
+                padding: '0 15px',
               }}
             >
+              {/* Heading with AOS fade-up effect */}
               <h1
+                data-aos="fade-up"
                 style={{
                   fontSize: '3rem',
                   color: 'white',
                   fontWeight: 'bold',
-                  textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)', // Adds shadow to text
+                  textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)',
                   marginBottom: '1rem',
                 }}
               >
                 {slider.heading}
               </h1>
+              
+              {/* Subheading with AOS fade-up effect */}
               <p
+                data-aos="fade-up"
                 style={{
                   fontSize: '1.2rem',
                   color: 'white',
-                  textShadow: '2px 2px 6px rgba(0, 0, 0, 0.7)', // Adds shadow to text
+                  textShadow: '2px 2px 6px rgba(0, 0, 0, 0.7)',
                   marginBottom: '1.5rem',
                 }}
               >
                 {slider.subHeading}
               </p>
-              <div className="d-flex gap-2 mt-3">
-                <Link href={slider.buttonLink} passHref>
-                  <p
-                    className="btn btn-primary px-4 py-2"
-                    style={{
-                      fontSize: '1rem',
-                      backgroundColor: '#007bff', // Customize button color
-                      color: '#fff', // White text color
-                      borderRadius: '4px', // Rounded corners
-                      padding: '10px 20px', // Padding for button
-                      cursor: 'pointer', // Pointer on hover
-                    }}
-                  >
-                    {slider.buttonText || 'FOR WINDOWS'}
-                  </p>
-                </Link>
-                
+              
+              <div className="mt-3">
+                {/* Conditionally render button if buttonLink and buttonText are available */}
+                {slider.buttonLink && slider.buttonText && (
+                  <Link href={slider.buttonLink} passHref>
+                    <button
+                      className="btn btn-primary px-4 py-2"
+                      style={{
+                        fontSize: '1rem',
+                        backgroundColor: '#007bff',
+                        color: '#fff',
+                        borderRadius: '4px',
+                        padding: '10px 20px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {slider.buttonText}
+                    </button>
+                  </Link>
+                )}
               </div>
             </div>
           </div>
         ))}
       </Slider>
+
       <style jsx>{`
-         .carousel-item,
-.slick-slide {
-  height: 600px !important; /* Ensure the height is applied */
-}
-
+        .carousel-item,
+        .slick-slide {
+          height: 600px !important;
+        }
       `}</style>
-
     </div>
   );
 }

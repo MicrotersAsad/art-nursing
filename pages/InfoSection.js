@@ -5,7 +5,7 @@ export default function InfoSection() {
   return (
     <div className="w-full">
       {/* Full-width grid layout without gaps */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" data-aos="fade-up">
         
         {/* Admission Block */}
         <div className="bg-[#0d1128] text-white p-6">

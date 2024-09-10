@@ -10,7 +10,7 @@ export default function CoursesSection() {
       {/* Course Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Nursing Course */}
-        <div className="bg-blue-900 text-white p-6 rounded-lg text-center pt-14 pb-14">
+        <div className="bg-blue-900 text-white p-6 rounded-lg text-center pt-14 pb-14" data-aos="fade-up">
           <div className="mb-4">
             {/* Nursing Icon (SVG) */}
             <svg
@@ -37,7 +37,7 @@ export default function CoursesSection() {
         </div>
 
         {/* Midwifery Course */}
-        <div className="bg-blue-900 text-white p-6 rounded-lg text-center pt-14 pb-14">
+        <div className="bg-blue-900 text-white p-6 rounded-lg text-center pt-14 pb-14" data-aos="fade-up"  data-aos-delay="50">
           <div className="mb-4">
             {/* Midwifery Icon (SVG) */}
             <svg
@@ -64,7 +64,7 @@ export default function CoursesSection() {
         </div>
 
         {/* B.Sc. Course */}
-        <div className="bg-blue-900 text-white p-6 rounded-lg text-center pt-14 pb-14">
+        <div className="bg-blue-900 text-white p-6 rounded-lg text-center pt-14 pb-14" data-aos="fade-up">
           <div className="mb-4">
             {/* BSc Icon (SVG) */}
             <svg

@@ -7,6 +7,9 @@
 
 /* Hide scroll bar for all elements */
 
+html, body {
+  overflow-x: hidden;
+}
 
 
 body {
@@ -14,18 +17,15 @@ body {
     margin: 0px;
     padding: 0px;
     font-family: 'Raleway', sans-serif;
+    overflow-x: hidden; /* Prevents horizontal scrolling */
 }
-header{
-    width: 100vw!important;
+
+img, .container, .header {
+ 
+  max-width: 100%;
+  overflow: hidden;
 }
-/* styles/custom.css */
-.header-background {
-    background-image: url('../public/img/Untitled-design.png'); /* Update the path to your background image */
-    background-size: cover;
-    background-position: center;
-    height: 150px;
-  }
-  
+
   .header-logo {
     height: 100px;
     width: 100px;
@@ -182,6 +182,31 @@ header{
       position: static;
       width: 100%;
     }
+  }
+  .loader {
+    border: 8px solid rgba(0, 0, 0, 0.1); /* Light gray border */
+    border-left-color: #007bff; /* Blue border */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto; /* Center horizontally */
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 600px; /* Same height as your slider */
   }
   
   .sidebar {

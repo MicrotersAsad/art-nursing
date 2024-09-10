@@ -10,7 +10,7 @@ export default function WhyChooseVNC() {
         {/* Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Job Opportunities */}
-          <div className="bg-white p-5 rounded-lg shadow-md flex items-center">
+          <div className="bg-white p-5 rounded-lg shadow-md flex items-center" data-aos="fade-right">
             <div className="mr-4">
               {/* Job Opportunities Icon */}
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="48px" height="48px">
@@ -24,7 +24,7 @@ export default function WhyChooseVNC() {
           </div>
 
           {/* Modern Laboratory */}
-          <div className="bg-white p-5 rounded-lg shadow-md flex items-center">
+          <div className="bg-white p-5 rounded-lg shadow-md flex items-center" data-aos="fade-up">
             <div className="mr-4">
               {/* Modern Laboratory Icon */}
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="48px" height="48px">
@@ -38,7 +38,7 @@ export default function WhyChooseVNC() {
           </div>
 
           {/* Modern Laboratory Midwifery */}
-          <div className="bg-white p-5 rounded-lg shadow-md flex items-center">
+          <div className="bg-white p-5 rounded-lg shadow-md flex items-center" data-aos="fade-left">
             <div className="mr-4">
               {/* Midwifery Icon */}
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="48px" height="48px">
@@ -52,7 +52,7 @@ export default function WhyChooseVNC() {
           </div>
 
           {/* Modern Laboratory Nursing */}
-          <div className="bg-white p-5 rounded-lg shadow-md flex items-center">
+          <div className="bg-white p-5 rounded-lg shadow-md flex items-center"data-aos="fade-right">
             <div className="mr-4">
               {/* Nursing Icon */}
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="48px" height="48px">
@@ -66,7 +66,7 @@ export default function WhyChooseVNC() {
           </div>
 
           {/* Modern Laboratory Paramedic */}
-          <div className="bg-white p-5 rounded-lg shadow-md flex items-center">
+          <div className="bg-white p-5 rounded-lg shadow-md flex items-center" data-aos="fade-up">
             <div className="mr-4">
               {/* Paramedic Icon */}
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="48px" height="48px">
@@ -80,7 +80,7 @@ export default function WhyChooseVNC() {
           </div>
 
           {/* Canteen */}
-          <div className="bg-white p-5 rounded-lg shadow-md flex items-center">
+          <div className="bg-white p-5 rounded-lg shadow-md flex items-center" data-aos="fade-left">
             <div className="mr-4">
               {/* Canteen Icon */}
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="48px" height="48px">
