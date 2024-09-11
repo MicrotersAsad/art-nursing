@@ -129,7 +129,7 @@ const GoverningDashboard = () => {
     setIsEdit(false);
   };
 
-  if (loading) return <p>Loading...</p>;
+
 
   return (
     <Layout>
@@ -165,18 +165,7 @@ const GoverningDashboard = () => {
                   required
                 />
               </div>
-              <div>
-                <label className="block text-lg font-medium text-gray-700">Department</label>
-                <input
-                  type="text"
-                  name="department"
-                  value={formData.department}
-                  onChange={handleChange}
-                  className="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                  placeholder="Enter governing department"
-                  required
-                />
-              </div>
+              
               <div>
                 <label className="block text-lg font-medium text-gray-700">Photo</label>
                 <input

@@ -37,18 +37,17 @@ const handler = async (req, res) => {
           return res.status(500).json({ message: 'Error uploading photo', error: err });
         }
 
-        const { name, designation, department } = req.body;
+        const { name, designation } = req.body;
         const file = req.file;
         const photoPath = file ? `/uploads/${file.filename}` : null;
 
-        if (!name || !designation || !department) {
+        if (!name || !designation) {
           return res.status(400).json({ message: 'Name, Designation, and Department are required.' });
         }
 
         const governingInfo = {
           name,
           designation,
-          department,
           photoPath,
         };
 
@@ -82,14 +81,13 @@ const handler = async (req, res) => {
         const file = req.file;
         const photoPath = file ? `/uploads/${file.filename}` : req.body.existingPhotoPath; // Keep existing photo if no new one
 
-        if (!name || !designation || !department) {
+        if (!name || !designation) {
           return res.status(400).json({ message: 'Name, Designation, and Department are required.' });
         }
 
         const updatedgoverningInfo = {
           name,
           designation,
-          department,
           photoPath,
         };
 

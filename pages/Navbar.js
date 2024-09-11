@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { FaAngleDown, FaEnvelope, FaPhone, FaPhoneAlt, FaRegArrowAltCircleRight } from 'react-icons/fa'; // Import arrow icon from react-icons
+import { FaAngleDown, FaEnvelope, FaPhoneAlt, FaRegArrowAltCircleRight } from 'react-icons/fa'; // Import arrow icon from react-icons
 import logo from "../public/img/logo (3).png"; // Ensure this is your logo path
 import Link from 'next/link';
+import { useRouter } from 'next/router'; // Import useRouter
 
 const Header = () => {
   const [openDropdown, setOpenDropdown] = useState(""); // Keep track of which dropdown is open
   const [isMenuOpen, setIsMenuOpen] = useState(false); // For mobile menu
+  const router = useRouter(); // Initialize router
 
   // Function to handle opening a dropdown and closing others
   const handleDropdown = (menu) => {
@@ -17,35 +19,44 @@ const Header = () => {
     }
   };
 
+  // Automatically close dropdown when navigating to a new page
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setOpenDropdown(""); // Close dropdown on route change
+      setIsMenuOpen(false); // Close mobile menu as well
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+    
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
+
   return (
     <header className="border-b-4 border-[#F4A139]">
       {/* Top Bar */}
       <div className="bg-[#004080] text-white">
-  <div className="flex flex-col md:flex-row justify-between items-center px-4 py-2 max-w-7xl mx-auto text-sm">
-    {/* Phone, Email, and Online Certificate Verification together on desktop */}
-    <div className="flex flex-col md:flex-row items-center space-x-4">
-      <span className="flex items-center whitespace-nowrap">
-      <FaPhoneAlt className="text-[#F4A139] me-2" />
-        +8802222291453
-      </span>
-      <span className="flex items-center whitespace-nowrap">
-        <FaEnvelope className="text-[#F4A139] me-2" />
-        info@art.edu.bd
-      </span>
-      
-      {/* On mobile, this will move below */}
-      <span className="flex items-center mt-1 md:mt-0 whitespace-nowrap">
-        <FaRegArrowAltCircleRight className="text-[#F4A139] me-2" />
-        <Link href="#" className="text-white">
-          Online Certificate Verification
-        </Link>
-      </span>
-    </div>
-  </div>
-</div>
-
-
-
+        <div className="flex flex-col md:flex-row justify-between items-center px-4 py-2 max-w-7xl mx-auto text-sm">
+          <div className="flex flex-col md:flex-row items-center space-x-4">
+            <span className="flex items-center whitespace-nowrap">
+              <FaPhoneAlt className="text-[#F4A139] me-2" />
+              +8802222291453
+            </span>
+            <span className="flex items-center whitespace-nowrap">
+              <FaEnvelope className="text-[#F4A139] me-2" />
+              info@art.edu.bd
+            </span>
+            <span className="flex items-center mt-1 md:mt-0 whitespace-nowrap">
+              <FaRegArrowAltCircleRight className="text-[#F4A139] me-2" />
+              <Link href="#" className="text-white">
+                Online Certificate Verification
+              </Link>
+            </span>
+          </div>
+        </div>
+      </div>
 
       {/* Main Header */}
       <div className="relative bg-cover bg-center">
@@ -104,7 +115,7 @@ const Header = () => {
               } md:block`}
             >
               <Link
-                href="#"
+                href="/"
                 className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r"
               >
                 Home
@@ -127,25 +138,25 @@ const Header = () => {
                       About Us
                     </Link>
                     <Link
-                      href="#"
+                      href="governing-body"
                       className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
                     >
                       Governing Body
                     </Link>
                     <Link
-                      href="#"
-                      className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
-                    >
-                      Staff Information
-                    </Link>
-                    <Link
-                      href="#"
+                      href="teacher-information"
                       className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
                     >
                       Teacher's Information
                     </Link>
                     <Link
-                      href="#"
+                      href="staff-information"
+                      className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
+                    >
+                      Staff Information
+                    </Link>
+                    <Link
+                      href="achivement"
                       className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
                     >
                       Achievements
