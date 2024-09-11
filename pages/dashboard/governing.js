@@ -1,118 +1,259 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import dynamic from 'next/dynamic';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import Layout from './layout';
+import Image from 'next/image';
 
-// Dynamically import the QuillWrapper component with SSR disabled
-const QuillWrapper = dynamic(() => import('../../components/EditorWrapper'), { ssr: false });
+const GoverningDashboard = () => {
+  const [governing, setgoverning] = useState([]);
+  const [formData, setFormData] = useState({
+    id: '',
+    name: '',
+    designation: '',
+    department: '',
+    photo: null,
+    existingPhotoPath: null, // Keep track of existing photo
+  });
+  const [isEdit, setIsEdit] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
 
-function About() {
-  const [quillContent, setQuillContent] = useState('');
-  const [existingContent, setExistingContent] = useState('');
-  const [metaTitle, setMetaTitle] = useState('');
-  const [metaDescription, setMetaDescription] = useState('');
-  const [existingMetaTitle, setExistingMetaTitle] = useState('');
-  const [existingMetaDescription, setExistingMetaDescription] = useState('');
-  const [error, setError] = useState(null);
-
+  // Fetch governing list
   useEffect(() => {
-    const fetchContent = async () => {
+    const fetchgoverning = async () => {
       try {
-        const response = await fetch('/api/governing');
-        if (!response.ok) {
-          throw new Error('Failed to fetch content');
-        }
-        const data = await response.json();
-        setQuillContent(data?.content || '');
-        setMetaTitle(data?.metaTitle || '');
-        setMetaDescription(data?.metaDescription || '');
-        setExistingContent(data?.content || '');
-        setExistingMetaTitle(data?.metaTitle || '');
-        setExistingMetaDescription(data?.metaDescription || '');
+        const response = await axios.get('/api/governing');
+        setgoverning(response.data);
       } catch (error) {
-        console.error('Error fetching content:', error.message);
-        setError(error.message);
+        console.error('Error fetching governing data:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchContent();
+    fetchgoverning();
   }, []);
 
-  const handleSubmit = useCallback(async () => {
-    try {
-      const response = await fetch('/api/governing', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ content: quillContent, metaTitle, metaDescription }),
-      });
+  // Handle form input change
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(`Failed to post content: ${errorMessage}`);
+  // Handle file (photo) change
+  const handleFileChange = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      photo: e.target.files[0],
+    }));
+  };
+
+  // Handle form submission for adding/editing
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setUploading(true);
+
+    const formDataObj = new FormData();
+    formDataObj.append('name', formData.name);
+    formDataObj.append('designation', formData.designation);
+    formDataObj.append('department', formData.department);
+    if (formData.photo) {
+      formDataObj.append('photo', formData.photo);
+    } else {
+      formDataObj.append('existingPhotoPath', formData.existingPhotoPath);
+    }
+
+    try {
+      if (isEdit) {
+        formDataObj.append('id', formData.id);
+        await axios.put('/api/governing', formDataObj, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+      } else {
+        await axios.post('/api/governing', formDataObj, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
       }
 
-      // Handle success
-      setError(null);
-      setExistingContent(quillContent);
-      setExistingMetaTitle(metaTitle);
-      setExistingMetaDescription(metaDescription);
+      const updatedgoverningList = await axios.get('/api/governing');
+      setgoverning(updatedgoverningList.data);
+      resetForm();
     } catch (error) {
-      console.error('Error posting content:', error.message);
-      setError(error.message);
+      console.error('Error uploading governing info:', error);
+    } finally {
+      setUploading(false);
     }
-  }, [quillContent, metaTitle, metaDescription]);
+  };
 
-  const handleQuillChange = useCallback((newContent) => {
-    setQuillContent(newContent);
-  }, []);
+  // Handle governing deletion
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this governing member?')) {
+      try {
+        await axios.delete(`/api/governing?id=${id}`);
+        setgoverning((prevgoverning) => prevgoverning.filter((member) => member._id !== id));
+      } catch (error) {
+        console.error('Error deleting governing member:', error);
+      }
+    }
+  };
+
+  // Handle governing edit
+  const handleEdit = (governingMember) => {
+    setFormData({
+      id: governingMember._id,
+      name: governingMember.name,
+      designation: governingMember.designation,
+      department: governingMember.department,
+      existingPhotoPath: governingMember.photoPath,
+      photo: null,
+    });
+    setIsEdit(true);
+  };
+
+  // Reset the form after adding/editing
+  const resetForm = () => {
+    setFormData({
+      id: '',
+      name: '',
+      designation: '',
+      department: '',
+      photo: null,
+      existingPhotoPath: null,
+    });
+    setIsEdit(false);
+  };
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <Layout>
-      <div className="container mx-auto p-5">
-        <h2 className="text-2xl font-bold mb-4">Edit governing body Page Content</h2>
-        {error && <div className="text-red-500 mb-4">Error: {error}</div>}
-        <div className="mb-4">
-          <label htmlFor="metaTitle" className="block text-sm font-medium text-gray-700">
-            Meta Title
-          </label>
-          <input
-            type="text"
-            id="metaTitle"
-            value={metaTitle}
-            onChange={(e) => setMetaTitle(e.target.value)}
-            className="mt-1 block w-full p-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="metaDescription" className="block text-sm font-medium text-gray-700">
-            Meta Description
-          </label>
-          <textarea
-            id="metaDescription"
-            value={metaDescription}
-            onChange={(e) => setMetaDescription(e.target.value)}
-            className="mt-1 block w-full p-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            rows="3"
-          />
-        </div>
-        <QuillWrapper initialContent={quillContent} onChange={handleQuillChange} />
-        <button
-          className="btn btn-primary p-2 mt-3 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-          onClick={handleSubmit}
-        >
-          Submit Content
-        </button>
+      <div className="p-8 bg-gray-50 min-h-screen">
+        <div className="max-w-6xl mx-auto bg-white shadow-md rounded-lg p-6">
+          <h1 className="text-3xl font-bold text-gray-900 mb-6 text-center">governing Dashboard</h1>
 
-        <div className="mt-10">
-          <h2 className="text-xl font-bold mb-4">governing body Content</h2>
-          <p className="text-sm font-medium text-gray-700">Meta Title: {existingMetaTitle}</p>
-          <p className="text-sm font-medium text-gray-700">Meta Description: {existingMetaDescription}</p>
-          <div dangerouslySetInnerHTML={{ __html: existingContent }} className="prose"></div>
+          {/* governing Form */}
+          <div className="mb-10">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">{isEdit ? 'Edit governing' : 'Add New governing'}</h2>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label className="block text-lg font-medium text-gray-700">Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Enter governing name"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-lg font-medium text-gray-700">Designation</label>
+                <input
+                  type="text"
+                  name="designation"
+                  value={formData.designation}
+                  onChange={handleChange}
+                  className="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Enter governing designation"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-lg font-medium text-gray-700">Department</label>
+                <input
+                  type="text"
+                  name="department"
+                  value={formData.department}
+                  onChange={handleChange}
+                  className="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Enter governing department"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-lg font-medium text-gray-700">Photo</label>
+                <input
+                  type="file"
+                  name="photo"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="mt-2 block w-full text-sm text-gray-500"
+                />
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="inline-flex items-center px-5 py-3 border border-transparent text-lg font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
+                  disabled={uploading}
+                >
+                  {uploading ? 'Saving...' : isEdit ? 'Update governing' : 'Add governing'}
+                </button>
+              </div>
+            </form>
+          </div>
+
+          {/* governing List Table */}
+          <div>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">governing List</h2>
+            <table className="min-w-full bg-white border border-gray-200 shadow-sm rounded-lg overflow-hidden">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">Photo</th>
+                  <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">Name</th>
+                  <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">Designation</th>
+                  <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">Department</th>
+                  <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {governing.map((member) => (
+                  <tr key={member._id} className="border-t">
+                    <td className="py-3 px-4 text-sm text-gray-800">
+                      {member.photoPath ? (
+                        <Image
+                          src={member.photoPath}
+                          alt={member.name}
+                          className="w-16 h-16 object-cover rounded-full"
+                          width={16}
+                          height={16}
+                        />
+                      ) : (
+                        <span className="text-gray-500">No Photo</span>
+                      )}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-gray-800">{member.name}</td>
+                    <td className="py-3 px-4 text-sm text-gray-800">{member.designation}</td>
+                    <td className="py-3 px-4 text-sm text-gray-800">{member.department}</td>
+                    <td className="py-3 px-4 text-sm flex space-x-3">
+                      <button
+                        onClick={() => handleEdit(member)}
+                        className="text-indigo-600 hover:text-indigo-900"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(member._id)}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </Layout>
   );
-}
+};
 
-export default About;
+export default GoverningDashboard;

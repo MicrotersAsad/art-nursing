@@ -642,6 +642,96 @@ console.log(user);
           </div>
         )}
     </div>
+    {/* About */}
+    <div className="mt-3">
+      <p
+        className={`flex items-center py-2 px-6 cursor-pointer rounded-md ${
+          menuOpen === "about"
+            ? "bg-gray-300 text-gray-700"
+            : "hover:bg-gray-300 hover:text-white"
+        }`}
+        onClick={() => toggleMenu("about")}
+      >
+        <FaUserGraduate className="mr-3 text-blue-500" />
+        {!isCollapsed && <span>About</span>}
+        {!isCollapsed && (
+          <span className="ml-auto">
+            {menuOpen === "about" ? <FaMinus /> : <FaPlus />}
+          </span>
+        )}
+      </p>
+
+      {(menuOpen === "about" ||
+        isActiveRoute("/dashboard/about-us") ||
+        isActiveRoute("/dashboard/governing") ||
+        isActiveRoute("/dashboard/staff") ||
+        isActiveRoute("/dashboard/teacher") ||
+        isActiveRoute("/dashboard/achievement")) &&
+        !isCollapsed && (
+          <div className="ml-6">
+            <Link href="/dashboard/about-us" passHref>
+              <p
+                className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                  isActiveRoute("/dashboard/about-us")
+                    ? "text-blue-400"
+                    : "hover:bg-gray-600 hover:text-white"
+                }`}
+              >
+                <FaCircle className="mr-2 text-xs" />
+                About Us
+              </p>
+            </Link>
+            <Link href="/dashboard/governing" passHref>
+              <p
+                className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                  isActiveRoute("/dashboard/governing")
+                    ? "text-blue-400"
+                    : "hover:bg-gray-600 hover:text-white"
+                }`}
+              >
+                <FaCircle className="mr-2 text-xs" />
+                Governing Body
+              </p>
+            </Link>
+            <Link href="/dashboard/staff" passHref>
+              <p
+                className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                  isActiveRoute("/dashboard/staff")
+                    ? "text-blue-400"
+                    : "hover:bg-gray-600 hover:text-white"
+                }`}
+              >
+                <FaCircle className="mr-2 text-xs" />
+                Staff Information
+              </p>
+            </Link>
+            <Link href="/dashboard/teacher" passHref>
+              <p
+                className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                  isActiveRoute("/dashboard/teacher")
+                    ? "text-blue-400"
+                    : "hover:bg-gray-600 hover:text-white"
+                }`}
+              >
+                <FaCircle className="mr-2 text-xs" />
+                Teacher Information
+              </p>
+            </Link>
+            <Link href="/dashboard/achievement" passHref>
+              <p
+                className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                  isActiveRoute("/dashboard/achievement")
+                    ? "text-blue-400"
+                    : "hover:bg-gray-600 hover:text-white"
+                }`}
+              >
+                <FaCircle className="mr-2 text-xs" />
+                Achievement
+              </p>
+            </Link>
+          </div>
+        )}
+    </div>
 
     {/* Appearance */}
     <div className="mt-3">

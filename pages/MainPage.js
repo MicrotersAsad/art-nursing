@@ -6,6 +6,7 @@ import WhyChooseVNC from './WhyChooseVNC';
 import NoticesAndBlogs from './NoticesAndBlogs';
 import PhotoGallery from './Gallery';
 import AboutSection from './AboutUs';
+import CountdownTimer from './CountdownTimer';
 
 const MainPage = () => {
     return (
@@ -13,6 +14,7 @@ const MainPage = () => {
             <Banner/>
             <InfoSection/>
             <AboutSection/>
+            <CountdownTimer/>
         
       <CoursesSection/>
       <WhyChooseVNC/>

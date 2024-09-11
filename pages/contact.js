@@ -164,12 +164,12 @@ const Contact = () => {
       </div>
 
       {/* Embedded Map */}
-      <div className='max-w-7xl mx-auto pt-5 pb-5'>
+      <div className='w-full pt-5 pb-5'>
         {contactInfo.locationLink && (
           <iframe
             src={contactInfo.locationLink}
-            width="1200"
-            height="400"
+            width="100%"
+            height="500"
             style={{ border: 0 }}
             allowFullScreen=""
             loading="lazy"
