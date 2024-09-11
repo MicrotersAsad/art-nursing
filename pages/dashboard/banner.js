@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Layout from './layout';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Dashboard() {
   const [formData, setFormData] = useState({
@@ -151,9 +152,11 @@ export default function Dashboard() {
               <label className="block text-md font-semibold text-gray-800 mb-1">Upload Image</label>
               {existingImage && !formData.img && (
                 <div className="mb-4">
-                  <img
+                  <Image
                     src={existingImage.startsWith('/uploads') ? existingImage : `/uploads/${existingImage}`}
                     alt="Current Slider"
+                    width={32}
+                    height={32}
                     className="w-32 h-32 object-cover rounded-lg shadow-lg"
                   />
                   <p className="text-sm text-gray-500 mt-1">Current Image</p>
@@ -263,9 +266,11 @@ export default function Dashboard() {
                     <tr key={index} className="border-t hover:bg-gray-100 transition duration-200">
                       <td className="px-6 py-4">
                         {slider.img ? (
-                          <img
+                          <Image
                             src={slider.img.startsWith('/uploads') ? slider.img : `/uploads/${slider.img}`}
                             alt={slider.heading}
+                            width={20}
+                            height={20}
                             className="w-20 h-20 object-cover rounded shadow-sm"
                           />
                         ) : (

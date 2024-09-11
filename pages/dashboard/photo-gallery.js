@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Layout from './layout';
+import Image from 'next/image';
 
 const Photogallery = () => {
   const [formData, setFormData] = useState({ img: null });
@@ -108,10 +109,13 @@ const Photogallery = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {img.map((image) => (
               <div key={image._id} className="relative">
-                <img
+                <Image
                   src={image.img}
                   alt="Gallery"
                   className="w-full  object-cover rounded"
+                  width={100}
+                  height={100}
+
                 />
                 <button
                   onClick={() => handleDelete(image._id)}

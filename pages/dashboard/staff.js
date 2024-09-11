@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Layout from './layout';
+import Image from 'next/image';
 
 const StaffDashboard = () => {
   const [staff, setStaff] = useState([]);
@@ -216,10 +217,12 @@ const StaffDashboard = () => {
                   <tr key={member._id} className="border-t">
                     <td className="py-3 px-4 text-sm text-gray-800">
                       {member.photoPath ? (
-                        <img
+                        <Image
                           src={member.photoPath}
                           alt={member.name}
                           className="w-16 h-16 object-cover rounded-full"
+                          width={16}
+                          height={16}
                         />
                       ) : (
                         <span className="text-gray-500">No Photo</span>

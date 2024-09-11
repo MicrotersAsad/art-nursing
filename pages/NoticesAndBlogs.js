@@ -8,6 +8,8 @@ export default function NoticesAndBlogs() {
   const [searchTermBlogs, setSearchTermBlogs] = useState('');
   const [loadingNotices, setLoadingNotices] = useState(true);
   const [loadingBlogs, setLoadingBlogs] = useState(true);
+  const [visibleNotices, setVisibleNotices] = useState(5); // Number of notices initially visible
+  const [visibleBlogs, setVisibleBlogs] = useState(5); // Number of blogs initially visible
 
   // Fetch notices from API
   useEffect(() => {
@@ -51,6 +53,35 @@ export default function NoticesAndBlogs() {
     blog.title.toLowerCase().includes(searchTermBlogs.toLowerCase())
   );
 
+  // Infinite Scroll for Notices
+  const handleScrollNotices = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop !==
+      document.documentElement.offsetHeight
+    )
+      return;
+    setVisibleNotices((prevVisible) => prevVisible + 5); // Show 5 more notices on scroll
+  };
+
+  // Infinite Scroll for Blogs
+  const handleScrollBlogs = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop !==
+      document.documentElement.offsetHeight
+    )
+      return;
+    setVisibleBlogs((prevVisible) => prevVisible + 5); // Show 5 more blogs on scroll
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScrollNotices);
+    window.addEventListener('scroll', handleScrollBlogs);
+    return () => {
+      window.removeEventListener('scroll', handleScrollNotices);
+      window.removeEventListener('scroll', handleScrollBlogs);
+    };
+  }, []);
+
   return (
     <div className="w-full bg-gray-100 py-12">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -72,7 +103,7 @@ export default function NoticesAndBlogs() {
                 {filteredNotices.length === 0 ? (
                   <div className="text-center py-4 text-gray-600">No notices available.</div>
                 ) : (
-                  filteredNotices.map((notice) => (
+                  filteredNotices.slice(0, visibleNotices).map((notice) => (
                     <div key={notice._id} className="flex items-center mb-4">
                       {/* Date Box */}
                       <div className="flex flex-col items-center justify-center text-white rounded-md overflow-hidden w-20 h-20">
@@ -119,7 +150,7 @@ export default function NoticesAndBlogs() {
               {filteredBlogs.length === 0 ? (
                 <div className="text-center py-4 text-gray-600">No blogs available.</div>
               ) : (
-                filteredBlogs.map((blog) => (
+                filteredBlogs.slice(0, visibleBlogs).map((blog) => (
                   <div key={blog._id} className="flex items-center mb-4">
                     {/* Date Box */}
                     <div className="flex flex-col items-center justify-center text-white rounded-md overflow-hidden w-16 h-16">

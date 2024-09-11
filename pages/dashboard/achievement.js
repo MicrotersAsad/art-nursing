@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Layout from './layout';
+import Image from 'next/image';
 
 const AchievementsDashboard = () => {
   const [achievements, setAchievements] = useState([]);
@@ -163,7 +164,8 @@ const AchievementsDashboard = () => {
               {isEdit && formData.existingImagePath && (
                 <div>
                   <label className="block text-lg font-medium text-gray-700">Existing Image</label>
-                  <img
+                  <Image
+                  width={16}
                     src={formData.existingImagePath}
                     alt="Achievement"
                     className="w-32 h-32 object-cover rounded mt-2"
@@ -199,7 +201,9 @@ const AchievementsDashboard = () => {
                     <td className="py-3 px-4 text-sm text-gray-800">{achievement.title}</td>
                     <td className="py-3 px-4 text-sm text-gray-800">
                       {achievement.imagePath ? (
-                        <img
+                        <Image
+                        width={16}
+                        height={16}
                           src={achievement.imagePath}
                           alt={achievement.title}
                           className="w-16 h-16 object-cover rounded"

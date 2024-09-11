@@ -11,7 +11,7 @@ const BlogSection = ({ initialBlogs }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState('');
   const [blogsData, setBlogsData] = useState(initialBlogs);
-  const [departments, setDepartments] = useState([]);
+  const [categories, setCategories] = useState([]);
   const blogsPerPage = 9;
 
   const currentBlogs = blogsData.slice((currentPage - 1) * blogsPerPage, currentPage * blogsPerPage);
@@ -29,26 +29,36 @@ const BlogSection = ({ initialBlogs }) => {
       setLoading(false);
     }
   }, []);
-  // Fetch existing departments
+
+  // Fetch categories
   useEffect(() => {
-    fetchDepartments();
+    fetchCategories();
   }, []);
 
-  const fetchDepartments = async () => {
+  const fetchCategories = async () => {
     try {
       const response = await axios.get('/api/categories');
-      setDepartments(response.data);
-      console.log(departments);
-      
+      console.log('Categories fetched:', response.data); // Debug log to check categories
+      setCategories(response.data);
     } catch (error) {
-      console.error('Error fetching departments:', error);
+      console.error('Error fetching categories:', error);
     }
   };
-  const getDepartmentName = (departmentId) => {
-    const department = departments.find((dept) => dept._id === departmentId);
-    console.log(department);
+
+  const getCategoryName = (categoryId) => {
+    if (!categoryId) {
+      console.warn('Blog does not have a categoryId:', categoryId); // Logs when categoryId is missing
+      return 'No Category';
+    }
+
+    const category = categories.find((cat) => cat._id === categoryId);
     
-    return department ? department.name : 'Unknown Department';
+    if (!category) {
+      console.warn(`No matching category found for ID: ${categoryId}`); // Logs if category is not found
+      return 'Unknown Category';
+    }
+
+    return category.name;
   };
 
   useEffect(() => {
@@ -58,14 +68,6 @@ const BlogSection = ({ initialBlogs }) => {
       setLoading(false);
     }
   }, [fetchBlogs, initialBlogs]);
-
-  const parseCategories = (category) => {
-    // Ensure category is a string and correctly split it, else return an empty array
-    if (typeof category === 'string') {
-      return category.split(',').map(cat => cat.trim());
-    }
-    return [];
-  };
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -121,7 +123,7 @@ const BlogSection = ({ initialBlogs }) => {
                   <p className="text-gray-600 mb-4">{blog.description}</p>
                   <p className="text-gray-500 text-sm">By {blog.author} · {new Date(blog.createdAt).toLocaleDateString()}</p>
                   <div className="mt-2">
-                  <td className="px-4 py-2">{getDepartmentName(blog.name)}</td>
+                    <span className="px-4 py-2">{getCategoryName(blog.category)}</span>
                   </div>
                 </div>
               </div>
@@ -148,60 +150,12 @@ const BlogSection = ({ initialBlogs }) => {
                   </h4>
                   <p className="text-gray-500 text-sm">By {blog.author} · {new Date(blog.createdAt).toLocaleDateString()}</p>
                   <div className="mt-2">
-                    {parseCategories(blog.category).map((category, i) => (
-                      <span key={i} className="text-sm bg-gray-200 text-gray-700 rounded-full px-2 py-1 mr-2">{category}</span>
-                    ))}
+                    <span className="px-4 py-2">{getCategoryName(blog.categoryId)}</span>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-
-        <div className="bg-red-500 text-white p-10 rounded-lg relative w-full text-center mt-5 mb-5">
-          <div className="mt-10">
-            <h2 className="text-2xl text-white font-bold mb-2">SUBSCRIBE TO OUR NEWSLETTER</h2>
-            <p className="mb-4">Stay updated with our latest blog posts and news.</p>
-            <form className="flex justify-center" onSubmit={(e) => e.preventDefault()}>
-              <input type="email" placeholder="Email Address" className="w-full max-w-xs p-3 rounded-l-md focus:outline-none" />
-              <button type="submit" className="bg-red-600 p-3 rounded-r-md">
-                <FaArrowRight className="text-white" />
-              </button>
-            </form>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
-          {currentBlogs.slice(4).map((blog, index) => (
-            <div key={index} className="bg-white shadow-md rounded-lg overflow-hidden">
-              {blog.image && (
-                <Image
-                  src={blog.image}
-                  alt={blog.title}
-                  width={600}
-                  height={400}
-                  layout="responsive"
-                  className="object-cover rounded-lg"
-                />
-              )}
-              <div className="p-4">
-                <h4 className="text-lg font-semibold">
-                  <Link href={`/blog/${blog.slug}`} passHref>
-                    <span className="text-blue-500 hover:underline">{blog.title}</span>
-                  </Link>
-                </h4>
-                <p className="text-gray-500 text-sm">By {blog.author} · {new Date(blog.createdAt).toLocaleDateString()}</p>
-                <div className="mt-2">
-                  {parseCategories(blog.category).map((category, i) => (
-                    <span key={i} className="text-sm bg-gray-200 text-gray-700 rounded-full px-2 py-1 mr-2">{category}</span>
-                  ))}
-                </div>
-                <Link href={`/blog/${blog.slug}`} passHref>
-                  <span className="text-red-500 hover:underline mt-3"><span>Read More <FaArrowRight/></span></span>
-                </Link>
-              </div>
-            </div>
-          ))}
         </div>
 
         <div className="flex justify-center mt-8">

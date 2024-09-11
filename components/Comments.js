@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../contexts/AuthContext';
+import Image from 'next/image';
 
 const Comment = ({ comment, slug, onReply }) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
@@ -31,7 +32,7 @@ const Comment = ({ comment, slug, onReply }) => {
       <div className="flex items-start">
         <div className="w-12 h-12 rounded-full bg-gray-200 flex-shrink-0 mr-4">
           {comment.authorProfile ? (
-            <img src={comment.authorProfile} alt={comment.author} className="w-full h-full rounded-full object-cover" />
+            <Image src={comment.authorProfile} alt={comment.author} width={100} height={100} className="w-full h-full rounded-full object-cover" />
           ) : (
             <div className="w-full h-full rounded-full bg-gray-300" />
           )}

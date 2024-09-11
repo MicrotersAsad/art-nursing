@@ -4,6 +4,7 @@ import { ClipLoader } from 'react-spinners';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEnvelope, FaTrashAlt, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
+import Image from 'next/image';
 
 const Users = () => {
   const [users, setUsers] = useState([]); // Ensure users is initialized as an empty array
@@ -194,7 +195,9 @@ const Users = () => {
                       </td>
                       <td className="py-2 px-4 border-b">
                         {user.profileImage ? (
-                          <img
+                          <Image
+                          width={16}
+                          height={16}
                             src={user.profileImage}
                             alt="Profile"
                             className="w-16 h-16 rounded-full mx-auto"
