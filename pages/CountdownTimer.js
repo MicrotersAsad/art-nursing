@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // Import the AOS CSS
 
+// StatisticsCard component
 const StatisticsCard = ({ title, value, animation }) => {
   const [count, setCount] = useState(0);
 
@@ -31,7 +32,25 @@ const StatisticsCard = ({ title, value, animation }) => {
   );
 };
 
+// Statistics component
 const Statistics = () => {
+  const [counters, setCounters] = useState([]);
+
+  // Fetch counter data from the API
+  useEffect(() => {
+    const fetchCounters = async () => {
+      try {
+        const response = await fetch('/api/setting'); // Assuming API endpoint
+        const data = await response.json();
+        setCounters(data.counters || []); // Set the counters if available
+      } catch (error) {
+        console.error('Error fetching counters:', error);
+      }
+    };
+
+    fetchCounters();
+  }, []);
+
   useEffect(() => {
     AOS.init({
       duration: 1200, // Animation duration
@@ -48,14 +67,18 @@ const Statistics = () => {
         Our Community Statistics
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 w-full max-w-7xl">
-        {/* Card 1: Students */}
-        <StatisticsCard title="Students" value="500+" animation="fade-up" />
-
-        {/* Card 2: Faculty */}
-        <StatisticsCard title="Faculty" value="3+" animation="fade-up" />
-
-        {/* Card 3: Teachers */}
-        <StatisticsCard title="Teachers" value="30+" animation="fade-up" />
+        {counters.length > 0 ? (
+          counters.map((counter, index) => (
+            <StatisticsCard
+              key={index}
+              title={counter.headline}
+              value={`${counter.counter}+`} // Ensure the counter has a "+" sign
+              animation="fade-up"
+            />
+          ))
+        ) : (
+          <p>No statistics available at the moment.</p>
+        )}
       </div>
     </div>
   );

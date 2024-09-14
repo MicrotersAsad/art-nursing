@@ -1,0 +1,12 @@
+<svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-12 h-12 mx-auto"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M9 12v1m2 0v-1m2 0v1m2 0v-1m4 0a7 7 0 01-4 6.39A7 7 0 014 12V7a4 4 0 018 0v3" />
+            </svg>

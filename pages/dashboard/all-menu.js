@@ -21,6 +21,8 @@ const MenuList = () => {
     fetchMenus();
   }, []);
 
+
+
   return (
     <Layout>
       <div className="max-w-7xl mx-auto p-8 bg-white rounded-lg shadow-lg">
@@ -32,7 +34,7 @@ const MenuList = () => {
               <th className="p-2 text-left font-medium text-gray-600 block md:table-cell">Link</th>
               <th className="p-2 text-left font-medium text-gray-600 block md:table-cell">Order</th>
               <th className="p-2 text-left font-medium text-gray-600 block md:table-cell">Status</th>
-              <th className="p-2 text-left font-medium text-gray-600 block md:table-cell">Actions</th>
+            
             </tr>
           </thead>
           <tbody className="block md:table-row-group">
@@ -42,17 +44,7 @@ const MenuList = () => {
                 <td className="p-2 block md:table-cell">{menu.link}</td>
                 <td className="p-2 block md:table-cell">{menu.order}</td>
                 <td className="p-2 block md:table-cell">{menu.status}</td>
-                <td className="p-2 block md:table-cell">
-                  <Link href={`/menus/edit/${menu._id}`}>
-                    <p className="text-blue-500 hover:text-blue-700 mr-2">Edit</p>
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(menu._id)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    Delete
-                  </button>
-                </td>
+               
               </tr>
             ))}
           </tbody>

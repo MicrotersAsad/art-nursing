@@ -1353,7 +1353,7 @@ const Layout = React.memo(({ children }) => {
             </p>
 
             {(menuOpen === "appearance" ||
-              isActiveRoute("/dashboard/theme-settings") ||
+              isActiveRoute("/dashboard/setting") ||
               isActiveRoute("/dashboard/contact") ||
               isActiveRoute("/dashboard/allcontact") ||
               isActiveRoute("/dashboard/smtp") ||
@@ -1363,10 +1363,10 @@ const Layout = React.memo(({ children }) => {
               isActiveRoute("/dashboard/add-menu")) &&
               !isCollapsed && (
                 <div className="ml-6">
-                  <Link href="/dashboard/theme-settings" passHref>
+                  <Link href="/dashboard/setting" passHref>
                     <p
                       className={`relative flex items-center py-2 px-6 cursor-pointer ${
-                        isActiveRoute("/dashboard/theme-settings")
+                        isActiveRoute("/dashboard/setting")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
                       }`}

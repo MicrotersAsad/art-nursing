@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { FaAngleDown, FaEnvelope, FaPhoneAlt, FaRegArrowAltCircleRight } from 'react-icons/fa';
-import logo from "../public/img/logo (3).png";
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -9,6 +8,7 @@ const Header = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [menus, setMenus] = useState([]); // Store dynamic menu data
+  const [settings, setSettings] = useState(null); // Store dynamic settings
   const router = useRouter();
 
   // Fetch dynamic menu data from the API
@@ -22,8 +22,20 @@ const Header = () => {
     }
   };
 
+  // Fetch dynamic header settings from the API
+  const fetchSettingsData = async () => {
+    try {
+      const response = await fetch('/api/setting');
+      const data = await response.json();
+      setSettings(data);
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+    }
+  };
+
   useEffect(() => {
     fetchMenuData(); // Fetch dynamic menu data
+    fetchSettingsData(); // Fetch dynamic settings data
   }, []);
 
   useEffect(() => {
@@ -50,11 +62,11 @@ const Header = () => {
           <div className="flex flex-col md:flex-row items-center space-x-4">
             <span className="flex items-center whitespace-nowrap">
               <FaPhoneAlt className="text-[#F4A139] me-2" />
-              +8802222291453
+              {settings?.topHeading?.mobileNo || '+8802222291453'}
             </span>
             <span className="flex items-center whitespace-nowrap">
               <FaEnvelope className="text-[#F4A139] me-2" />
-              info@art.edu.bd
+              {settings?.topHeading?.email || 'info@art.edu.bd'}
             </span>
             <span className="flex items-center mt-1 md:mt-0 whitespace-nowrap">
               <FaRegArrowAltCircleRight className="text-[#F4A139] me-2" />
@@ -73,22 +85,13 @@ const Header = () => {
             {/* Logo */}
             <div className="flex items-center space-x-4">
               <Image
-                src={logo}
-                alt="FIU Logo"
-                width={80}
+                src={settings?.logoUrl || '/img/default-logo.png'} // Use dynamic logo URL
+                alt="Logo"
+                width={150}
                 height={80}
                 className="header-logo"
               />
-              <div>
-                <Link href="/">
-                  <h1 className="text-2xl md:text-3xl font-bold text-white">
-                    Art Nursing College
-                  </h1>
-                </Link>
-                <p className="text-xs md:text-sm text-gray-200">
-                  Start Here Succeed Here
-                </p>
-              </div>
+             
             </div>
 
             {/* Mobile Menu Toggle */}
