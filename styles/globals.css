@@ -122,11 +122,11 @@ img, .container, .header {
     display: block;
   }
   
-  nav a {
+  /* nav a {
     padding: 0.75rem 1.5rem;
     display: inline-block;
     transition: color 0.3s ease-in-out;
-  }
+  } */
   
   /* nav a:hover {
     color: #ffcc00;
