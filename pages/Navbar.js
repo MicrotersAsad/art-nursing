@@ -1,38 +1,46 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { FaAngleDown, FaEnvelope, FaPhoneAlt, FaRegArrowAltCircleRight } from 'react-icons/fa'; // Import arrow icon from react-icons
-import logo from "../public/img/logo (3).png"; // Ensure this is your logo path
+import { FaAngleDown, FaEnvelope, FaPhoneAlt, FaRegArrowAltCircleRight } from 'react-icons/fa';
+import logo from "../public/img/logo (3).png";
 import Link from 'next/link';
-import { useRouter } from 'next/router'; // Import useRouter
+import { useRouter } from 'next/router';
 
 const Header = () => {
-  const [openDropdown, setOpenDropdown] = useState(""); // Keep track of which dropdown is open
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // For mobile menu
-  const router = useRouter(); // Initialize router
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [menus, setMenus] = useState([]); // Store dynamic menu data
+  const router = useRouter();
 
-  // Function to handle opening a dropdown and closing others
-  const handleDropdown = (menu) => {
-    if (openDropdown === menu) {
-      setOpenDropdown(""); // Close if it's already open
-    } else {
-      setOpenDropdown(menu); // Open the selected menu
+  // Fetch dynamic menu data from the API
+  const fetchMenuData = async () => {
+    try {
+      const response = await fetch('/api/menus');
+      const data = await response.json();
+      setMenus(data);
+    } catch (error) {
+      console.error('Error fetching menus:', error);
     }
   };
 
-  // Automatically close dropdown when navigating to a new page
+  useEffect(() => {
+    fetchMenuData(); // Fetch dynamic menu data
+  }, []);
+
   useEffect(() => {
     const handleRouteChange = () => {
-      setOpenDropdown(""); // Close dropdown on route change
-      setIsMenuOpen(false); // Close mobile menu as well
+      setOpenDropdown(null); 
+      setIsMenuOpen(false); 
     };
 
     router.events.on('routeChangeComplete', handleRouteChange);
-    
-    // Cleanup the event listener when the component unmounts
     return () => {
       router.events.off('routeChangeComplete', handleRouteChange);
     };
   }, [router.events]);
+
+  const handleDropdown = (menuId) => {
+    setOpenDropdown(openDropdown === menuId ? null : menuId);
+  };
 
   return (
     <header className="border-b-4 border-[#F4A139]">
@@ -95,167 +103,92 @@ const Header = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16m-7 6h7"
-                />
+                {isMenuOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16m-7 6h7"
+                  />
+                )}
               </svg>
             </button>
           </div>
         </div>
 
-        {/* Desktop Navigation Menu */}
+        {/* Navigation Menu */}
         <div className="bg-opacity-90 bg-[#004080]">
           <div className="max-w-7xl mx-auto">
             <nav
-              className={`md:flex justify-start items-center text-white text-lg ${
-                isMenuOpen ? 'block' : 'hidden'
-              } md:block`}
+              className={`md:flex items-center text-white text-lg ${isMenuOpen ? 'block' : 'hidden'} md:block`}
             >
-              <Link
-                href="/"
-                className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r"
-              >
-                Home
-              </Link>
-
-              {/* About Dropdown */}
-              <div className="relative">
-                <button
-                  onClick={() => handleDropdown('aboutFiu')}
-                  className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r"
-                >
-                  About <FaAngleDown className="ml-2" />
-                </button>
-                {openDropdown === 'aboutFiu' && (
-                  <div className="absolute z-10 text-white shadow-lg rounded py-2 w-48 left-0 top-full bg-[#004080]">
+              {/* Dynamic Menus */}
+              {menus?.map((menu) => (
+                <div key={menu._id} className="relative group">
+                  {menu.submenus && menu.submenus.length > 0 ? (
+                    <div>
+                      <button
+                        onClick={() => handleDropdown(menu._id)}
+                        className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r"
+                      >
+                        {menu.title} <FaAngleDown className="ml-2" />
+                      </button>
+                      {/* Dropdown */}
+                      <div
+                        className={`absolute z-10 ${
+                          openDropdown === menu._id ? 'block' : 'hidden'
+                        } md:group-hover:block text-white shadow-lg rounded py-2 w-48 left-0 top-full bg-[#004080]`}
+                      >
+                        {menu.submenus.map((submenu) => (
+                          <Link
+                            key={submenu.title}
+                            href={submenu.link || '#'}
+                            className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
+                          >
+                            {submenu.title}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
                     <Link
-                      href="#"
-                      className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
+                      href={menu.link || '#'}
+                      className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r"
                     >
-                      About Us
+                      {menu.title}
                     </Link>
-                    <Link
-                      href="governing-body"
-                      className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
-                    >
-                      Governing Body
-                    </Link>
-                    <Link
-                      href="teacher-information"
-                      className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
-                    >
-                      Teacher's Information
-                    </Link>
-                    <Link
-                      href="staff-information"
-                      className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
-                    >
-                      Staff Information
-                    </Link>
-                    <Link
-                      href="achivement"
-                      className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
-                    >
-                      Achievements
-                    </Link>
-                  </div>
-                )}
-              </div>
-
-              {/* Admission Dropdown */}
-              <div className="relative">
-                <button
-                  onClick={() => handleDropdown('admission')}
-                  className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r"
-                >
-                  Admission <FaAngleDown className="ml-2" />
-                </button>
-                {openDropdown === 'admission' && (
-                  <div className="absolute z-10 text-white shadow-lg rounded py-2 w-48 left-0 top-full bg-[#004080]">
-                    <Link
-                      href="#"
-                      className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
-                    >
-                      Admission Requirements
-                    </Link>
-                    <Link
-                      href="#"
-                      className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
-                    >
-                      Tuition Fees
-                    </Link>
-                    <Link
-                      href="#"
-                      className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
-                    >
-                      Admission Form
-                    </Link>
-                  </div>
-                )}
-              </div>
-
-              {/* Academics Dropdown */}
-              <div className="relative">
-                <button
-                  onClick={() => handleDropdown('academics')}
-                  className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r"
-                >
-                  Program & Courses <FaAngleDown className="ml-2" />
-                </button>
-                {openDropdown === 'academics' && (
-                  <div className="absolute z-10 text-white shadow-lg rounded py-2 w-48 left-0 top-full bg-[#004080]">
-                    <Link
-                      href="#"
-                      className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
-                    >
-                      Diploma in Nursing Science
-                    </Link>
-                    <Link
-                      href="#"
-                      className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
-                    >
-                      BSC in Nursing (Basic) - 4 Years
-                    </Link>
-                    <Link
-                      href="#"
-                      className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
-                    >
-                      BSC in Nursing (Post Basic) - 2 Years
-                    </Link>
-                    <Link
-                      href="#"
-                      className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b"
-                    >
-                      Faculty of Science
-                    </Link>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              ))}
 
               {/* Static Links */}
               <Link
-                href="notices"
+                href="/notices"
                 className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r"
               >
                 Notice Board
               </Link>
               <Link
-                href="results"
+                href="/results"
                 className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r"
               >
                 Results
               </Link>
               <Link
-                href="blog"
+                href="/blog"
                 className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r"
               >
                 Blog
               </Link>
               <Link
-                href="contact"
+                href="/contact"
                 className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all"
               >
                 Contact Us
