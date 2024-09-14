@@ -1359,6 +1359,7 @@ const Layout = React.memo(({ children }) => {
               isActiveRoute("/dashboard/smtp") ||
               isActiveRoute("/dashboard/comments") ||
               isActiveRoute("/dashboard/media") ||
+              isActiveRoute("/dashboard/all-menu") ||
               isActiveRoute("/dashboard/add-menu")) &&
               !isCollapsed && (
                 <div className="ml-6">
@@ -1432,6 +1433,18 @@ const Layout = React.memo(({ children }) => {
                     >
                       <FaCircle className="mr-2 text-xs" />
                       Media
+                    </p>
+                  </Link>
+                  <Link href="/dashboard/all-menu" passHref>
+                    <p
+                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                        isActiveRoute("/dashboard/all-menu")
+                          ? "text-blue-400"
+                          : "hover:bg-gray-600 hover:text-white"
+                      }`}
+                    >
+                      <FaCircle className="mr-2 text-xs" />
+                      All Menu
                     </p>
                   </Link>
                   <Link href="/dashboard/add-menu" passHref>
