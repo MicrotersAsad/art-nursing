@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 
 export default function WhyChooseANC() {
@@ -37,9 +38,13 @@ export default function WhyChooseANC() {
               >
                 <div className="mr-4">
                   {/* SVG Icons remain the same */}
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="48px" height="48px">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm6 14H6v-1c0-2.67 5.33-4 6-4s6 1.33 6 4v1z" />
-                  </svg>
+                  <img
+                src={item?.iconUrl} // Use dynamic logo URL
+                alt="Logo"
+                width={128}
+                height={128}
+                className="icon-logo"
+              />
                 </div>
                 <div>
                   {/* Dynamic Title and Description */}

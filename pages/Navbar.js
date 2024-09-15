@@ -3,12 +3,14 @@ import Image from 'next/image';
 import { FaAngleDown, FaEnvelope, FaPhoneAlt, FaRegArrowAltCircleRight } from 'react-icons/fa';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useAuth } from '../contexts/AuthContext';
 
 const Header = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [menus, setMenus] = useState([]); // Store dynamic menu data
   const [settings, setSettings] = useState(null); // Store dynamic settings
+  const { user } = useAuth(); // Get the user object from AuthContext
   const router = useRouter();
 
   // Fetch dynamic menu data from the API
@@ -40,8 +42,8 @@ const Header = () => {
 
   useEffect(() => {
     const handleRouteChange = () => {
-      setOpenDropdown(null); 
-      setIsMenuOpen(false); 
+      setOpenDropdown(null);
+      setIsMenuOpen(false);
     };
 
     router.events.on('routeChangeComplete', handleRouteChange);
@@ -91,7 +93,6 @@ const Header = () => {
                 height={80}
                 className="header-logo"
               />
-             
             </div>
 
             {/* Mobile Menu Toggle */}
@@ -196,6 +197,16 @@ const Header = () => {
               >
                 Contact Us
               </Link>
+
+              {/* Conditionally Render Dashboard Link for Super Admin */}
+              {user?.role === 'super admin' && (
+                <Link
+                  href="/dashboard/dashboard"
+                  className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r md:border-l"
+                >
+                  Dashboard
+                </Link>
+              )}
             </nav>
           </div>
         </div>

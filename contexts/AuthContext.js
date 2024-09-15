@@ -2,12 +2,13 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
   const router = useRouter();
 
   useEffect(() => {
@@ -19,6 +20,7 @@ export const AuthProvider = ({ children }) => {
           setUser(decoded);
         } else {
           console.error("Token decoding failed");
+          localStorage.removeItem('token');
         }
       } catch (error) {
         console.error("Token verification failed:", error);
@@ -26,6 +28,7 @@ export const AuthProvider = ({ children }) => {
         router.push('/login');
       }
     }
+    setLoading(false); // Set loading to false after token fetching is done
   }, [router]);
 
   const login = async (email, password) => {
@@ -72,7 +75,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, updateUserProfile }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, updateUserProfile }}>
       {children}
     </AuthContext.Provider>
   );

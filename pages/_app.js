@@ -6,6 +6,7 @@ import Footer from './Footer';
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'next/router';
 import '../styles/globals.css';
+import { ClipLoader } from 'react-spinners';
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -40,7 +41,7 @@ function MyApp({ Component, pageProps }) {
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossOrigin="anonymous"
-        strategy="lazyOnload" // Optimize loading strategy
+        strategy="lazyOnload"
       />
 
       <AuthProvider>
@@ -61,36 +62,42 @@ function MyApp({ Component, pageProps }) {
 
 // AuthGuard component for protecting routes and handling redirection
 const AuthGuard = ({ children, isDashboard, isLoginPage }) => {
-  const { user, loading } = useAuth(); // Assume useAuth provides user and loading state
+  const { user, loading } = useAuth();
   const router = useRouter();
-
   useEffect(() => {
-    // If loading, do nothing
-    if (loading) return;
+    console.log("User:", user);
+    console.log("Loading:", loading);
+    console.log("Current Route:", router.pathname);
+  }, [loading, user, router]);
+  
+  useEffect(() => {
+    if (loading) return; // If loading, don't do anything
 
-    // If user is logged in and on the login page, redirect to the dashboard
+    // Only redirect to dashboard if the user is on login page
     if (user && isLoginPage) {
       router.push('/dashboard/dashboard');
+      return;
     }
 
-    // If user is not logged in and trying to access dashboard, redirect to login
+    // Only redirect to login if the user is trying to access dashboard but is not logged in
     if (!user && isDashboard) {
       router.push('/login');
+      return;
     }
+
+    // If the user is authenticated and not on login/dashboard, allow them to stay
   }, [loading, user, isDashboard, isLoginPage, router]);
 
-  // While loading, show a loader
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={80} color={"#36D7B7"} loading={loading} />
+      </div>
+    );
   }
 
-  // If user is on the login page and logged in, don't render login page
-  if (isLoginPage && user) {
-    return null;
-  }
-
-  // Render the content for all other cases
   return children;
 };
+
 
 export default MyApp;

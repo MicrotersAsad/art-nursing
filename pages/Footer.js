@@ -1,10 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image'; // Import Next.js Image component
 import logo from "../public/img/logo (3).png"; // Ensure this is the correct path to your logo image
 import { FaFacebook, FaYoutube, FaPhoneAlt, FaEnvelope, FaInfoCircle, FaBook, FaNewspaper, FaSyringe, FaGraduationCap, FaCalendar, FaBriefcase, FaImages } from 'react-icons/fa'; // Import icons
 import Link from 'next/link';
 
 const Footer = () => {
+  const [footerData,setFooterdata]=useState([])
+
+  useEffect(()=>{
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch('/api/footer'); // Replace with your API endpoint
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+          
+          setFooterdata(data || []); // Set whyChooseANC from the API response
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchSettings();
+  }, []);
   return (
     <footer className="bg-[#00254c] text-white py-10 px-4 md:px-10"> {/* Added px-4 for padding on mobile, px-10 for medium screens */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -12,11 +31,11 @@ const Footer = () => {
         <div>
           {/* Use Image component from Next.js for optimized image loading */}
           <Image
-            src={logo}
+            src={footerData?.logoUrl}
             alt="Art Nursing College"
             width={80} // Adjust the size as needed
             height={80}
-            className="h-16 mb-4"
+            className="h-16 w-48 mb-4"
           />
           <p className="text-pink-500 text-lg mb-4 font-bold">Art Nursing College</p>
           <p className="text-gray-300">
@@ -24,13 +43,18 @@ const Footer = () => {
           </p>
           {/* Social Icons */}
           <div className="flex space-x-4 mt-4">
-            <Link href="#" className="text-white bg-blue-600 p-2 rounded-full">
-              <FaFacebook />
-            </Link>
-            <Link href="#" className="text-white bg-red-600 p-2 rounded-full">
-              <FaYoutube />
-            </Link>
-          </div>
+  {footerData?.socialLinks?.facebook && (
+    <Link href={footerData.socialLinks.facebook} className="text-white bg-blue-600 p-2 rounded-full">
+      <FaFacebook />
+    </Link>
+  )}
+  {footerData?.socialLinks?.youtube && (
+    <Link href={footerData.socialLinks.youtube} className="text-white bg-red-600 p-2 rounded-full">
+      <FaYoutube />
+    </Link>
+  )}
+</div>
+
         </div>
 
         {/* Middle Section 1 - Featured Links */}
