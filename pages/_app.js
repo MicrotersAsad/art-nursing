@@ -75,7 +75,7 @@ const AuthGuard = ({ children, isDashboard, isLoginPage }) => {
 
     // Only redirect to dashboard if the user is on login page
     if (user && isLoginPage) {
-      router.push('/dashboard/dashboard');
+      router.push('/dashboard/overview');
       return;
     }
 
