@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Script from 'next/script';
 import Head from 'next/head';
 import Navbar from './Navbar';
@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'next/router';
 import '../styles/globals.css';
 import { ClipLoader } from 'react-spinners';
+import { FaArrowUp } from 'react-icons/fa'; // Import an arrow icon
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -51,6 +52,7 @@ function MyApp({ Component, pageProps }) {
         <AuthGuard isDashboard={isDashboard} isLoginPage={isLoginPage}>
           <div className={isDashboard ? 'dashboard-container' : 'site-container'}>
             <Component {...pageProps} />
+            <BackToTopButton /> {/* Back to Top Button */}
           </div>
         </AuthGuard>
 
@@ -64,12 +66,13 @@ function MyApp({ Component, pageProps }) {
 const AuthGuard = ({ children, isDashboard, isLoginPage }) => {
   const { user, loading } = useAuth();
   const router = useRouter();
+  
   useEffect(() => {
     console.log("User:", user);
     console.log("Loading:", loading);
     console.log("Current Route:", router.pathname);
   }, [loading, user, router]);
-  
+
   useEffect(() => {
     if (loading) return; // If loading, don't do anything
 
@@ -84,8 +87,6 @@ const AuthGuard = ({ children, isDashboard, isLoginPage }) => {
       router.push('/login');
       return;
     }
-
-    // If the user is authenticated and not on login/dashboard, allow them to stay
   }, [loading, user, isDashboard, isLoginPage, router]);
 
   if (loading) {
@@ -99,5 +100,46 @@ const AuthGuard = ({ children, isDashboard, isLoginPage }) => {
   return children;
 };
 
+// Back to Top Button component
+const BackToTopButton = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Show button when user scrolls down
+    const toggleVisibility = () => {
+      if (window.pageYOffset > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', toggleVisibility);
+
+    return () => {
+      window.removeEventListener('scroll', toggleVisibility);
+    };
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  return (
+    <>
+      {isVisible && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-5 right-5 bg-indigo-600 text-white p-3 rounded-full shadow-lg hover:bg-indigo-700 focus:outline-none"
+        >
+          <FaArrowUp className="w-5 h-5" />
+        </button>
+      )}
+    </>
+  );
+};
 
 export default MyApp;
