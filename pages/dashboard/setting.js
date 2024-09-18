@@ -171,7 +171,7 @@ const AdminHomepage = () => {
         <h1 className="text-3xl font-bold mb-6 text-gray-800">Homepage Settings</h1>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           {/* Top Heading */}
-          <div className="mb-8">
+          <div className="mb-8 border rounded p-5">
             <h2 className="text-xl font-semibold mb-4 text-gray-700">Top Heading</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
@@ -210,111 +210,122 @@ const AdminHomepage = () => {
               />
             </div>
           </div>
+         
 
-        {/* Logo Upload */}
-        <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4 text-gray-700">Logo Upload</h2>
-            {settings.logoUrl && (
-              <div className="mb-4">
-                <p className="text-gray-700">Current Logo:</p>
-                <img src={settings.logoUrl} alt="Logo" className="h-20 w-auto" />
-              </div>
-            )}
-            <input
-              type="file"
-              name="logo"
-              className="border p-2 rounded w-full"
-              onChange={handleFileChange}
-            />
-          </div>
+      {/* Logo and Favicon Upload in a single row */}
+{/* Logo and Favicon Upload in a single row with a divider */}
+<div className="flex justify-between items-start mb-8 border rounded p-5">
+  {/* Logo Upload */}
+  <div className="w-1/2 pr-4">
+    <h2 className="text-xl font-semibold mb-4 text-gray-700">Logo Upload</h2>
+    <input
+      type="file"
+      name="logo"
+      className="border p-2 rounded w-full"
+      onChange={handleFileChange}
+    />
+      {settings.logoUrl && (
+      <div className="mb-4">
+        <p className="text-gray-700">Current Logo:</p>
+        <img src={settings.logoUrl} alt="Logo" className="h-20 w-auto" />
+      </div>
+    )}
+  </div>
 
-          {/* Favicon Upload */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4 text-gray-700">Favicon Upload</h2>
-            {settings.faviconUrl && (
-              <div className="mb-4">
-                <p className="text-gray-700">Current Favicon:</p>
-                <img src={settings.faviconUrl} alt="Favicon" className="h-10 w-auto" />
-              </div>
-            )}
-            <input
-              type="file"
-              name="favicon"
-              className="border p-2 rounded w-full"
-              onChange={handleFileChange}
-            />
-          </div>
+  {/* Divider */}
+  <div className="w-px bg-gray-300 mx-4 h-48"></div>
 
-          {/* Hero Area */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4 text-gray-700">Hero Area</h2>
-            {settings.heroArea.map((hero, index) => (
-              <div key={index} className="mb-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    name={`heroTitle_${index}`}
-                    className="border p-2 rounded w-full"
-                    value={hero.title}
-                    onChange={(e) => handleInputChange(e, "heroArea", index, "title")}
-                    placeholder="Hero Title"
-                  />
-                  <textarea
-                    type="text"
-                    name={`heroDescription_${index}`}
-                    className="border p-2 rounded w-full"
-                    value={hero.description}
-                    onChange={(e) => handleInputChange(e, "heroArea", index, "description")}
-                    placeholder="Hero Description"
-                  ></textarea>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                  <input
-                    type="text"
-                    name={`heroButtonText_${index}`}
-                    className="border p-2 rounded w-full"
-                    value={hero.buttonText}
-                    onChange={(e) => handleInputChange(e, "heroArea", index, "buttonText")}
-                    placeholder="Button Text"
-                  />
-                  <input
-                    type="text"
-                    name={`heroButtonLink_${index}`}
-                    className="border p-2 rounded w-full"
-                    value={hero.buttonLink}
-                    onChange={(e) => handleInputChange(e, "heroArea", index, "buttonLink")}
-                    placeholder="Button Link"
-                  />
-                </div>
-                <input
-                  type="text"
-                  name={`heroIcon_${index}`}
-                  className="border p-2 rounded w-full mt-4"
-                  value={hero.iconUrl}
-                  onChange={(e) => handleInputChange(e, "heroArea", index, "iconUrl")}
-                  placeholder="Hero Icon URL"
-                />
-                <button
-                  type="button"
-                  className="text-red-500 mt-2"
-                  onClick={() => removeSection("heroArea", index)}
-                >
-                  Remove Hero Section
-                </button>
-              </div>
-            ))}
-            {settings.heroArea.length < 4 && (
-              <button
-                type="button"
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-4"
-                onClick={() => addSection("heroArea", 4)}
-              >
-                Add Hero Section
-              </button>
-            )}
-          </div>
+  {/* Favicon Upload */}
+  <div className="w-1/2 pl-4">
+    <h2 className="text-xl font-semibold mb-4 text-gray-700">Favicon Upload</h2>
+    <input
+      type="file"
+      name="favicon"
+      className="border p-2 rounded w-full"
+      onChange={handleFileChange}
+    />
+    {settings.faviconUrl && (
+      <div className="mb-4">
+        <p className="text-gray-700">Current Favicon:</p>
+        <img src={settings.faviconUrl} alt="Favicon" className="h-10 w-auto" />
+      </div>
+    )}
+  </div>
+</div>
+
+{/* Hero Area */}
+<div className="mb-8 border rounded p-5">
+  <h2 className="text-xl font-semibold mb-4 text-gray-700">Hero Area</h2>
+  {settings.heroArea.map((hero, index) => (
+    <div key={index} className="mb-6">
+      <h3 className="text-lg font-semibold mb-2 text-gray-600">
+        Hero Section {index + 1}
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input
+          type="text"
+          name={`heroTitle_${index}`}
+          className="border p-2 rounded w-full"
+          value={hero.title}
+          onChange={(e) => handleInputChange(e, "heroArea", index, "title")}
+          placeholder="Hero Title"
+        />
+        <textarea
+          name={`heroDescription_${index}`}
+          className="border p-2 rounded w-full"
+          value={hero.description}
+          onChange={(e) => handleInputChange(e, "heroArea", index, "description")}
+          placeholder="Hero Description"
+        ></textarea>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <input
+          type="text"
+          name={`heroButtonText_${index}`}
+          className="border p-2 rounded w-full"
+          value={hero.buttonText}
+          onChange={(e) => handleInputChange(e, "heroArea", index, "buttonText")}
+          placeholder="Button Text"
+        />
+        <input
+          type="text"
+          name={`heroButtonLink_${index}`}
+          className="border p-2 rounded w-full"
+          value={hero.buttonLink}
+          onChange={(e) => handleInputChange(e, "heroArea", index, "buttonLink")}
+          placeholder="Button Link"
+        />
+      </div>
+      <input
+        type="text"
+        name={`heroIcon_${index}`}
+        className="border p-2 rounded w-full mt-4"
+        value={hero.iconUrl}
+        onChange={(e) => handleInputChange(e, "heroArea", index, "iconUrl")}
+        placeholder="Hero Icon URL"
+      />
+      <button
+        type="button"
+        className="text-red-500 mt-2"
+        onClick={() => removeSection("heroArea", index)}
+      >
+        Remove Hero Section
+      </button>
+    </div>
+  ))}
+  {settings.heroArea.length < 4 && (
+    <button
+      type="button"
+      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-4"
+      onClick={() => addSection("heroArea", 4)}
+    >
+      Add Hero Section
+    </button>
+  )}
+</div>
+
           {/* About Us Section */}
-          <div className="mb-8">
+          <div className="mb-8 border rounded p-5">
             <h2 className="text-xl font-semibold mb-4 text-gray-700">About Us Section</h2>
             <input
               type="text"
@@ -365,193 +376,204 @@ const AdminHomepage = () => {
 
 
           {/* Counter Section */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4 text-gray-700">Counters</h2>
-            {settings.counters.length > 0 ? (
-              settings.counters.map((counter, index) => (
-                <div key={index} className="mb-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      name={`counterHeadline_${index}`}
-                      className="border p-2 rounded w-full"
-                      value={counter.headline || ""}
-                      onChange={(e) => {
-                        const updatedCounters = [...settings.counters];
-                        updatedCounters[index].headline = e.target.value;
-                        setSettings((prev) => ({
-                          ...prev,
-                          counters: updatedCounters,
-                        }));
-                      }}
-                      placeholder="Counter Headline"
-                    />
-                    <input
-                      type="number"
-                      name={`counterValue_${index}`}
-                      className="border p-2 rounded w-full"
-                      value={counter.counter || ""}
-                      onChange={(e) => {
-                        const updatedCounters = [...settings.counters];
-                        updatedCounters[index].counter = e.target.value;
-                        setSettings((prev) => ({
-                          ...prev,
-                          counters: updatedCounters,
-                        }));
-                      }}
-                      placeholder="Counter Value"
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    className="text-red-500 mt-2"
-                    onClick={() => removeSection("counters", index)}
-                  >
-                    Remove Counter
-                  </button>
-                </div>
-              ))
-            ) : (
-              <p>No counters available. Please add one.</p>
-            )}
+          <div className="mb-8 border rounded p-5">
+  <h2 className="text-xl font-semibold mb-4 text-gray-700">Counters</h2>
+  {settings.counters.length > 0 ? (
+    settings.counters.map((counter, index) => (
+      <div key={index} className="mb-6">
+        {/* Serial number for each counter */}
+        <h3 className="text-lg font-semibold mb-2 text-gray-600">
+          Counter {index + 1}
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            type="text"
+            name={`counterHeadline_${index}`}
+            className="border p-2 rounded w-full"
+            value={counter.headline || ""}
+            onChange={(e) => {
+              const updatedCounters = [...settings.counters];
+              updatedCounters[index].headline = e.target.value;
+              setSettings((prev) => ({
+                ...prev,
+                counters: updatedCounters,
+              }));
+            }}
+            placeholder="Counter Headline"
+          />
+          <input
+            type="number"
+            name={`counterValue_${index}`}
+            className="border p-2 rounded w-full"
+            value={counter.counter || ""}
+            onChange={(e) => {
+              const updatedCounters = [...settings.counters];
+              updatedCounters[index].counter = e.target.value;
+              setSettings((prev) => ({
+                ...prev,
+                counters: updatedCounters,
+              }));
+            }}
+            placeholder="Counter Value"
+          />
+        </div>
+        <button
+          type="button"
+          className="text-red-500 mt-2"
+          onClick={() => removeSection("counters", index)}
+        >
+          Remove Counter
+        </button>
+      </div>
+    ))
+  ) : (
+    <p>No counters available. Please add one.</p>
+  )}
 
-            {/* Button to Add Counter */}
-            {settings.counters.length < 3 && (
-              <button
-                type="button"
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-4"
-                onClick={() => {
-                  const updatedCounters = [...settings.counters, { headline: "", counter: "" }];
-                  setSettings((prev) => ({
-                    ...prev,
-                    counters: updatedCounters,
-                  }));
-                }}
-              >
-                Add Counter
-              </button>
-            )}
-          </div>
+  {/* Button to Add Counter */}
+  {settings.counters.length < 3 && (
+    <button
+      type="button"
+      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-4"
+      onClick={() => {
+        const updatedCounters = [...settings.counters, { headline: "", counter: "" }];
+        setSettings((prev) => ({
+          ...prev,
+          counters: updatedCounters,
+        }));
+      }}
+    >
+      Add Counter
+    </button>
+  )}
+</div>
 
-          {/* Our Courses */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4 text-gray-700">Our Courses</h2>
-            {settings.ourCourses.map((course, index) => (
-              <div key={index} className="mb-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    name={`courseHeading_${index}`}
-                    className="border p-2 rounded w-full"
-                    value={course.heading}
-                    onChange={(e) => handleInputChange(e, "ourCourses", index, "heading")}
-                    placeholder="Course Heading"
-                  />
-                  <textarea
-                    type="text"
-                    name={`courseDescription_${index}`}
-                    className="border p-2 rounded w-full"
-                    value={course.description}
-                    onChange={(e) => handleInputChange(e, "ourCourses", index, "description")}
-                    placeholder="Course Description"
-                  />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                  <input
-                    type="text"
-                    name={`courseButtonText_${index}`}
-                    className="border p-2 rounded w-full"
-                    value={course.buttonText}
-                    onChange={(e) => handleInputChange(e, "ourCourses", index, "buttonText")}
-                    placeholder="Button Text"
-                  />
-                  <input
-                    type="text"
-                    name={`courseButtonLink_${index}`}
-                    className="border p-2 rounded w-full"
-                    value={course.buttonLink}
-                    onChange={(e) => handleInputChange(e, "ourCourses", index, "buttonLink")}
-                    placeholder="Button Link"
-                  />
-                </div>
-                <input
-                  type="text"
-                  name={`courseIcon_${index}`}
-                  className="border p-2 rounded w-full mt-4"
-                  value={course.iconUrl}
-                  onChange={(e) => handleInputChange(e, "ourCourses", index, "iconUrl")}
-                  placeholder="Course Icon URL"
-                />
-                <button
-                  type="button"
-                  className="text-red-500 mt-2"
-                  onClick={() => removeSection("ourCourses", index)}
-                >
-                  Remove Course
-                </button>
-              </div>
-            ))}
-            {settings.ourCourses.length < 3 && (
-              <button
-                type="button"
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-4"
-                onClick={() => addSection("ourCourses", 3)}
-              >
-                Add Course
-              </button>
-            )}
-          </div>
+{/* Our Courses */}
+<div className="mb-8 border rounded p-5">
+  <h2 className="text-xl font-semibold mb-4 text-gray-700">Our Courses</h2>
+  {settings.ourCourses.map((course, index) => (
+    <div key={index} className="mb-6">
+      {/* Serial number for each course */}
+      <h3 className="text-lg font-semibold mb-2 text-gray-600">
+        Course {index + 1}
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input
+          type="text"
+          name={`courseHeading_${index}`}
+          className="border p-2 rounded w-full"
+          value={course.heading}
+          onChange={(e) => handleInputChange(e, "ourCourses", index, "heading")}
+          placeholder="Course Heading"
+        />
+        <textarea
+          name={`courseDescription_${index}`}
+          className="border p-2 rounded w-full"
+          value={course.description}
+          onChange={(e) => handleInputChange(e, "ourCourses", index, "description")}
+          placeholder="Course Description"
+        ></textarea>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <input
+          type="text"
+          name={`courseButtonText_${index}`}
+          className="border p-2 rounded w-full"
+          value={course.buttonText}
+          onChange={(e) => handleInputChange(e, "ourCourses", index, "buttonText")}
+          placeholder="Button Text"
+        />
+        <input
+          type="text"
+          name={`courseButtonLink_${index}`}
+          className="border p-2 rounded w-full"
+          value={course.buttonLink}
+          onChange={(e) => handleInputChange(e, "ourCourses", index, "buttonLink")}
+          placeholder="Button Link"
+        />
+      </div>
+      <input
+        type="text"
+        name={`courseIcon_${index}`}
+        className="border p-2 rounded w-full mt-4"
+        value={course.iconUrl}
+        onChange={(e) => handleInputChange(e, "ourCourses", index, "iconUrl")}
+        placeholder="Course Icon URL"
+      />
+      <button
+        type="button"
+        className="text-red-500 mt-2"
+        onClick={() => removeSection("ourCourses", index)}
+      >
+        Remove Course
+      </button>
+    </div>
+  ))}
+  {settings.ourCourses.length < 3 && (
+    <button
+      type="button"
+      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-4"
+      onClick={() => addSection("ourCourses", 3)}
+    >
+      Add Course
+    </button>
+  )}
+</div>
 
-          {/* Why Choose ANC */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4 text-gray-700">Why Choose ANC</h2>
-            {settings.whyChooseANC.map((why, index) => (
-              <div key={index} className="mb-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    name={`whyHeading_${index}`}
-                    className="border p-2 rounded w-full"
-                    value={why.heading}
-                    onChange={(e) => handleInputChange(e, "whyChooseANC", index, "heading")}
-                    placeholder="Why Choose ANC Heading"
-                  />
-                  <textarea
-                    type="text"
-                    name={`whyDescription_${index}`}
-                    className="border p-2 rounded w-full"
-                    value={why.description}
-                    onChange={(e) => handleInputChange(e, "whyChooseANC", index, "description")}
-                    placeholder="Why Choose ANC Description"
-                  />
-                </div>
-                <input
-                  type="text"
-                  name={`whyIcon_${index}`}
-                  className="border p-2 rounded w-full mt-4"
-                  value={why.iconUrl}
-                  onChange={(e) => handleInputChange(e, "whyChooseANC", index, "iconUrl")}
-                  placeholder="Why Choose ANC Icon URL"
-                />
-                <button
-                  type="button"
-                  className="text-red-500 mt-2"
-                  onClick={() => removeSection("whyChooseANC", index)}
-                >
-                  Remove Why Choose ANC Section
-                </button>
-              </div>
-            ))}
-            {settings.whyChooseANC.length < 6 && (
-              <button
-                type="button"
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-4"
-                onClick={() => addSection("whyChooseANC", 6)}
-              >
-                Add Why Choose ANC Section
-              </button>
-            )}
-          </div>
+{/* Why Choose ANC */}
+<div className="mb-8 border rounded p-5">
+  <h2 className="text-xl font-semibold mb-4 text-gray-700">Why Choose ANC</h2>
+  {settings.whyChooseANC.map((why, index) => (
+    <div key={index} className="mb-6">
+      {/* Serial number for each Why Choose ANC section */}
+      <h3 className="text-lg font-semibold mb-2 text-gray-600">
+        Why Choose ANC {index + 1}
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input
+          type="text"
+          name={`whyHeading_${index}`}
+          className="border p-2 rounded w-full"
+          value={why.heading}
+          onChange={(e) => handleInputChange(e, "whyChooseANC", index, "heading")}
+          placeholder="Why Choose ANC Heading"
+        />
+        <textarea
+          name={`whyDescription_${index}`}
+          className="border p-2 rounded w-full"
+          value={why.description}
+          onChange={(e) => handleInputChange(e, "whyChooseANC", index, "description")}
+          placeholder="Why Choose ANC Description"
+        ></textarea>
+      </div>
+      <input
+        type="text"
+        name={`whyIcon_${index}`}
+        className="border p-2 rounded w-full mt-4"
+        value={why.iconUrl}
+        onChange={(e) => handleInputChange(e, "whyChooseANC", index, "iconUrl")}
+        placeholder="Why Choose ANC Icon URL"
+      />
+      <button
+        type="button"
+        className="text-red-500 mt-2"
+        onClick={() => removeSection("whyChooseANC", index)}
+      >
+        Remove Why Choose ANC Section
+      </button>
+    </div>
+  ))}
+  {settings.whyChooseANC.length < 6 && (
+    <button
+      type="button"
+      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-4"
+      onClick={() => addSection("whyChooseANC", 6)}
+    >
+      Add Why Choose ANC Section
+    </button>
+  )}
+</div>
+
 
           {/* Submit Button */}
           <button

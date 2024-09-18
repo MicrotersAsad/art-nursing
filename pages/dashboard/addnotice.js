@@ -165,7 +165,7 @@ const NoticeDashboard = () => {
   return (
     <Layout>
       <div className="p-8 bg-gray-50 min-h-screen">
-        <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
+        <div className="max-w-7xl mx-auto bg-white shadow-md rounded-lg p-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-6 text-center">
             {editing ? 'Edit Notice' : 'Notice Dashboard'}
           </h1>
@@ -267,76 +267,77 @@ const NoticeDashboard = () => {
           </div>
 
           {/* Display Notices in a Table */}
-          <div>
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Existing Notices</h2>
-            <div className="overflow-x-auto">
-              <table className="min-w-full bg-white border border-gray-200">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="py-2 px-4 border-b text-left text-gray-700 font-medium">Department</th>
-                    <th className="py-2 px-4 border-b text-left text-gray-700 font-medium">Title</th>
-                    <th className="py-2 px-4 border-b text-left text-gray-700 font-medium">Date</th>
-                    <th className="py-2 px-4 border-b text-left text-gray-700 font-medium">Content</th>
-                    <th className="py-2 px-4 border-b text-left text-gray-700 font-medium">PDF</th>
-                    <th className="py-2 px-4 border-b text-left text-gray-700 font-medium">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-  {notices.length === 0 ? (
-    <tr>
-      <td colSpan="5" className="text-center py-4 text-gray-600">
-        No notices available.
-      </td>
-    </tr>
-  ) : (
-    notices.map((notice) => {
-      const departmentName = departments.find(dept => dept._id === notice.department)?.name || "Unknown Department";
-
-      return (
-        <tr key={notice._id} className="border-t">
-          <td className="py-2 px-4">{departmentName}</td>
-          <td className="py-2 px-4">{notice.title}</td>
-          <td className="py-2 px-4">{new Date(notice.date).toLocaleDateString()}</td>
-          <td className="py-2 px-4 text-sm text-gray-600">
-            <div dangerouslySetInnerHTML={{ __html: notice.content }} />
-          </td>
-          <td className="py-2 px-4">
-            {notice.filePath ? (
-              <Link
-                href={`/uploads/${notice.filePath.split('/').pop()}`}
-                className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View PDF
-              </Link>
-            ) : (
-              <p className="text-gray-500 text-sm">No PDF available</p>
-            )}
-          </td>
-          <td className="py-2 px-4">
-            <button
-              onClick={() => handleEdit(notice)}
-              className="text-blue-500 hover:text-blue-700 mr-4"
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => handleDelete(notice._id)}
-              className="text-red-500 hover:text-red-700"
-            >
-              Delete
-            </button>
-          </td>
+         {/* Display Notices in a Table */}
+<div>
+  <h2 className="text-2xl font-semibold text-gray-800 mb-4">Existing Notices</h2>
+  <div className="overflow-x-auto shadow-md sm:rounded-lg">
+    <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+      <thead className="bg-indigo-600 text-white">
+        <tr>
+          <th className="py-3 px-6 text-left text-sm font-semibold">Department</th>
+          <th className="py-3 px-6 text-left text-sm font-semibold">Title</th>
+          <th className="py-3 px-6 text-left text-sm font-semibold">Date</th>
+          <th className="py-3 px-6 text-left text-sm font-semibold">Content</th>
+          <th className="py-3 px-6 text-left text-sm font-semibold">PDF</th>
+          <th className="py-3 px-6 text-left text-sm font-semibold">Actions</th>
         </tr>
-      );
-    })
-  )}
-</tbody>
+      </thead>
+      <tbody className="bg-white divide-y divide-gray-200">
+        {notices.length === 0 ? (
+          <tr>
+            <td colSpan="6" className="text-center py-4 text-gray-600">
+              No notices available.
+            </td>
+          </tr>
+        ) : (
+          notices.map((notice) => {
+            const departmentName = departments.find(dept => dept._id === notice.department)?.name || "Unknown Department";
 
-              </table>
-            </div>
-          </div>
+            return (
+              <tr key={notice._id} className="hover:bg-gray-100 transition-colors">
+                <td className="py-4 px-6">{departmentName}</td>
+                <td className="py-4 px-6">{notice.title}</td>
+                <td className="py-4 px-6">{new Date(notice.date).toLocaleDateString()}</td>
+                <td className="py-4 px-6 text-sm text-gray-600">
+                  <div dangerouslySetInnerHTML={{ __html: notice.content }} />
+                </td>
+                <td className="py-4 px-6">
+                  {notice.filePath ? (
+                    <Link
+                      href={`/uploads/${notice.filePath.split('/').pop()}`}
+                      className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View PDF
+                    </Link>
+                  ) : (
+                    <p className="text-gray-500 text-sm">No PDF available</p>
+                  )}
+                </td>
+                <td className="py-4 px-6 flex space-x-4">
+                  <button
+                    onClick={() => handleEdit(notice)}
+                    className="text-blue-600 hover:text-blue-800"
+                  >
+                    <i className="fas fa-edit"></i> Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(notice._id)}
+                    className="text-red-600 hover:text-red-800"
+                  >
+                    <i className="fas fa-trash-alt"></i> Delete
+                  </button>
+                </td>
+              </tr>
+            );
+          })
+        )}
+      </tbody>
+    </table>
+  </div>
+</div>
+
         </div>
       </div>
     </Layout>

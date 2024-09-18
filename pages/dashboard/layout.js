@@ -20,7 +20,8 @@ import {
   FaSignOutAlt,
   FaClipboardList,
   FaCircle, 
-  FaUser
+  FaUser,
+  FaArrowLeft
 } from "react-icons/fa";
 import Image from "next/image";
 import logo from "../../public/img/logo (3).png";
@@ -66,7 +67,7 @@ const Layout = React.memo(({ children }) => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-100">
+    <div className="flex h-screen overflow-hidden bg-gray-100 sidebar-test">
       {/* Background Overlay for mobile */}
       <div
         className={`fixed inset-0 z-30 bg-black opacity-50 transition-opacity lg:hidden ${
@@ -94,14 +95,14 @@ const Layout = React.memo(({ children }) => {
           Art Nursing College
         </h6>
 
-        <nav className="mt-10 overflow-y-auto h-full scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+        <nav className="mt-10  h-full scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
           {/* Dashboard */}
           <div className="mt-3">
             <Link
-              href="/dashboard/dashboard"
+              href="/dashboard/overview"
               passHref
               className={`flex items-center py-2 px-6 cursor-pointer rounded-md ${
-                isActiveRoute("/dashboard/dashboard")
+                isActiveRoute("/dashboard/overview")
                   ? "bg-gray-300 text-gray-700"
                   : "hover:bg-gray-700 hover:text-white"
               }`}
@@ -743,116 +744,126 @@ const Layout = React.memo(({ children }) => {
         </nav>
       </div>
 
-      {/* Main content area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Top Bar */}
-        <header className="flex justify-between items-center px-4 py-2 bg-white border-b-4 border-gray-200">
-          {/* Sidebar Collapse Button for Desktop */}
-          <button
-            className="ml-3 text-gray-500 focus:outline-none hidden lg:block"
-            onClick={() => setIsCollapsed(!isCollapsed)}
-          >
-            <FaBars className="w-6 h-6" />
-          </button>
+    {/* Main content area */}
+<div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+  {/* Top Bar */}
+  <header className="flex justify-between items-center px-4 py-2 bg-white border-b-4 border-gray-200">
+    {/* Sidebar Collapse Button for Desktop */}
+    <button
+      className="ml-3 text-gray-500 focus:outline-none hidden lg:block"
+      onClick={() => setIsCollapsed(!isCollapsed)}
+    >
+      <FaBars className="w-6 h-6" />
+    </button>
 
-          {/* Sidebar toggle for Mobile */}
-          <button
-            className="text-gray-500 focus:outline-none lg:hidden"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <FaBars className="w-6 h-6" />
-          </button>
+    {/* Sidebar toggle for Mobile */}
+    <button
+      className="text-gray-500 focus:outline-none lg:hidden"
+      onClick={() => setSidebarOpen(true)}
+    >
+      <FaBars className="w-6 h-6" />
+    </button>
 
-          {/* Search Input for Desktop */}
-          <div className="relative w-50 hidden lg:block">
-            <input
-              type="text"
-              className="w-full px-4 py-2 rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 text-sm"
-              placeholder="Search"
-            />
-            <FaSearch className="absolute top-3 right-3 text-gray-400" />
+    {/* Search Input for Desktop */}
+    <div className="relative w-50 hidden lg:block">
+      <input
+        type="text"
+        className="w-full px-4 py-2 rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 text-sm"
+        placeholder="Search"
+      />
+      <FaSearch className="absolute top-3 right-3 text-gray-400" />
+    </div>
+    <button
+        className="flex items-center space-x-2 mt-4 text-blue-600 hover:text-blue-800 mb-4"
+        onClick={() => router.push('/')}
+      >
+        <FaArrowLeft className="w-4 h-4" />
+        <span>Back to Website</span>
+      </button>
+    {/* Profile & Notification */}
+    <div className="relative ms-5">
+      <div
+        onClick={() => setProfileDropdown(!profileDropdown)}
+        className="cursor-pointer flex items-center"
+      >
+        {/* Profile Image */}
+        {user?.profileImage ? (
+          <Image
+            src={getProfileImagePath(user?.profileImage)}
+            width={40}
+            height={40}
+            className="rounded-full border"
+            alt="Profile Image"
+            unoptimized
+          />
+        ) : (
+          <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+            <span className="text-gray-500 font-bold text-xl">
+              {user?.userName?.charAt(0).toUpperCase()}
+            </span>
           </div>
+        )}
+      </div>
 
-          {/* Profile & Notification */}
-          <div className="relative ms-5">
-            <div
-              onClick={() => setProfileDropdown(!profileDropdown)}
-              className="cursor-pointer flex items-center"
-            >
-              {/* Profile Image */}
-              {user?.profileImage ? (
-                <Image
-                  src={getProfileImagePath(user?.profileImage)}
-                  width={40}
-                  height={40}
-                  className="rounded-full border"
-                  alt="Profile Image"
-                  unoptimized
-                />
-              ) : (
-                <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
-                  <span className="text-gray-500 font-bold text-xl">
-                    {user?.userName?.charAt(0).toUpperCase()}
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {profileDropdown && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-20">
-                <div className="px-4 py-2 flex items-center">
-                  {user?.profileImage ? (
-                    <Image
-                      src={getProfileImagePath(user?.profileImage)}
-                      width={30}
-                      height={30}
-                      className="rounded-full border"
-                      alt="Profile Image"
-                      unoptimized
-                    />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
-                      <span className="text-gray-500 font-bold text-sm">
-                        {user?.username?.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                  )}
-                  <div className="ml-3">
-                    <p className="font-semibold text-blue-500">
-                      {user?.username || "Username"}
-                    </p>
-                    <p className="text-gray-500 text-sm">
-                      {user?.role || "Role"}
-                    </p>
-                  </div>
-                </div>
-                <hr />
-                <Link href="/profile" passHref>
-                  <button className="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-100">
-                    <FaUser className="mr-3" />
-                    Profile
-                  </button>
-                </Link>
-
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
-                >
-                  <FaSignOutAlt className="mr-3" />
-                  Sign Out
-                </button>
+      {profileDropdown && (
+        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-20">
+          <div className="px-4 py-2 flex items-center">
+            {user?.profileImage ? (
+              <Image
+                src={getProfileImagePath(user?.profileImage)}
+                width={30}
+                height={30}
+                className="rounded-full border"
+                alt="Profile Image"
+                unoptimized
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
+                <span className="text-gray-500 font-bold text-sm">
+                  {user?.username?.charAt(0).toUpperCase()}
+                </span>
               </div>
             )}
+            <div className="ml-3">
+              <p className="font-semibold text-blue-500">
+                {user?.username || "Username"}
+              </p>
+              <p className="text-gray-500 text-sm">
+                {user?.role || "Role"}
+              </p>
+            </div>
           </div>
-        </header>
+          <hr />
+          <Link href="/profile" passHref>
+            <button className="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-100">
+              <FaUser className="mr-3" />
+              Profile
+            </button>
+          </Link>
 
-        {/* Main content */}
-        <main className="flex-1 overflow-y-auto bg-gray-100">
-          <div className="container mx-auto px-6 py-8">
-            {children}
-          </div>
-        </main>
-      </div>
+          <button
+            onClick={handleLogout}
+            className="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
+          >
+            <FaSignOutAlt className="mr-3" />
+            Sign Out
+          </button>
+        </div>
+      )}
+    </div>
+  </header>
+
+  {/* Main content */}
+  <main className="flex-1 overflow-y-auto bg-gray-100">
+    <div className="container mx-auto px-6 py-8">
+      {/* Back button */}
+    
+
+      {children}
+    </div>
+  </main>
+</div>
+
     </div>
   );
 });

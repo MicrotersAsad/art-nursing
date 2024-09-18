@@ -201,7 +201,7 @@ const Header = () => {
               {/* Conditionally Render Dashboard Link for Super Admin */}
               {user?.role === 'super admin' && (
                 <Link
-                  href="/dashboard/dashboard"
+                  href="/dashboard/overview"
                   className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r md:border-l"
                 >
                   Dashboard
