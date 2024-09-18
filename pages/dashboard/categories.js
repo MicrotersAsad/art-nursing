@@ -44,9 +44,14 @@ function Categories() {
   const handleSaveCategory = async () => {
     const { name, slug, description } = categoryData;
     
+    if (!name || !description) {
+      toast.error('Name and description are required.');
+      return;
+    }
+
     const newCategory = {
       name,
-      slug,
+      slug: slug || createSlug(name), // Generate slug if it's empty
       description
     };
 
@@ -179,55 +184,63 @@ function Categories() {
         </div>
 
         <h3 className="text-xl font-semibold mb-3">Categories List</h3>
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Name
-              </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Slug
-              </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Description
-              </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {categories.length > 0 ? (
-              categories.map((category) => (
-                <tr key={category._id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{category.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{category.slug}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{category.description}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <button
-                      onClick={() => handleEdit(category)}
-                      className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded mr-2"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteCategory(category._id)}
-                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-                    >
-                      Delete
-                    </button>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                  Slug
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                  Description
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {categories.length > 0 ? (
+                categories.map((category) => (
+                  <tr key={category._id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-semibold">
+                      {category.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {category.slug}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {category.description}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <button
+                        onClick={() => handleEdit(category)}
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded mr-2"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteCategory(category._id)}
+                        className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="text-center py-4 text-gray-500">
+                    No categories available.
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="4" className="text-center py-4">
-                  No categories available.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
 
         {error && <div className="text-red-500 mt-4">Error: {error}</div>}
         <ToastContainer />

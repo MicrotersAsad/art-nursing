@@ -29,63 +29,82 @@ export default async function handler(req, res) {
       }
       break;
 
-    case 'POST':
-      try {
-        const { name, description } = body;
-
-        if (!name || !description) {
-          throw new Error('Name and description are required');
-        }
-
-        // Create the new category object
-        const newCategory = {
-          name,
-          description,
-          createdAt: new Date(),
-        };
-
-        // Insert the new category into the database
-        const result = await categoriesCollection.insertOne(newCategory);
-        res.status(201).json(result.ops[0]);
-      } catch (error) {
-        console.error("POST Error:", error);
-        res.status(400).json({ success: false, error: error.message });
-      }
-      break;
-
-    case 'PUT':
-      try {
-        const { name, description } = body;
-
-        if (!name || !description) {
-          throw new Error('Name and description are required');
-        }
-
-        // Update the category in the database
-        const updateCategory = {
-          $set: {
-            name,
-            description,
+      case 'POST':
+        try {
+          const { name, slug, description } = body;
+      
+          if (!name || !slug || !description) {
+            throw new Error('Name, slug, and description are required');
           }
-        };
-
-        const result = await categoriesCollection.updateOne(
-          { _id: new ObjectId(id) },
-          updateCategory
-        );
-
-        if (result.matchedCount === 0) {
-          throw new Error('Category not found');
+      
+          // Check if slug already exists
+          const existingCategory = await categoriesCollection.findOne({ slug });
+          if (existingCategory) {
+            throw new Error('Category slug already exists');
+          }
+      
+          // Create the new category object
+          const newCategory = {
+            name,
+            slug,  // Ensure slug is saved
+            description,
+            createdAt: new Date(),
+          };
+      
+          // Insert the new category into the database
+          const result = await categoriesCollection.insertOne(newCategory);
+      
+          // Return the inserted document with its generated _id
+          res.status(201).json({ _id: result.insertedId, name, slug, description, createdAt: new Date() });
+        } catch (error) {
+          console.error("POST Error:", error);
+          res.status(400).json({ success: false, error: error.message });
         }
+        break;
+      
+      
 
-        // Return the updated category
-        const updatedCategory = await categoriesCollection.findOne({ _id: new ObjectId(id) });
-        res.status(200).json(updatedCategory);
-      } catch (error) {
-        console.error("PUT Error:", error);
-        res.status(400).json({ success: false, error: error.message });
-      }
-      break;
+        case 'PUT':
+          try {
+            const { name, slug, description } = body;
+        
+            if (!name || !slug || !description) {
+              throw new Error('Name, slug, and description are required');
+            }
+        
+            // Check if slug already exists for another category
+            const existingCategory = await categoriesCollection.findOne({ slug });
+            if (existingCategory && existingCategory._id.toString() !== id) {
+              throw new Error('Category slug already exists');
+            }
+        
+            // Update the category in the database
+            const updateCategory = {
+              $set: {
+                name,
+                slug,  // Ensure slug is updated
+                description,
+              }
+            };
+        
+            const result = await categoriesCollection.updateOne(
+              { _id: new ObjectId(id) },
+              updateCategory
+            );
+        
+            if (result.matchedCount === 0) {
+              throw new Error('Category not found');
+            }
+        
+            // Return the updated category
+            const updatedCategory = await categoriesCollection.findOne({ _id: new ObjectId(id) });
+            res.status(200).json(updatedCategory);
+          } catch (error) {
+            console.error("PUT Error:", error);
+            res.status(400).json({ success: false, error: error.message });
+          }
+          break;
+        
 
     case 'DELETE':
       try {

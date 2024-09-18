@@ -4,6 +4,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../contexts/AuthContext';
 import Image from 'next/image';
+import Cuser from '../public/user.png';
 
 const Comment = ({ comment, slug, onReply }) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
@@ -31,22 +32,15 @@ const Comment = ({ comment, slug, onReply }) => {
     <div className={`mb-6 p-4 border border-gray-200 rounded-lg bg-white shadow-sm ${comment.approved ? '' : 'opacity-50'}`}>
       <div className="flex items-start">
         <div className="w-12 h-12 rounded-full bg-gray-200 flex-shrink-0 mr-4">
-          {comment.authorProfile ? (
-            <Image src={comment.authorProfile} alt={comment.author} width={100} height={100} className="w-full h-full rounded-full object-cover" />
-          ) : (
-            <div className="w-full h-full rounded-full bg-gray-300" />
-          )}
+          <Image src={Cuser} alt={comment.name} width={100} height={100} className="w-full h-full rounded-full object-cover" />
         </div>
         <div className="flex-1">
           <div className="flex items-center justify-between">
-            <p className="font-semibold text-gray-800">{comment.author}</p>
+            <p className="font-semibold text-gray-800">{comment.name}</p>
             <p className="text-xs text-gray-500">{new Date(comment.createdAt).toLocaleString()}</p>
           </div>
           <p className="text-gray-700 mb-4">{comment.content}</p>
-          <button
-            onClick={() => setShowReplyForm(!showReplyForm)}
-            className="text-blue-500 hover:underline text-sm"
-          >
+          <button onClick={() => setShowReplyForm(!showReplyForm)} className="text-blue-500 hover:underline text-sm">
             {showReplyForm ? 'Cancel' : 'Reply'}
           </button>
           {showReplyForm && (
@@ -108,7 +102,6 @@ const Comments = ({ slug }) => {
       setComments(response.data);
     } catch (error) {
       console.error('Error fetching comments:', error);
-      // setError('Failed to load comments.');
     }
   };
 
@@ -165,7 +158,7 @@ const Comments = ({ slug }) => {
   };
 
   return (
-    <div className="mt-8 max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="mt-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <ToastContainer />
       <h2 className="text-3xl font-bold mb-6">Comments</h2>
       <form onSubmit={handleCommentSubmit} className="mb-6">
@@ -205,7 +198,7 @@ const Comments = ({ slug }) => {
               letterSpacing: '2px',
               textAlign: 'center',
               background: 'linear-gradient(135deg, #f3f4f6 25%, #e5e7eb 25%, #e5e7eb 50%, #f3f4f6 50%, #f3f4f6 75%, #e5e7eb 75%, #e5e7eb)',
-              backgroundSize: '10px 10px'
+              backgroundSize: '10px 10px',
             }}
           >
             {captcha}

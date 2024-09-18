@@ -613,7 +613,7 @@ const Layout = React.memo(({ children }) => {
               isActiveRoute("/dashboard/contact") ||
               isActiveRoute("/dashboard/allcontact") ||
               isActiveRoute("/dashboard/smtp") ||
-              isActiveRoute("/dashboard/comments") ||
+              isActiveRoute("/dashboard/comment") ||
               isActiveRoute("/dashboard/media") ||
               isActiveRoute("/dashboard/all-menu") ||
               isActiveRoute("/dashboard/add-menu")) &&
@@ -679,10 +679,10 @@ const Layout = React.memo(({ children }) => {
                       SMTP
                     </p>
                   </Link>
-                  <Link href="/dashboard/comments" passHref>
+                  <Link href="/dashboard/comment" passHref>
                     <p
                       className={`relative flex items-center py-2 px-6 cursor-pointer ${
-                        isActiveRoute("/dashboard/comments")
+                        isActiveRoute("/dashboard/comment")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
                       }`}

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Layout from './layout';
+import Link from 'next/link';
 
 const CommentTable = () => {
   const [comments, setComments] = useState([]);
@@ -76,6 +77,7 @@ const CommentTable = () => {
           <thead>
             <tr className='bg-gray-200'>
               <th className="py-2 px-4 border-b">Author</th>
+              <th className="py-2 px-4 border-b">Email</th>
               <th className="py-2 px-4 border-b">Comment</th>
               <th className="py-2 px-4 border-b">Actions</th>
             </tr>
@@ -83,8 +85,13 @@ const CommentTable = () => {
           <tbody>
             {comments.map(comment => (
               <tr key={comment._id}>
-                <td className="py-2 px-4 border-b">{comment.author}</td>
-                <td className="py-2 px-4 border-b">{comment.content}</td>
+                <td className="py-2 px-4 border-b">{comment.name}</td>
+                <td className="py-2 px-4 border-b">{comment.email}</td>
+                <td className="py-2 px-4 border-b">
+        <Link href={`/blog/${comment.slug}`}>
+          <p className="text-blue-500 hover:underline">{comment.content}</p> {/* Clickable link */}
+        </Link>
+      </td>
                 <td className="py-2 px-4 border-b">
                   {!comment.approved && (
                     <button 

@@ -166,35 +166,42 @@ function AllBlogs() {
                 </tr>
               </thead>
               <tbody>
-                {currentBlogs.map((blog) => (
-                  <tr key={blog._id}>
-                    <td className="py-2 px-4 border-b">
-                      <input
-                        type="checkbox"
-                        checked={selectedBlogs.includes(blog._id)}
-                        onChange={() => handleSelectBlog(blog._id)}
-                      />
-                    </td>
-                    <td className="py-2 px-4 border-b">{blog.title}</td>
-                    <td className="py-2 px-4 border-b">{blog.category}</td>
-                    <td className="py-2 px-4 border-b">
-                      <span className="flex items-center">
-                        <FaEye className="mr-1" /> {blog.viewCount}
-                      </span>
-                    </td>
-                    <td className="py-2 px-4 border-b flex items-center justify-center">
-                      <Link href={`/dashboard/edit-blog?id=${blog._id}`}>
-                        <button className="mr-3 text-blue-500 hover:text-blue-700">
-                          <FaEdit />
-                        </button>
-                      </Link>
-                      <button onClick={() => handleDelete(blog._id)} className="text-red-500 hover:text-red-700">
-                        <FaTrash />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+  {currentBlogs.map((blog) => {
+    // Find the category name based on the blog's category ID
+    const categoryName = categories.find(category => category._id === blog.category)?.name || 'Unknown';
+
+    return (
+      <tr key={blog._id}>
+        <td className="py-2 px-4 border-b">
+          <input
+            type="checkbox"
+            checked={selectedBlogs.includes(blog._id)}
+            onChange={() => handleSelectBlog(blog._id)}
+          />
+        </td>
+        <td className="py-2 px-4 border-b">{blog.title}</td>
+        {/* Display the matched category name */}
+        <td className="py-2 px-4 border-b">{categoryName}</td>
+        <td className="py-2 px-4 border-b">
+          <span className="flex items-center">
+            <FaEye className="mr-1" /> {blog.viewCount}
+          </span>
+        </td>
+        <td className="py-2 px-4 border-b flex items-center justify-center">
+          <Link href={`/dashboard/edit-blog?id=${blog._id}`}>
+            <button className="mr-3 text-blue-500 hover:text-blue-700">
+              <FaEdit />
+            </button>
+          </Link>
+          <button onClick={() => handleDelete(blog._id)} className="text-red-500 hover:text-red-700">
+            <FaTrash />
+          </button>
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
+
             </table>
             <div className="flex justify-center mt-4">
               {Array.from({ length: totalPages }, (_, index) => (
