@@ -95,7 +95,7 @@ const Layout = React.memo(({ children }) => {
           Art Nursing College
         </h6>
 
-        <nav className="mt-10  h-full scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+        <nav className="mt-10 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
           {/* Dashboard */}
           <div className="mt-3">
             <Link
