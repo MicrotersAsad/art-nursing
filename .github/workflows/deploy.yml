@@ -1,4 +1,4 @@
-name: SFTP Deploy to cPanel
+name: FTP Deploy to cPanel
 
 on:
   push:
@@ -13,12 +13,11 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v2  # Checks out the code from your repository.
     
-    - name: SFTP Deploy
-      uses: burnett01/sftp-deploy@v1.0.0  # Uses an SFTP deployment action.
+    - name: FTP Deploy
+      uses: SamKirkland/FTP-Deploy-Action@4.1.0  # Uses an FTP deployment action.
       with:
-        username: ${{ secrets.FTP_USERNAME }}  # SFTP username stored in GitHub secrets.
-        password: ${{ secrets.FTP_PASSWORD }}  # SFTP password stored in GitHub secrets.
-        server: ${{ secrets.FTP_SERVER }}  # Replace with your cPanel server domain or IP.
-        port: 22  # Default SFTP port (22). If your server uses a different port, update it.
-        localPath: ./  # Path to the local directory (repository root in this case).
-        remotePath: /public_html/  # The path on your server where you want to deploy (adjust according to your cPanel structure).
+        server: ${{ secrets.FTP_SERVER }}  # FTP server (your cPanel domain or IP).
+        username: ${{ secrets.FTP_USERNAME }}  # FTP username stored as GitHub secret.
+        password: ${{ secrets.FTP_PASSWORD }}  # FTP password stored as GitHub secret.
+        local-dir: ./  # The local directory you want to deploy (current directory in this case).
+        server-dir: /public_html/  # The directory on your server (adjust for your cPanel setup).
