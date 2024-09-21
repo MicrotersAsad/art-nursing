@@ -3,7 +3,7 @@ name: Deploy Next.js to cPanel via FTP
 on:
   push:
     branches:
-      - main  # Triggers the workflow when pushing to the main branch.
+      - main
 
 jobs:
   build-deploy:
@@ -11,27 +11,27 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v2  # Checks out the code from your repository.
+      uses: actions/checkout@v2
 
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '21.6.1'  # Specify the Node.js version you want to use.
+        node-version: '16'
 
     - name: Install Dependencies
-      run: npm install  # Installs your project's dependencies.
+      run: npm install
 
     - name: Build Project
-      run: npm run build  # Builds the Next.js project.
+      run: npm run build  # Build the Next.js project
 
-    - name: Export Static Files
-      run: npm run export  # Exports static files for Next.js project.
+    - name: Start Server
+      run: next start  # Start the Next.js server for SSR (not supported on static hosting like cPanel)
 
     - name: FTP Deploy
-      uses: SamKirkland/FTP-Deploy-Action@4.1.0  # Deploy to cPanel using FTP
+      uses: SamKirkland/FTP-Deploy-Action@4.1.0
       with:
-        server: ${{ secrets.FTP_SERVER }}  # Your FTP server (domain or IP)
-        username: ${{ secrets.FTP_USERNAME }}  # Your FTP username (stored in GitHub secrets)
-        password: ${{ secrets.FTP_PASSWORD }}  # Your FTP password (stored in GitHub secrets)
-        local-dir: ./out  # The default directory where 'npm run export' puts the static files
-        server-dir: /public_html/  # Adjust this to the correct path on your cPanel server
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: .next  # .next directory contains the build for SSR
+        server-dir: /public_html/
