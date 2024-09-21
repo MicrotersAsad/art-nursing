@@ -1,23 +1,37 @@
-name: FTP Deploy to cPanel
+name: FTP Deploy Next.js to cPanel
 
 on:
   push:
     branches:
-      - main  # Triggers the workflow when pushing to the main branch. Change 'main' to the branch you use if different.
+      - main  # Triggers the workflow when pushing to the main branch.
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest  # Runs the job in a Linux environment.
+  build-deploy:
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2  # Checks out the code from your repository.
-    
-    - name: FTP Deploy
-      uses: SamKirkland/FTP-Deploy-Action@4.1.0  # Uses an FTP deployment action.
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
       with:
-        server: ${{ secrets.FTP_SERVER }}  # FTP server (your cPanel domain or IP).
-        username: ${{ secrets.FTP_USERNAME }}  # FTP username stored as GitHub secret.
-        password: ${{ secrets.FTP_PASSWORD }}  # FTP password stored as GitHub secret.
-        local-dir: ./  # The local directory you want to deploy (current directory in this case).
-        server-dir: /public_html/  # The directory on your server (adjust for your cPanel setup).
+        node-version: '21.6.1'  # You can specify your preferred Node.js version.
+
+    - name: Install Dependencies
+      run: npm install  # Installs your project's dependencies.
+
+    - name: Build Project
+      run: npm run build  # Builds the Next.js project.
+
+    - name: Export Static Files
+      run: npm run export  # Exports the static files for the project.
+
+    - name: FTP Deploy
+      uses: SamKirkland/FTP-Deploy-Action@4.1.0
+      with:
+        server: ${{ secrets.FTP_SERVER }}  # Your FTP server (domain or IP).
+        username: ${{ secrets.FTP_USERNAME }}  # Your FTP username (stored in GitHub secrets).
+        password: ${{ secrets.FTP_PASSWORD }}  # Your FTP password (stored in GitHub secrets).
+        local-dir: ./out  # The Next.js export directory (default is "out").
+        server-dir: /public_html/  # The target directory on your cPanel server (adjust as needed).
