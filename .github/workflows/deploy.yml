@@ -1,24 +1,23 @@
-name: Deploy to cPanel via SSH
+name: FTP Deploy to cPanel
 
 on:
   push:
     branches:
-      - main  # This triggers the deployment on push to the main branch. You can replace 'main' with any branch you want.
+      - main  # Triggers the workflow when pushing to the main branch. Change 'main' to the branch you use if different.
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # Specifies the virtual environment for the job.
+    runs-on: ubuntu-latest  # Runs the job in a Linux environment.
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v2  # This step checks out the code from your repository.
-      
-    - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.5.3  # This action sets up the SSH agent with the private key.
+      uses: actions/checkout@v2  # Checks out the code from your repository.
+    
+    - name: FTP Deploy
+      uses: SamKirkland/FTP-Deploy-Action@4.1.0  # Uses an FTP deployment action.
       with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}  # The SSH key stored as a GitHub secret.
-
-    - name: Deploy Files via SSH
-      run: |
-        ssh -o StrictHostKeyChecking=no artncedubd@artncedubd.com "rm -rf /path/to/your/app/*"  # Remove old files.
-        scp -r ./ artncedubd@artncedubd.com:/path/to/your/app/  # Upload new files.
+        server: ${{ secrets.FTP_SERVER }}  # FTP server (your cPanel domain or IP).
+        username: ${{ secrets.FTP_USERNAME }}  # FTP username stored as GitHub secret.
+        password: ${{ secrets.FTP_PASSWORD }}  # FTP password stored as GitHub secret.
+        local-dir: ./  # The local directory you want to deploy (current directory in this case).
+        server-dir: /public_html/  # The directory on your server (adjust for your cPanel setup).
