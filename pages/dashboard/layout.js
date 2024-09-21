@@ -452,21 +452,21 @@ const Layout = React.memo(({ children }) => {
             </p>
 
             {(menuOpen === "program" ||
-              isActiveRoute("/dashboard/program-1") ||
+              isActiveRoute("/dashboard/add-programme") ||
               isActiveRoute("/dashboard/program-2") ||
               isActiveRoute("/dashboard/program-3")) &&
               !isCollapsed && (
                 <div className="ml-6">
-                  <Link href="/dashboard/program-1" passHref>
+                  <Link href="/dashboard/add-programme" passHref>
                     <p
                       className={`relative flex items-center py-2 px-6 cursor-pointer ${
-                        isActiveRoute("/dashboard/program-1")
+                        isActiveRoute("/dashboard/add-programme")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
                       }`}
                     >
                       <FaCircle className="mr-2 text-xs" />
-                      Program 1
+                      Add Programme
                     </p>
                   </Link>
                   <Link href="/dashboard/program-2" passHref>
