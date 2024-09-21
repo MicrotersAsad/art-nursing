@@ -15,6 +15,7 @@ export default function FooterForm() {
     email: '',
   });
   const [copyrightText, setCopyrightText] = useState('');
+  const [approvedBy, setApprovedBy] = useState([{ logoUrl: '', name: '' }]);
   const [message, setMessage] = useState('');
 
   // Fetch existing data on component mount
@@ -32,6 +33,9 @@ export default function FooterForm() {
           setQuickLinks(data.quickLinks?.length ? data.quickLinks : [{ name: '', url: '' }]);
           setContactInfo(data.contactInfo || { address: '', phone1: '', phone2: '', phone3: '', email: '' });
           setCopyrightText(data.copyrightText || '');
+          
+          // Ensure only existing approvedBy items are set (and don't add new entries unless explicitly)
+          setApprovedBy(data.approvedBy?.length ? data.approvedBy : [{ logoUrl: '', name: '' }]);
         }
       } catch (error) {
         console.error('Error fetching footer data:', error);
@@ -72,6 +76,12 @@ export default function FooterForm() {
     setQuickLinks(newLinks);
   };
 
+  const handleApprovedByChange = (index, field, value) => {
+    const updatedApprovedBy = [...approvedBy];
+    updatedApprovedBy[index][field] = value;
+    setApprovedBy(updatedApprovedBy);
+  };
+
   const handleContactInfoChange = (e) => {
     setContactInfo({
       ...contactInfo,
@@ -81,22 +91,27 @@ export default function FooterForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
+    // Ensure we are not duplicating entries; only update what's already there
     const formData = new FormData();
     formData.append('logo', logo);
     formData.append('socialLinks', JSON.stringify(socialLinks));
     formData.append('featuredLinks', JSON.stringify(featuredLinks));
     formData.append('quickLinks', JSON.stringify(quickLinks));
     formData.append('contactInfo', JSON.stringify(contactInfo));
-    formData.append('copyrightText', copyrightText);
+    
+    // Only send the current state of approvedBy, do not append new items unless explicitly done
+    formData.append('approvedBy', JSON.stringify(approvedBy));
 
+    formData.append('copyrightText', copyrightText);
+  
     const res = await fetch('/api/footer', {
       method: 'POST',
       body: formData,
     });
-
+  
     const data = await res.json();
-
+  
     if (res.ok) {
       setMessage('Footer updated successfully!');
     } else {
@@ -154,106 +169,87 @@ export default function FooterForm() {
 
         {/* Featured Links */}
         <div className="mb-6 border rounded p-3">
-  <h3 className="text-lg font-semibold mb-4">Featured Links</h3>
-  {featuredLinks.map((link, index) => (
-    <div key={index} className="flex items-center space-x-4 mb-2">
-      {/* Serial Number */}
-      <span className="font-bold">{index + 1}.</span>
+          <h3 className="text-lg font-semibold mb-4">Featured Links</h3>
+          {featuredLinks.map((link, index) => (
+            <div key={index} className="flex items-center space-x-4 mb-2">
+              <span className="font-bold">{index + 1}.</span>
+              <input
+                type="text"
+                placeholder="Link Name"
+                value={link.name}
+                onChange={(e) => handleFeaturedLinkChange(index, 'name', e.target.value)}
+                className="p-2 border rounded w-1/2"
+              />
+              <input
+                type="text"
+                placeholder="Link URL"
+                value={link.url}
+                onChange={(e) => handleFeaturedLinkChange(index, 'url', e.target.value)}
+                className="p-2 border rounded w-1/2"
+              />
+              {featuredLinks.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => setFeaturedLinks(featuredLinks.filter((_, i) => i !== index))}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <FaMinusCircle />
+                </button>
+              )}
+            </div>
+          ))}
+          {featuredLinks.length < 6 && (
+            <button
+              type="button"
+              onClick={handleAddFeaturedLink}
+              className="text-blue-500 hover:text-blue-700"
+            >
+              <FaPlusCircle /> Add Featured Link
+            </button>
+          )}
+        </div>
 
-      {/* Link Name Input */}
-      <input
-        type="text"
-        placeholder="Link Name"
-        value={link.name}
-        onChange={(e) => handleFeaturedLinkChange(index, 'name', e.target.value)}
-        className="p-2 border rounded w-1/2"
-      />
-
-      {/* Link URL Input */}
-      <input
-        type="text"
-        placeholder="Link URL"
-        value={link.url}
-        onChange={(e) => handleFeaturedLinkChange(index, 'url', e.target.value)}
-        className="p-2 border rounded w-1/2"
-      />
-
-      {/* Remove Button */}
-      {featuredLinks.length > 1 && (
-        <button
-          type="button"
-          onClick={() => setFeaturedLinks(featuredLinks.filter((_, i) => i !== index))}
-          className="text-red-500 hover:text-red-700"
-        >
-          <FaMinusCircle />
-        </button>
-      )}
-    </div>
-  ))}
-
-  {/* Add Button */}
-  {featuredLinks.length < 6 && (
-    <button
-      type="button"
-      onClick={handleAddFeaturedLink}
-      className="text-blue-500 hover:text-blue-700"
-    >
-      <FaPlusCircle /> Add Featured Link
-    </button>
-  )}
-</div>
-
-{/* Quick Links */}
-<div className="mb-6 border rounded p-3">
-  <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-  {quickLinks.map((link, index) => (
-    <div key={index} className="flex items-center space-x-4 mb-2">
-      {/* Serial Number */}
-      <span className="font-bold">{index + 1}.</span>
-
-      {/* Link Name Input */}
-      <input
-        type="text"
-        placeholder="Link Name"
-        value={link.name}
-        onChange={(e) => handleQuickLinkChange(index, 'name', e.target.value)}
-        className="p-2 border rounded w-1/2"
-      />
-
-      {/* Link URL Input */}
-      <input
-        type="text"
-        placeholder="Link URL"
-        value={link.url}
-        onChange={(e) => handleQuickLinkChange(index, 'url', e.target.value)}
-        className="p-2 border rounded w-1/2"
-      />
-
-      {/* Remove Button */}
-      {quickLinks.length > 1 && (
-        <button
-          type="button"
-          onClick={() => setQuickLinks(quickLinks.filter((_, i) => i !== index))}
-          className="text-red-500 hover:text-red-700"
-        >
-          <FaMinusCircle />
-        </button>
-      )}
-    </div>
-  ))}
-
-  {/* Add Button */}
-  {quickLinks.length < 6 && (
-    <button
-      type="button"
-      onClick={handleAddQuickLink}
-      className="text-blue-500 hover:text-blue-700"
-    >
-      <FaPlusCircle /> Add Quick Link
-    </button>
-  )}
-</div>
-
+        {/* Quick Links */}
+        <div className="mb-6 border rounded p-3">
+          <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+          {quickLinks.map((link, index) => (
+            <div key={index} className="flex items-center space-x-4 mb-2">
+              <span className="font-bold">{index + 1}.</span>
+              <input
+                type="text"
+                placeholder="Link Name"
+                value={link.name}
+                onChange={(e) => handleQuickLinkChange(index, 'name', e.target.value)}
+                className="p-2 border rounded w-1/2"
+              />
+              <input
+                type="text"
+                placeholder="Link URL"
+                value={link.url}
+                onChange={(e) => handleQuickLinkChange(index, 'url', e.target.value)}
+                className="p-2 border rounded w-1/2"
+              />
+              {quickLinks.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => setQuickLinks(quickLinks.filter((_, i) => i !== index))}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <FaMinusCircle />
+                </button>
+              )}
+            </div>
+          ))}
+          {quickLinks.length < 6 && (
+            <button
+              type="button"
+              onClick={handleAddQuickLink}
+              className="text-blue-500 hover:text-blue-700"
+            >
+              <FaPlusCircle /> Add Quick Link
+            </button>
+          )}
+        </div>
 
         {/* Contact Info */}
         <div className="mb-6 border rounded p-3">
@@ -300,6 +296,54 @@ export default function FooterForm() {
             onChange={handleContactInfoChange}
             className="mt-4 p-2 border rounded w-full"
           />
+        </div>
+
+        {/* Approved By Section */}
+        <div className="mb-6 border rounded p-3">
+          <h3 className="text-lg font-semibold mb-4">Approved By</h3>
+          {approvedBy.map((item, index) => (
+            <div key={index} className="mb-4">
+              {/* Approved By Logo URL */}
+              <label className="block text-sm font-medium text-gray-700">Approved By Logo URL</label>
+              <input
+                type="text"
+                placeholder="Enter Approved By logo URL"
+                value={item.logoUrl}
+                onChange={(e) => handleApprovedByChange(index, 'logoUrl', e.target.value)}
+                className="mt-2 p-2 border rounded w-full"
+              />
+
+              {/* Approved By University Name */}
+              <label className="block text-sm font-medium text-gray-700 mt-4">Approved By University Name</label>
+              <input
+                type="text"
+                placeholder="Enter University Name"
+                value={item.name}
+                onChange={(e) => handleApprovedByChange(index, 'name', e.target.value)}
+                className="mt-2 p-2 border rounded w-full"
+              />
+
+              {/* Remove Button */}
+              {approvedBy.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => setApprovedBy(approvedBy.filter((_, i) => i !== index))}
+                  className="text-red-500 hover:text-red-700 mt-2"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
+
+          {/* Add Another Approved By */}
+          <button
+            type="button"
+            onClick={() => setApprovedBy([...approvedBy, { logoUrl: '', name: '' }])}
+            className="text-blue-500 hover:text-blue-700 mt-4"
+          >
+            Add Another Approved By
+          </button>
         </div>
 
         {/* Copyright Section */}

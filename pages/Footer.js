@@ -21,6 +21,8 @@ const Footer = () => {
         if (response.ok) {
           const data = await response.json();
           setFooterData(data || {});
+     
+          
         }
       } catch (error) {
         console.error('Error fetching footer data:', error);
@@ -36,8 +38,8 @@ const Footer = () => {
 
   return (
     <footer className="bg-[#00254c] text-white py-10 px-4 md:px-10">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-        {/* Left Section - Logo and Description */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-10">
+        {/* Column 1 - Logo and Description */}
         <div>
           {footerData.logoUrl && (
             <Image
@@ -45,7 +47,7 @@ const Footer = () => {
               alt="Art Nursing College"
               width={80}
               height={80}
-              className="h-16 w-48 mb-4"
+              className="h-20 w-20 mb-4"
             />
           )}
           <p className="text-pink-500 text-lg mb-4 font-bold">Art Nursing College</p>
@@ -68,7 +70,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Middle Section 1 - Featured Links */}
+        {/* Column 2 - Featured Links */}
         <div>
           <h3 className="text-xl font-bold mb-4">Featured Links</h3>
           <ul className="space-y-2">
@@ -87,7 +89,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Middle Section 2 - Quick Links */}
+        {/* Column 3 - Quick Links */}
         <div>
           <h3 className="text-xl font-bold mb-4">Quick Links</h3>
           <ul className="space-y-2">
@@ -105,7 +107,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Right Section - Contact Information */}
+        {/* Column 4 - Contact Information */}
         <div>
           <h3 className="text-xl font-bold mb-4">Contact Information</h3>
           <p className="text-gray-300 mb-4">{footerData.contactInfo?.address}</p>
@@ -143,6 +145,27 @@ const Footer = () => {
               </li>
             )}
           </ul>
+        </div>
+
+        {/* Column 5 - Approved By Section */}
+        <div>
+          <h3 className="text-xl font-bold mb-4">Approved By</h3>
+          <div className="space-y-4">
+            {footerData.approvedBy?.map((approved, index) => (
+              <div key={index} className="flex items-center">
+                {approved.logoUrl && (
+                  <Image
+                    src={approved.logoUrl}
+                    alt={`Approved by ${approved.name}`}
+                    width={150}
+                    height={50}
+                    className="h-14 w-56 mr-4"
+                  />
+                )}
+                <p className="text-gray-300">{approved.name}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
