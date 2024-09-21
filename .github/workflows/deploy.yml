@@ -1,4 +1,4 @@
-name: FTP Deploy Next.js to cPanel
+name: Deploy Next.js to cPanel via FTP
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '21.6.1'  # You can specify your preferred Node.js version.
+        node-version: '21.6.1'  # Specify the Node.js version you want to use.
 
     - name: Install Dependencies
       run: npm install  # Installs your project's dependencies.
@@ -25,13 +25,13 @@ jobs:
       run: npm run build  # Builds the Next.js project.
 
     - name: Export Static Files
-      run: npm run export  # Exports the static files for the project.
+      run: npm run export  # Exports static files for Next.js project if applicable.
 
     - name: FTP Deploy
-      uses: SamKirkland/FTP-Deploy-Action@4.1.0
+      uses: SamKirkland/FTP-Deploy-Action@4.1.0  # Deploy to cPanel using FTP
       with:
-        server: ${{ secrets.FTP_SERVER }}  # Your FTP server (domain or IP).
-        username: ${{ secrets.FTP_USERNAME }}  # Your FTP username (stored in GitHub secrets).
-        password: ${{ secrets.FTP_PASSWORD }}  # Your FTP password (stored in GitHub secrets).
-        local-dir: ./out  # The Next.js export directory (default is "out").
-        server-dir: /public_html/  # The target directory on your cPanel server (adjust as needed).
+        server: ${{ secrets.FTP_SERVER }}  # Your FTP server (domain or IP)
+        username: ${{ secrets.FTP_USERNAME }}  # Your FTP username (stored in GitHub secrets)
+        password: ${{ secrets.FTP_PASSWORD }}  # Your FTP password (stored in GitHub secrets)
+        local-dir: ./out  # This is the default directory where 'npm run export' puts the static files
+        server-dir: /public_html/  # Adjust this to the correct path on your cPanel server

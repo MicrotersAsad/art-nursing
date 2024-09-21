@@ -10,4 +10,5 @@ module.exports = {
       },
     ],
   },
-}
+  output: 'export',  // Enables static site export for Next.js
+};
