@@ -1,17 +1,9 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-name: FTP Deploy to cPanel
-=======
-name: SFTP Deploy to cPanel
->>>>>>> 36c17270d65fd5f37c7648ef42a2c622ddc7ed01
-=======
 name: Deploy Next.js to cPanel via FTP
->>>>>>> 45ee2831a4cf318563cbfdd6255d5df44b4f9577
 
 on:
   push:
     branches:
-      - main
+      - main  # Triggers the workflow when pushing to the main branch.
 
 jobs:
   build-deploy:
@@ -19,52 +11,24 @@ jobs:
 
     steps:
     - name: Checkout Code
-<<<<<<< HEAD
       uses: actions/checkout@v2  # Checks out the code from your repository.
-    
-<<<<<<< HEAD
-    - name: FTP Deploy
-      uses: SamKirkland/FTP-Deploy-Action@4.1.0  # Uses an FTP deployment action.
-      with:
-        server: ${{ secrets.FTP_SERVER }}  # FTP server (your cPanel domain or IP).
-        username: ${{ secrets.FTP_USERNAME }}  # FTP username stored as GitHub secret.
-        password: ${{ secrets.FTP_PASSWORD }}  # FTP password stored as GitHub secret.
-        local-dir: ./  # The local directory you want to deploy (current directory in this case).
-        server-dir: /public_html/  # The directory on your server (adjust for your cPanel setup).
-=======
-    - name: SFTP Deploy
-      uses: burnett01/sftp-deploy@v1.0.0  # Uses an SFTP deployment action.
-      with:
-        username: ${{ secrets.FTP_USERNAME }}  # SFTP username stored in GitHub secrets.
-        password: ${{ secrets.FTP_PASSWORD }}  # SFTP password stored in GitHub secrets.
-        server: ${{ secrets.FTP_SERVER }}  # Replace with your cPanel server domain or IP.
-        port: 22  # Default SFTP port (22). If your server uses a different port, update it.
-        localPath: ./  # Path to the local directory (repository root in this case).
-        remotePath: /public_html/  # The path on your server where you want to deploy (adjust according to your cPanel structure).
->>>>>>> 36c17270d65fd5f37c7648ef42a2c622ddc7ed01
-=======
-      uses: actions/checkout@v2
 
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '16'
+        node-version: '21.6.1'  # Specify the Node.js version you need.
 
     - name: Install Dependencies
-      run: npm install
+      run: npm install  # Installs dependencies specified in package.json
 
     - name: Build Project
-      run: npm run build  # Build the Next.js project
-
-    - name: Start Server
-      run: next start  # Start the Next.js server for SSR (not supported on static hosting like cPanel)
+      run: npm run build  # Builds the Next.js project
 
     - name: FTP Deploy
-      uses: SamKirkland/FTP-Deploy-Action@4.1.0
+      uses: SamKirkland/FTP-Deploy-Action@4.1.0  # Deploy to cPanel using FTP
       with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: .next  # .next directory contains the build for SSR
-        server-dir: /public_html/
->>>>>>> 45ee2831a4cf318563cbfdd6255d5df44b4f9577
+        server: ${{ secrets.FTP_SERVER }}  # Your FTP server domain or IP
+        username: ${{ secrets.FTP_USERNAME }}  # FTP username stored in GitHub secrets
+        password: ${{ secrets.FTP_PASSWORD }}  # FTP password stored in GitHub secrets
+        local-dir: .next  # Deploy the built Next.js folder
+        server-dir: /public_html/  # Target folder on your cPanel (replace this with your target folder)
