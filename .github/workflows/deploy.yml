@@ -16,9 +16,9 @@ jobs:
     - name: SFTP Deploy
       uses: burnett01/sftp-deploy@v1.0.0  # Uses an SFTP deployment action.
       with:
-        username: ${{ secrets.SFTP_USERNAME }}  # SFTP username stored in GitHub secrets.
-        password: ${{ secrets.SFTP_PASSWORD }}  # SFTP password stored in GitHub secrets.
-        server: sftp.artncedubd.com  # Replace with your cPanel server domain or IP.
+        username: ${{ secrets.FTP_USERNAME }}  # SFTP username stored in GitHub secrets.
+        password: ${{ secrets.FTP_PASSWORD }}  # SFTP password stored in GitHub secrets.
+        server: ${{ secrets.FTP_SERVER }}  # Replace with your cPanel server domain or IP.
         port: 22  # Default SFTP port (22). If your server uses a different port, update it.
         localPath: ./  # Path to the local directory (repository root in this case).
         remotePath: /public_html/  # The path on your server where you want to deploy (adjust according to your cPanel structure).
