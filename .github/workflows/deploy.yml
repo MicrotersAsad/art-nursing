@@ -30,5 +30,8 @@ jobs:
         server: ${{ secrets.FTP_SERVER }}  # Your FTP server domain or IP
         username: ${{ secrets.FTP_USERNAME }}  # FTP username stored in GitHub secrets
         password: ${{ secrets.FTP_PASSWORD }}  # FTP password stored in GitHub secrets
+        protocol: ftp  # Specify the protocol
+        port: 21  # Default FTP port
+        passive: true  # Enable passive mode
         local-dir: .next/  # Correct local directory path with trailing slash
         server-dir: /public_html/  # Target folder on your cPanel (replace this with your target folder)
