@@ -1,6 +1,7 @@
 module.exports = {
   reactStrictMode: true,
   images: {
+    unoptimized: true,  // Disables image optimization for static exports
     remotePatterns: [
       {
         protocol: 'http',
@@ -10,4 +11,5 @@ module.exports = {
       },
     ],
   },
-}
+  output: 'export',  // Enables static site export
+};
