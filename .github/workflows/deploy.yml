@@ -16,7 +16,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '21.6.1'  # Specify the Node.js version you need.
+        node-version: '16.x'  # Specify a stable LTS Node.js version. Avoid using version '21.x' as it's not LTS.
 
     - name: Install Dependencies
       run: npm install  # Installs dependencies specified in package.json
