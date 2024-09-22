@@ -3,12 +3,9 @@ import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
 
-// Configure Multer storage options
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-    
-    // Ensure the uploads directory exists
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
@@ -23,11 +20,10 @@ const upload = multer({ storage });
 
 export const config = {
   api: {
-    bodyParser: false, // Disable the body parser to handle file uploads
+    bodyParser: false,
   },
 };
 
-// Middleware to handle file uploads using Multer
 const runMiddleware = (req, res, fn) => {
   return new Promise((resolve, reject) => {
     fn(req, res, (result) => {
@@ -45,14 +41,12 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     try {
-      // Run Multer middleware to handle the file upload
       await runMiddleware(req, res, upload.fields([
         { name: 'deanImage', maxCount: 1 },
         { name: 'headImage', maxCount: 1 },
-        { name: 'facultyImages', maxCount: 20 }, // Allow up to 20 faculty images
+        { name: 'facultyImages', maxCount: 20 },
       ]));
 
-      // Extract form data from req.body and provide default values
       const {
         name = '',
         slug = '',
@@ -67,11 +61,9 @@ export default async function handler(req, res) {
         headMessage = '',
       } = req.body;
 
-      // Handle file uploads (if present)
       const deanImage = req.files?.deanImage?.[0]?.filename ? `/uploads/${req.files.deanImage[0].filename}` : null;
       const headImage = req.files?.headImage?.[0]?.filename ? `/uploads/${req.files.headImage[0].filename}` : null;
 
-      // Process faculty images (if present)
       const facultyImages = req.files?.facultyImages || [];
       const facultyMembers = req.body?.facultyMembers ? JSON.parse(req.body.facultyMembers) : [];
 
@@ -81,7 +73,6 @@ export default async function handler(req, res) {
         }
       });
 
-      // Prepare the program data to be inserted into the database
       const programData = {
         name,
         slug,
@@ -100,10 +91,8 @@ export default async function handler(req, res) {
         createdAt: new Date(),
       };
 
-      // Insert program data into the database
       const result = await collection.insertOne(programData);
 
-      // Return success response
       res.status(201).json({ success: true, message: 'Program created successfully', data: { id: result.insertedId } });
     } catch (error) {
       console.error('Error creating program:', error);
@@ -111,15 +100,14 @@ export default async function handler(req, res) {
     }
   } else if (req.method === 'PUT') {
     try {
-      const { slug } = req.query; // Get the slug from the URL
-      // Run Multer middleware to handle the file upload
+      const { slug } = req.query;
+
       await runMiddleware(req, res, upload.fields([
         { name: 'deanImage', maxCount: 1 },
         { name: 'headImage', maxCount: 1 },
-        { name: 'facultyImages', maxCount: 20 }, // Allow up to 20 faculty images
+        { name: 'facultyImages', maxCount: 20 },
       ]));
 
-      // Extract form data
       const {
         name = '',
         departmentInfo = '',
@@ -133,11 +121,9 @@ export default async function handler(req, res) {
         headMessage = '',
       } = req.body;
 
-      // Handle file uploads
       const deanImage = req.files?.deanImage?.[0]?.filename ? `/uploads/${req.files.deanImage[0].filename}` : null;
       const headImage = req.files?.headImage?.[0]?.filename ? `/uploads/${req.files.headImage[0].filename}` : null;
 
-      // Process faculty images
       const facultyImages = req.files?.facultyImages || [];
       const facultyMembers = req.body?.facultyMembers ? JSON.parse(req.body.facultyMembers) : [];
 
@@ -147,7 +133,6 @@ export default async function handler(req, res) {
         }
       });
 
-      // Prepare the updated program data
       const updatedProgramData = {
         name,
         departmentInfo,
@@ -158,16 +143,15 @@ export default async function handler(req, res) {
         tuitionFees,
         deanName,
         deanMessage,
-        deanImage: deanImage || undefined, // Use existing image if not updated
+        deanImage: deanImage || undefined,
         headMessage,
         headName,
-        headImage: headImage || undefined, // Use existing image if not updated
+        headImage: headImage || undefined,
         updatedAt: new Date(),
       };
 
-      // Update the program in the database
       const result = await collection.updateOne(
-        { slug }, // Match the program by slug
+        { slug },
         { $set: updatedProgramData }
       );
 
@@ -175,7 +159,6 @@ export default async function handler(req, res) {
         return res.status(404).json({ success: false, message: 'Program not found or no changes made' });
       }
 
-      // Return success response
       res.status(200).json({ success: true, message: 'Program updated successfully' });
     } catch (error) {
       console.error('Error updating program:', error);
@@ -183,15 +166,13 @@ export default async function handler(req, res) {
     }
   } else if (req.method === 'DELETE') {
     try {
-      const { slug } = req.query; // Get the slug from the URL
-      // Delete the program from the database
+      const { slug } = req.query;
       const result = await collection.deleteOne({ slug });
 
       if (result.deletedCount === 0) {
         return res.status(404).json({ success: false, message: 'Program not found' });
       }
 
-      // Return success response
       res.status(200).json({ success: true, message: 'Program deleted successfully' });
     } catch (error) {
       console.error('Error deleting program:', error);
@@ -202,21 +183,18 @@ export default async function handler(req, res) {
       const { slug } = req.query;
   
       if (slug) {
-        // If slug is provided, fetch a single program
         const program = await collection.findOne({ slug });
         if (!program) {
           return res.status(404).json({ success: false, message: 'Program not found' });
         }
         res.status(200).json({ success: true, data: program });
       } else {
-        // Otherwise, fetch all programs
         const programmes = await collection.find({}).toArray();
         res.status(200).json({ success: true, data: programmes });
       }
     } catch (error) {
       res.status(500).json({ success: false, message: 'Failed to fetch program(s)', error: error.message });
     }
-    
   } else {
     res.setHeader('Allow', ['POST', 'PUT', 'DELETE', 'GET']);
     res.status(405).end(`Method ${req.method} Not Allowed`);

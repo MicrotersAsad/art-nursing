@@ -83,7 +83,7 @@ const Layout = React.memo(({ children }) => {
   onMouseLeave={() => isCollapsed && setIsCollapsed(true)}
 >
         {/* Logo */}
-        <div className="flex items-center justify-center mt-8">
+        <div className="flex items-center text-white justify-center mt-8">
           <Image
             src={logo}
             width={isCollapsed ? 40 : 80}
@@ -95,15 +95,15 @@ const Layout = React.memo(({ children }) => {
           Art Nursing College
         </h6>
 
-        <nav className="mt-10 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+        <nav className="mt-10 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 text-white">
           {/* Dashboard */}
           <div className="mt-3">
             <Link
               href="/dashboard/overview"
               passHref
-              className={`flex items-center py-2 px-6 cursor-pointer rounded-md ${
+              className={`flex items-center text-white py-2 px-6 cursor-pointer rounded-md ${
                 isActiveRoute("/dashboard/overview")
-                  ? "bg-gray-300 text-gray-700"
+                  ? "bg-gray-500 text-gray-700"
                   : "hover:bg-gray-700 hover:text-white"
               }`}
             >
@@ -115,13 +115,13 @@ const Layout = React.memo(({ children }) => {
           {/* Notice Board */}
           <div className="mt-3">
             <p
-              className={`flex items-center py-2 px-6 cursor-pointer rounded-md ${
+              className={`flex items-center  py-2 text-white px-6 cursor-pointer rounded-md ${
                 isActiveRoute("/dashboard/all-notice") ||
                 isActiveRoute("/dashboard/addnotice")
-                  ? "bg-gray-300 text-gray-700"
+                  ? "bg-gray-500 text-gray-700"
                   : menuOpen === "notice"
-                  ? "bg-gray-300 text-gray-700"
-                  : "hover:bg-gray-300 hover:text-white"
+                  ? "bg-gray-500 text-gray-700"
+                  : "hover:bg-gray-500 hover:text-white"
               }`}
               onClick={() => toggleMenu("notice")}
             >
@@ -141,7 +141,7 @@ const Layout = React.memo(({ children }) => {
                 <div className="ml-6">
                   <Link href="/dashboard/all-notice" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/all-notice")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -153,7 +153,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/addnotice" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/addnotice")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -170,13 +170,13 @@ const Layout = React.memo(({ children }) => {
           {/* Gallery */}
           <div className="mt-3">
             <p
-              className={`flex items-center py-2 px-6 cursor-pointer rounded-md ${
+              className={`flex items-center text-white py-2 px-6 cursor-pointer rounded-md ${
                 isActiveRoute("/dashboard/photo-gallery") ||
                 isActiveRoute("/dashboard/video-gallery")
-                  ? "bg-gray-300 text-gray-700"
+                  ? "bg-gray-500 text-gray-700"
                   : menuOpen === "gallery"
-                  ? "bg-gray-300 text-gray-700"
-                  : "hover:bg-gray-300 hover:text-white"
+                  ? "bg-gray-500 text-gray-700"
+                  : "hover:bg-gray-500 hover:text-white"
               }`}
               onClick={() => toggleMenu("gallery")}
             >
@@ -196,7 +196,7 @@ const Layout = React.memo(({ children }) => {
                 <div className="ml-6">
                   <Link href="/dashboard/photo-gallery" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/photo-gallery")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -208,7 +208,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/video-gallery" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/video-gallery")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -224,12 +224,12 @@ const Layout = React.memo(({ children }) => {
 {/* Banner Management */}
 <div className="mt-3">
             <p
-              className={`flex items-center py-2 px-6 cursor-pointer rounded-md ${
+              className={`flex items-center text-white py-2 px-6 cursor-pointer rounded-md ${
                 isActiveRoute("/dashboard/banner")
-                  ? "bg-gray-300 text-gray-700"
+                  ? "bg-gray-500 text-gray-700"
                   : menuOpen === "banner"
-                  ? "bg-gray-300 text-gray-700"
-                  : "hover:bg-gray-300 hover:text-white"
+                  ? "bg-gray-500 text-gray-700"
+                  : "hover:bg-gray-500 hover:text-white"
               }`}
               onClick={() => toggleMenu("banner")}
             >
@@ -247,7 +247,7 @@ const Layout = React.memo(({ children }) => {
                 <div className="ml-6">
                   <Link href="/dashboard/banner" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/banner")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -263,14 +263,14 @@ const Layout = React.memo(({ children }) => {
           {/* Blog */}
           <div className="mt-3">
             <p
-              className={`flex items-center py-2 px-6 cursor-pointer rounded-md ${
+              className={`flex items-center text-white py-2 px-6 cursor-pointer rounded-md ${
                 isActiveRoute("/dashboard/categories") ||
                 isActiveRoute("/dashboard/all-blogs") ||
                 isActiveRoute("/dashboard/blogs")
-                  ? "bg-gray-300 text-gray-700"
+                  ? "bg-gray-500 text-gray-700"
                   : menuOpen === "blog"
-                  ? "bg-gray-300 text-gray-700"
-                  : "hover:bg-gray-300 hover:text-white"
+                  ? "bg-gray-500 text-gray-700"
+                  : "hover:bg-gray-500 hover:text-white"
               }`}
               onClick={() => toggleMenu("blog")}
             >
@@ -291,7 +291,7 @@ const Layout = React.memo(({ children }) => {
                 <div className="ml-6">
                   <Link href="/dashboard/categories" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/categories")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -303,7 +303,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/all-blogs" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/all-blogs")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -315,7 +315,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/blogs" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/blogs")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -332,10 +332,10 @@ const Layout = React.memo(({ children }) => {
           {/* Pages */}
           <div className="mt-3">
             <p
-              className={`flex items-center py-2 px-6 cursor-pointer rounded-md ${
+              className={`flex items-center text-white py-2 px-6 cursor-pointer rounded-md ${
                 menuOpen === "pages"
-                  ? "bg-gray-300 text-gray-700"
-                  : "hover:bg-gray-300 hover:text-white"
+                  ? "bg-gray-500 text-gray-700"
+                  : "hover:bg-gray-500 hover:text-white"
               }`}
               onClick={() => toggleMenu("pages")}
             >
@@ -355,7 +355,7 @@ const Layout = React.memo(({ children }) => {
                 <div className="ml-6">
                   <Link href="/dashboard/all-pages" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/all-pages")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -367,7 +367,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/add-page" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/add-page")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -384,10 +384,10 @@ const Layout = React.memo(({ children }) => {
           {/* Manage Users */}
           <div className="mt-3">
             <p
-              className={`flex items-center py-2 px-6 cursor-pointer rounded-md ${
+              className={`flex items-center text-white py-2 px-6 cursor-pointer rounded-md ${
                 menuOpen === "users"
-                  ? "bg-gray-300 text-gray-700"
-                  : "hover:bg-gray-300 hover:text-white"
+                  ? "bg-gray-500 text-gray-700"
+                  : "hover:bg-gray-500 hover:text-white"
               }`}
               onClick={() => toggleMenu("users")}
             >
@@ -407,7 +407,7 @@ const Layout = React.memo(({ children }) => {
                 <div className="ml-6">
                   <Link href="/dashboard/admin-list" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/admin-list")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -419,7 +419,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/add-admin" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/add-admin")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -435,10 +435,10 @@ const Layout = React.memo(({ children }) => {
   {/* Program */}
   <div className="mt-3">
             <p
-              className={`flex items-center py-2 px-6 cursor-pointer rounded-md ${
+              className={`flex items-center text-white py-2 px-6 cursor-pointer rounded-md ${
                 menuOpen === "program"
-                  ? "bg-gray-300 text-gray-700"
-                  : "hover:bg-gray-300 hover:text-white"
+                  ? "bg-gray-500 text-gray-700"
+                  : "hover:bg-gray-500 hover:text-white"
               }`}
               onClick={() => toggleMenu("program")}
             >
@@ -459,7 +459,7 @@ const Layout = React.memo(({ children }) => {
                 <div className="ml-6">
                   <Link href="/dashboard/add-programme" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/add-programme")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -471,7 +471,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/program-2" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/program-2")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -483,7 +483,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/program-3" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/program-3")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -500,10 +500,10 @@ const Layout = React.memo(({ children }) => {
           {/* About */}
           <div className="mt-3">
             <p
-              className={`flex items-center py-2 px-6 cursor-pointer rounded-md ${
+              className={`flex items-center text-white py-2 px-6 cursor-pointer rounded-md ${
                 menuOpen === "about"
-                  ? "bg-gray-300 text-gray-700"
-                  : "hover:bg-gray-300 hover:text-white"
+                  ? "bg-gray-500 text-gray-700"
+                  : "hover:bg-gray-500 hover:text-white"
               }`}
               onClick={() => toggleMenu("about")}
             >
@@ -526,7 +526,7 @@ const Layout = React.memo(({ children }) => {
                 <div className="ml-6">
                   <Link href="/dashboard/about-us" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/about-us")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -538,7 +538,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/governing" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/governing")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -550,7 +550,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/staff" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/staff")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -562,7 +562,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/teacher" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/teacher")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -574,7 +574,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/achievement" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/achievement")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -591,10 +591,10 @@ const Layout = React.memo(({ children }) => {
           {/* Appearance */}
           <div className="mt-3">
             <p
-              className={`flex items-center py-2 px-6 cursor-pointer rounded-md ${
+              className={`flex items-center text-white py-2 px-6 cursor-pointer rounded-md ${
                 menuOpen === "appearance"
-                  ? "bg-gray-300 text-gray-700"
-                  : "hover:bg-gray-300 hover:text-white"
+                  ? "bg-gray-500 text-gray-700"
+                  : "hover:bg-gray-500 hover:text-white"
               }`}
               onClick={() => toggleMenu("appearance")}
             >
@@ -621,7 +621,7 @@ const Layout = React.memo(({ children }) => {
                 <div className="ml-6">
                   <Link href="/dashboard/setting" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/setting")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -633,7 +633,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/fotter-management" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/fotter-management")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -645,7 +645,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/contact" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/contact")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -657,7 +657,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/allcontact" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/allcontact")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -669,7 +669,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/smtp" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/smtp")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -681,7 +681,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/comment" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/comment")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -693,7 +693,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/media" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/media")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -705,7 +705,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/all-menu" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/all-menu")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -717,7 +717,7 @@ const Layout = React.memo(({ children }) => {
                   </Link>
                   <Link href="/dashboard/add-menu" passHref>
                     <p
-                      className={`relative flex items-center py-2 px-6 cursor-pointer ${
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
                         isActiveRoute("/dashboard/add-menu")
                           ? "text-blue-400"
                           : "hover:bg-gray-600 hover:text-white"
@@ -734,7 +734,7 @@ const Layout = React.memo(({ children }) => {
           {/* Logout */}
           <div className="mt-3">
             <p
-              className="flex items-center py-2 px-6 cursor-pointer rounded-md hover:bg-gray-300 hover:text-white"
+              className="flex items-center text-white py-2 px-6 cursor-pointer rounded-md hover:bg-gray-500 hover:text-white"
               onClick={handleLogout}
             >
               <FaSignOutAlt className="mr-3 text-red-500" />
@@ -774,7 +774,7 @@ const Layout = React.memo(({ children }) => {
       <FaSearch className="absolute top-3 right-3 text-gray-400" />
     </div>
     <button
-        className="flex items-center space-x-2 mt-4 text-blue-600 hover:text-blue-800 mb-4"
+        className="flex items-center text-white space-x-2 mt-4 text-blue-600 hover:text-blue-800 mb-4"
         onClick={() => router.push('/')}
       >
         <FaArrowLeft className="w-4 h-4" />
@@ -784,7 +784,7 @@ const Layout = React.memo(({ children }) => {
     <div className="relative ms-5">
       <div
         onClick={() => setProfileDropdown(!profileDropdown)}
-        className="cursor-pointer flex items-center"
+        className="cursor-pointer flex items-center text-white"
       >
         {/* Profile Image */}
         {user?.profileImage ? (
@@ -797,7 +797,7 @@ const Layout = React.memo(({ children }) => {
             unoptimized
           />
         ) : (
-          <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-gray-500 flex items-center text-white justify-center">
             <span className="text-gray-500 font-bold text-xl">
               {user?.userName?.charAt(0).toUpperCase()}
             </span>
@@ -807,7 +807,7 @@ const Layout = React.memo(({ children }) => {
 
       {profileDropdown && (
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-20">
-          <div className="px-4 py-2 flex items-center">
+          <div className="px-4 py-2 flex items-center text-white">
             {user?.profileImage ? (
               <Image
                 src={getProfileImagePath(user?.profileImage)}
@@ -818,7 +818,7 @@ const Layout = React.memo(({ children }) => {
                 unoptimized
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-gray-500 flex items-center text-white justify-center">
                 <span className="text-gray-500 font-bold text-sm">
                   {user?.username?.charAt(0).toUpperCase()}
                 </span>
@@ -835,7 +835,7 @@ const Layout = React.memo(({ children }) => {
           </div>
           <hr />
           <Link href="/profile" passHref>
-            <button className="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-100">
+            <button className="flex items-center text-white w-full px-4 py-2 text-gray-800 hover:bg-gray-100">
               <FaUser className="mr-3" />
               Profile
             </button>
@@ -843,7 +843,7 @@ const Layout = React.memo(({ children }) => {
 
           <button
             onClick={handleLogout}
-            className="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
+            className="flex items-center text-white w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
           >
             <FaSignOutAlt className="mr-3" />
             Sign Out

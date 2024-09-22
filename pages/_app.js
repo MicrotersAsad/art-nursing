@@ -36,6 +36,10 @@ function MyApp({ Component, pageProps }) {
           type="text/css"
           href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"
         />
+        <link
+	rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/jodit/4.2.27/jodit.min.css"
+/>
       </Head>
 
       <Script
