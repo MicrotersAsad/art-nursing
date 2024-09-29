@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function CoursesSection() {
   const [courses, setCourses] = useState([]);
@@ -36,10 +37,12 @@ export default function CoursesSection() {
             >
               <div className="mb-4">
                 {/* Course Icon */}
-                <img
+                <Image
                   src={course.iconUrl} // Assuming the API returns an icon URL for each course
                   alt={course.heading}
                   className="w-12 h-12 mx-auto"
+                  width={24}
+                  height={24}
                 />
               </div>
               <h3 className="text-xl font-semibold mb-2">{course.heading}</h3>

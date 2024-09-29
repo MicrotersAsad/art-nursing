@@ -5,6 +5,7 @@ import Zoom from 'react-medium-image-zoom'; // Zoom for image
 import 'react-medium-image-zoom/dist/styles.css'; // Zoom CSS
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import Image from 'next/image';
 
 Modal.setAppElement('#__next'); // Setting up the root for the modal
 
@@ -132,7 +133,7 @@ const PhotoGallery = () => {
         {photos.map((photo, index) => (
           <div key={index}>
             <Zoom>
-              <img
+              <Image width={100} height={100}
                 src={photo.img}
                 alt={`Modal Image ${index}`}
                 style={{ width: '100%', height: 'auto', maxHeight: '90vh', objectFit: 'contain' }} // Ensure full height utilization

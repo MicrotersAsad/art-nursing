@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Layout from './layout';
 import dynamic from 'next/dynamic';
 import slugify from 'slugify';
+import Image from 'next/image';
 
 // Dynamically load the Jodit editor to prevent SSR issues
 const JoditWrapper = dynamic(() => import('../../components/EditorWrapper'), { ssr: false });
@@ -289,7 +290,7 @@ export default function AddProgram() {
                 {/* Display image preview if it exists */}
                 {member.imageUrl && (
                   <div className="mb-2">
-                    <img src={member.imageUrl} alt="Faculty Image" className="w-32 h-32 object-cover" />
+                    <Image width={64} height={64} src={member.imageUrl} alt="Faculty Image" className="w-32 h-32 object-cover" />
                   </div>
                 )}
 
@@ -323,7 +324,7 @@ export default function AddProgram() {
             />
             {deanImageUrl && (
               <div className="mb-2">
-                <img src={deanImageUrl} alt="Dean's Image" className="w-32 h-32 object-cover" />
+                <Image width={64} height={64} src={deanImageUrl} alt="Dean's Image" className="w-32 h-32 object-cover" />
               </div>
             )}
             <label className="block mb-2 font-semibold">Dean's Name</label>
@@ -354,7 +355,7 @@ export default function AddProgram() {
             />
             {headImageUrl && (
               <div className="mb-2">
-                <img src={headImageUrl} alt="Head's Image" className="w-32 h-32 object-cover" />
+                <Image width={64} height={64} src={headImageUrl} alt="Head's Image" className="w-32 h-32 object-cover" />
               </div>
             )}
             <label className="block mb-2 font-semibold">Head's Name</label>

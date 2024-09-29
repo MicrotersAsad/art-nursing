@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Layout from '../layout';
+import Image from 'next/image';
 
 // Dynamically load Quill editor (only on client-side)
 const QuillWrapper = dynamic(() => import('../../../components/EditorWrapper'), { ssr: false });
@@ -144,7 +145,7 @@ const EditPage = () => {
             {existingMetaImage && (
               <div className="mt-4">
                 <p>Existing Image:</p>
-                <img src={existingMetaImage} alt="Existing Meta" className="w-48 h-auto" />
+                <Image width={40} height={40} src={existingMetaImage} alt="Existing Meta" className="w-48 h-auto" />
               </div>
             )}
           </div>

@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import PageHeader from '../components/PageHeader';
+import Image from 'next/image';
 
 const ViewPage = () => {
   const router = useRouter();
@@ -32,7 +33,7 @@ const ViewPage = () => {
       <div className="content mb-8" dangerouslySetInnerHTML={{ __html: pageData.content }}></div>
       {pageData.metaImage && (
         <div>
-          <img src={pageData.metaImage} alt="Meta Image" className="mb-4" />
+          <Image width={20} height={20} src={pageData.metaImage} alt="Meta Image" className="mb-4" />
         </div>
       )}
     </div>

@@ -38,7 +38,7 @@ export default function WhyChooseANC() {
               >
                 <div className="mr-4">
                   {/* SVG Icons remain the same */}
-                  <img
+                  <Image
                 src={item?.iconUrl} // Use dynamic logo URL
                 alt="Logo"
                 width={128}

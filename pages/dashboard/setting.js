@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Layout from "./layout";
+import Image from "next/image";
 
 const AdminHomepage = () => {
   const router = useRouter();
@@ -227,7 +228,7 @@ const AdminHomepage = () => {
       {settings.logoUrl && (
       <div className="mb-4">
         <p className="text-gray-700">Current Logo:</p>
-        <img src={settings.logoUrl} alt="Logo" className="h-20 w-auto" />
+        <Image width={20} height={20} src={settings.logoUrl} alt="Logo" className="h-20 w-auto" />
       </div>
     )}
   </div>
@@ -247,7 +248,7 @@ const AdminHomepage = () => {
     {settings.faviconUrl && (
       <div className="mb-4">
         <p className="text-gray-700">Current Favicon:</p>
-        <img src={settings.faviconUrl} alt="Favicon" className="h-10 w-auto" />
+        <Image width={10} height={10} src={settings.faviconUrl} alt="Favicon" className="h-10 w-auto" />
       </div>
     )}
   </div>
@@ -363,7 +364,7 @@ const AdminHomepage = () => {
             {settings.aboutSection.aboutImageUrl && (
               <div className="mt-4">
                 <p className="text-gray-700">Current About Us Image:</p>
-                <img src={settings.aboutSection.aboutImageUrl} alt="About Us" className="h-20 w-auto" />
+                <Image width={10} height={10} src={settings.aboutSection.aboutImageUrl} alt="About Us" className="h-20 w-auto" />
               </div>
             )}
             <input

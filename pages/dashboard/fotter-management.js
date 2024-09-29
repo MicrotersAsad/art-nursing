@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FaPlusCircle, FaMinusCircle } from 'react-icons/fa';
 import Layout from './layout';
+import Image from 'next/image';
 
 export default function FooterForm() {
   const [logo, setLogo] = useState(null);
@@ -128,7 +129,7 @@ export default function FooterForm() {
         <div className="mb-4 border rounded p-3">
           <label className="block text-sm font-medium text-gray-700">Upload Logo</label>
           {logo && typeof logo === 'string' && (
-            <img src={logo} alt="Current Logo" className="h-16 w-auto mb-4" />
+            <Image width={16} height={16} src={logo} alt="Current Logo" className="h-16 w-auto mb-4" />
           )}
           <input
             type="file"
