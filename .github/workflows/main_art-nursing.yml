@@ -60,4 +60,4 @@ jobs:
           slot-name: 'art-nursing'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E4DE55122863483CB5BFE10BDC6084C8 }}
           timeout-minutes: 15
-          package: .
+           package: ./release.zip  
