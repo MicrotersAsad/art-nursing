@@ -52,12 +52,11 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
-      - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'art-nursing'
-          slot-name: 'art-nursing'  # প্রোডাকশন স্লটের নাম
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E4DE55122863483CB5BFE10BDC6084C8 }}
-          timeout-minutes: 15
-          package: ./release.zip
+    - name: 'Deploy to Azure Web App'
+  uses: azure/webapps-deploy@v2
+  with:
+    app-name: 'art-nursing'
+    slot-name: 'art-nursing'
+    publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+    package: ./release.zip
+
