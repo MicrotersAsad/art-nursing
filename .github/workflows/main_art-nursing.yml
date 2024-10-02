@@ -59,4 +59,5 @@ jobs:
           app-name: 'art-nursing'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E4DE55122863483CB5BFE10BDC6084C8 }}
+          timeout-minutes: 15
           package: .
