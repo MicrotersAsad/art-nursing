@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
+           node-version: '20.x'
 
       - name: npm install, build, and test
         run: |
@@ -58,5 +58,6 @@ jobs:
         with:
           app-name: 'art-nursing'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E4DE55122863483CB5BFE10BDC6084C8 }}
+          slot-name: 'cvh4bkh8bra9b5ab'
           timeout-minutes: 15
           package: .
