@@ -53,6 +53,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'art-nursing'
-          slot-name: 'art-nursing-cvh4bkh8bra9b5ab'  # স্লটের নাম এখানে যুক্ত করা হয়েছে
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+          slot-name: 'art-nursing-cvh4bkh8bra9b5ab'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE}}
           package: ./release.zip
