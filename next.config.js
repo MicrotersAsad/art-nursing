@@ -7,7 +7,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',  // Update to 'https' for production, assuming your app uses SSL
-        hostname: 'https://art-nursing-cvh4bkh8bra9b5ab.eastus-01.azurewebsites.net/',  // Replace with your production hostname or CDN
+        hostname: 'https://artnursing.azurewebsites.net/',  // Replace with your production hostname or CDN
         port: '',  // Leave empty unless you're specifying a port in production
         pathname: '/uploads/**',  // Ensure this matches your production URL structure for image storage
       },
