@@ -95,7 +95,8 @@ const PhotoGallery = () => {
       <Slider {...settings}>
         {photos.map((photo, index) => (
           <div key={index} onClick={() => openModal(photo.img, index)}>
-            <img
+            <Image
+            width={100} height={100}
               src={photo.img}
               alt={`Photo ${index}`}
               style={{ width: '100%', height: '400px', objectFit: 'cover', cursor: 'pointer' }}
