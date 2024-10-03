@@ -1,3 +1,6 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
 name: Build and deploy Node.js app to Azure Web App - artnursing
 
 on:
@@ -23,9 +26,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}-${{ matrix.node-version }}
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-${{ matrix.node-version }}
             ${{ runner.os }}-node-
 
       - name: npm install, build, and test
@@ -33,9 +35,11 @@ jobs:
           npm install
           npm run build --if-present
         env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}  # Example for environment variables
+          NEXT_PUBLIC_DB_NAME: ${{ secrets.NEXT_PUBLIC_DB_NAME }}  # Example for environment variables
+          NEXT_PUBLIC_DB_USER: ${{ secrets.NEXT_PUBLIC_DB_USER }}
+          NEXT_PUBLIC_DB_PASS: ${{ secrets.NEXT_PUBLIC_DB_PASS }}
 
-      # Optionally zip artifact, but consider skipping this if not needed
+      # Optionally zip artifact
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
 
@@ -74,6 +78,5 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'artnursing'
-          slot-name: 'Production'  # Adjust if you're using deployment slots
+          app-name: 'artnursing'  # Directly deploy to your production web app
           package: .
