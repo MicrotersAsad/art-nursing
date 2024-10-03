@@ -21,6 +21,15 @@ jobs:
         with:
           node-version: '20.x'
 
+      # Caching node_modules to speed up installation process
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: npm install, build, and test
         run: |
           npm install
@@ -43,7 +52,7 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
+      id-token: write # This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
@@ -53,9 +62,6 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-
-      - name: Add a delay before deployment
-        run: sleep 20
 
       - name: Login to Azure
         uses: azure/login@v2
