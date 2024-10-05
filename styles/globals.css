@@ -330,4 +330,37 @@ thead th {
 
 /* Table body styling */
 
+.content-container p {
+  margin: 1em 0;
+  line-height: 1.6;
+}
 
+.content-container ul {
+  list-style-type: disc;
+  padding-left: 40px; /* ইনডেন্টেশনের জন্য */
+  margin-top: 1em;
+}
+
+.content-container ol {
+  list-style-type: decimal;
+  padding-left: 40px; /* ইনডেন্টেশনের জন্য */
+  margin-top: 1em;
+}
+
+.content-container li {
+  margin: 0.5em 0; /* লিস্ট আইটেমের মধ্যে একটু ফাঁকা রাখার জন্য */
+}
+
+.jodit-wysiwyg ul {
+  list-style-type: disc;
+  padding-left: 40px; /* লিস্ট আইটেম ইনডেন্ট করার জন্য */
+}
+
+.jodit-wysiwyg ol {
+  list-style-type: decimal;
+  padding-left: 40px; /* লিস্ট আইটেম ইনডেন্ট করার জন্য */
+}
+
+.jodit-wysiwyg li {
+  margin: 0.5em 0;
+}

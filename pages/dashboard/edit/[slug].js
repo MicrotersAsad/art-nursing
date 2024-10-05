@@ -3,18 +3,40 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Layout from '../layout';
 import Image from 'next/image';
+import DOMPurify from 'dompurify';
+import parse from 'html-react-parser';
 
 // Dynamically load Quill editor (only on client-side)
 const QuillWrapper = dynamic(() => import('../../../components/EditorWrapper'), { ssr: false });
+
+const modules = {
+  toolbar: [
+    [{ header: [1, 2, false] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [{ list: 'ordered' }, { list: 'bullet' }],
+    ['link'],
+  ],
+};
+
+const formats = [
+  'header',
+  'bold',
+  'italic',
+  'underline',
+  'strike',
+  'list',
+  'bullet',
+  'link',
+];
 
 const EditPage = () => {
   const [pageData, setPageData] = useState({
     name: '',
     slug: '',
     metaTitle: '',
-    metaDescription: ''
+    metaDescription: '',
   });
-  
+
   const [content, setContent] = useState(''); // Manage content separately for Quill
   const [metaImage, setMetaImage] = useState(null); // Meta image state
   const [existingMetaImage, setExistingMetaImage] = useState(''); // Existing image
@@ -40,14 +62,17 @@ const EditPage = () => {
     e.preventDefault();
 
     const formData = new FormData(); // Create FormData for file upload
+    formData.append('id', pageData._id); // Include page ID for update
     formData.append('name', pageData.name);
     formData.append('slug', pageData.slug);
     formData.append('content', content); // Include the content from Quill editor
     formData.append('metaTitle', pageData.metaTitle);
     formData.append('metaDescription', pageData.metaDescription);
-    
+
     if (metaImage) {
       formData.append('metaImage', metaImage); // Append new image if available
+    } else {
+      formData.append('existingMetaImage', existingMetaImage); // Use existing image if no new one is selected
     }
 
     const response = await fetch(`/api/pages`, {
@@ -57,7 +82,7 @@ const EditPage = () => {
 
     if (response.ok) {
       alert('Page updated successfully');
-      router.push('/admin/pages');
+      
     } else {
       alert('Failed to update page');
     }
@@ -70,7 +95,8 @@ const EditPage = () => {
 
   // Handle changes in the Quill editor
   const handleQuillChange = (value) => {
-    setContent(value); // Update content state when Quill changes
+    const sanitizedValue = DOMPurify.sanitize(value); // Sanitize content from Quill editor
+    setContent(sanitizedValue); // Update content state when Quill changes
   };
 
   return (
@@ -105,7 +131,7 @@ const EditPage = () => {
               Content*
             </label>
             <div className="border border-gray-300 rounded-lg shadow-sm p-3">
-              <QuillWrapper initialContent={content} onChange={handleQuillChange} />
+              <QuillWrapper initialContent={content} onChange={handleQuillChange} modules={modules} formats={formats} />
             </div>
           </div>
 
@@ -149,13 +175,21 @@ const EditPage = () => {
               </div>
             )}
           </div>
-        
+
           <button
             type="submit"
             className="bg-blue-500 text-white py-2 px-4 rounded"
           >
             Update Page
           </button>
+
+          {/* Render sanitized content */}
+          <div className="mt-8">
+            <h2 className="text-xl font-semibold mb-2">Preview:</h2>
+            <div className="content-container border p-4">
+              {parse(content)}
+            </div>
+          </div>
         </form>
       </div>
     </Layout>

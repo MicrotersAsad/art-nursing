@@ -53,6 +53,23 @@ const runMiddleware = (req, res, fn) => {
   });
 };
 
+// Helper function to parse JSON body manually
+const parseJsonBody = async (req) => {
+  return new Promise((resolve, reject) => {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+    });
+    req.on('end', () => {
+      try {
+        resolve(JSON.parse(body));
+      } catch (error) {
+        reject(new Error('Invalid JSON format'));
+      }
+    });
+  });
+};
+
 export default async function handler(req, res) {
   const { db } = await connectToDatabase();
 
@@ -112,36 +129,47 @@ export default async function handler(req, res) {
   }
 
   // Handle PUT request - Update an existing page
-  if (req.method === "PUT") {
-    const { id, name, slug, content, metaTitle, metaDescription, metaImage } = req.body;
-
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid page ID" });
-    }
-
-    const updatedPage = await db.collection("pages").updateOne(
-      { _id: new ObjectId(id) },
-      {
-        $set: {
-          name,
-          slug,
-          content,
-          metaTitle,
-          metaDescription,
-          metaImage,
-          updatedAt: new Date(),
-        },
-      }
-    );
-
-    if (updatedPage.matchedCount === 0) {
-      return res.status(404).json({ message: "Page not found" });
-    }
-
-    return res.status(200).json({ message: "Page updated" });
+// Handle PUT request - Update an existing page
+if (req.method === "PUT") {
+  try {
+    // Run multer middleware to handle file upload
+    await runMiddleware(req, res, upload.single('metaImage')); // 'metaImage' is the file field name
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 
-  
+  // Extract other form data from request body
+  const { id, name, slug, content, metaTitle, metaDescription } = req.body;
+  const metaImage = req.file ? `/uploads/${req.file.filename}` : req.body.existingMetaImage; // Use new image or keep the existing one
+
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid page ID" });
+  }
+
+  const updatedPage = await db.collection("pages").updateOne(
+    { _id: new ObjectId(id) },
+    {
+      $set: {
+        name,
+        slug,
+        content,
+        metaTitle,
+        metaDescription,
+        metaImage,
+        updatedAt: new Date(),
+      },
+    }
+  );
+
+  if (updatedPage.matchedCount === 0) {
+    return res.status(404).json({ message: "Page not found" });
+  }
+
+  return res.status(200).json({ message: "Page updated" });
+}
+
+
+  // Handle DELETE request - Delete a page by slug
   if (req.method === 'DELETE') {
     try {
       const { slug } = req.query;  // Fetch slug from query string
@@ -160,11 +188,8 @@ export default async function handler(req, res) {
     } catch (error) {
       console.error('Error deleting page:', error);
       return res.status(500).json({ message: 'Internal Server Error', error });
-    }}
-
- 
-
-
+    }
+  }
 
   // If the method is not allowed
   res.status(405).json({ message: "Method not allowed" });

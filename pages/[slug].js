@@ -2,6 +2,8 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import PageHeader from '../components/PageHeader';
 import Image from 'next/image';
+import DOMPurify from 'dompurify';
+import parse from 'html-react-parser';
 
 const ViewPage = () => {
   const router = useRouter();
@@ -19,6 +21,9 @@ const ViewPage = () => {
 
   if (!pageData) return <p>Loading...</p>;
 
+  // Sanitize and parse content
+  const sanitizedContent = DOMPurify.sanitize(pageData.content);
+
   return (
     <>
       <PageHeader
@@ -28,15 +33,11 @@ const ViewPage = () => {
           { label: `${pageData.name}` }
         ]}
       />
-   <div className="max-w-7xl mx-auto p-4  mt-5 mb-5">
-     
-      <div className="content mb-8" dangerouslySetInnerHTML={{ __html: pageData.content }}></div>
-      {pageData.metaImage && (
-        <div>
-          <Image width={20} height={20} src={pageData.metaImage} alt="Meta Image" className="mb-4" />
-        </div>
-      )}
-    </div>
+      <div className="max-w-7xl mx-auto p-4 mt-5 mb-5">
+        {/* Add the content-container class for proper styling */}
+        <div className="content-container mb-8">{parse(sanitizedContent)}</div>
+        
+      </div>
     </>
   );
 };
