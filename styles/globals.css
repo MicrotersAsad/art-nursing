@@ -40,7 +40,9 @@ img, .container, .header {
   .nav-item:hover {
     background-color: #004c99; /* Exact hover background color */
   }
-  
+  .bg-cover{
+    background-image: url("/public/img/Untitled-design.png");
+  }
   .dropdown-menu {
     display: none;
     position: absolute;
@@ -329,6 +331,11 @@ thead th {
 }
 
 /* Table body styling */
+.slick-prev, .slick-next {
+  color: #fff !important; /* যদি রঙ ঠিক করতে হয় */
+  background-color: transparent !important; /* যদি ব্যাকগ্রাউন্ডে সমস্যা থাকে */
+  z-index: 10; /* নিশ্চিত করুন যে আইকন উপরে প্রদর্শিত হচ্ছে */
+}
 
 .content-container p {
   margin: 1em 0;

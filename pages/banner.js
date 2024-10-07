@@ -38,7 +38,7 @@ export default function Banner() {
 
   if (loading) {
     return (
-      <div className="loader-container">
+      <div className="flex items-center justify-center h-full">
         <div className="loader"></div>
       </div>
     );
@@ -65,48 +65,22 @@ export default function Banner() {
         {sliders.map((slider, index) => (
           <div
             key={index}
-            className="carousel-item"
-            style={{
-              position: 'relative',
-              height: '600px',
-              overflow: 'hidden',
-            }}
+            className="relative overflow-hidden h-[600px]"
           >
             <div
+              className="absolute inset-0 bg-cover bg-center z-0 brightness-[60%]"
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '600px',
                 backgroundImage: `url(${slider.img})`,
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center',
-                zIndex: 0,
-                filter: 'brightness(60%)',
               }}
             ></div>
 
             <div
-              className="carousel-caption d-flex flex-column justify-content-center align-items-start max-w-7xl mx-auto"
-              style={{
-                position: 'relative',
-                zIndex: 1,
-                height: '100%',
-                padding: '0 15px',
-              }}
+              className="relative z-10 flex flex-col justify-center max-w-7xl mx-auto h-full px-4"
             >
               {/* Heading with AOS fade-up effect */}
               <h1
                 data-aos="fade-up"
-                style={{
-                  fontSize: '3rem',
-                  color: 'white',
-                  fontWeight: 'bold',
-                  textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)',
-                  marginBottom: '1rem',
-                }}
+                className="text-3xl md:text-5xl text-white font-bold mb-4 shadow-md"
               >
                 {slider.heading}
               </h1>
@@ -114,43 +88,27 @@ export default function Banner() {
               {/* Subheading with AOS fade-up effect */}
               <p
                 data-aos="fade-up"
-                style={{
-                  fontSize: '1.2rem',
-                  color: 'white',
-                  textShadow: '2px 2px 6px rgba(0, 0, 0, 0.7)',
-                  marginBottom: '1.5rem',
-                }}
+                className="text-lg md:text-xl text-white mb-6 shadow-md"
               >
                 {slider.subHeading}
               </p>
               
-              <div className="mt-3">
-                {/* Conditionally render button if buttonLink and buttonText are available */}
-                {slider.buttonLink && slider.buttonText && (
-                  <Link href={slider.buttonLink} passHref>
-                    <button
-                      className="btn btn-primary px-4 py-2"
-                      style={{
-                        fontSize: '1rem',
-                        backgroundColor: '#007bff',
-                        color: '#fff',
-                        borderRadius: '4px',
-                        padding: '10px 20px',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      {slider.buttonText}
-                    </button>
-                  </Link>
-                )}
-              </div>
+              {/* Conditionally render button if buttonLink and buttonText are available */}
+              {slider.buttonLink && slider.buttonText && (
+                <Link href={slider.buttonLink} passHref>
+                  <button
+                    className="bg-blue-600 text-white rounded px-5 py-3 hover:bg-blue-700 transition duration-300 ease-in-out"
+                  >
+                    {slider.buttonText}
+                  </button>
+                </Link>
+              )}
             </div>
           </div>
         ))}
       </Slider>
 
       <style jsx>{`
-        .carousel-item,
         .slick-slide {
           height: 600px !important;
         }
