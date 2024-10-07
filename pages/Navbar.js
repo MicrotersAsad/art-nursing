@@ -68,7 +68,7 @@ const Header = () => {
             </span>
             <span className="flex items-center whitespace-nowrap">
               <FaEnvelope className="text-[#F4A139] me-2" />
-              {settings?.topHeading?.email || 'info@art.edu.bd'}
+              {settings?.topHeading?.email || 'artnursingcollege@gmail.com'}
             </span>
             <span className="flex items-center mt-1 md:mt-0 whitespace-nowrap">
               <FaRegArrowAltCircleRight className="text-[#F4A139] me-2" />

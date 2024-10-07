@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { FaFacebook, FaYoutube, FaPhoneAlt, FaEnvelope, FaInfoCircle, FaGraduationCap, FaBook, FaNewspaper } from 'react-icons/fa';
+import { FaFacebook, FaYoutube, FaPhoneAlt, FaEnvelope, FaInfoCircle, FaGraduationCap, FaBook, FaNewspaper, } from 'react-icons/fa';
 import Link from 'next/link';
 
 // Icon mapping object for dynamic links (adjust based on your API data)
@@ -136,37 +136,40 @@ const Footer = () => {
                 </Link>
               </li>
             )}
-            {footerData.contactInfo?.email && (
+           {footerData.contactInfo?.phone3 && (
               <li className="flex items-center">
                 <FaEnvelope className="mr-2" />
-                <Link href={`mailto:${footerData.contactInfo.email}`} className="text-gray-300 hover:text-pink-500">
-                  {footerData.contactInfo.email}
-                </Link>
+                <Link href={`mailto:${footerData.contactInfo.email}`} className="text-sm text-gray-300 hover:text-pink-500 break-all">
+  {footerData.contactInfo.email}
+</Link>
+
               </li>
             )}
+
           </ul>
         </div>
 
         {/* Column 5 - Approved By Section */}
         <div>
-          <h3 className="text-xl font-bold mb-4">Approved By</h3>
-          <div className="space-y-4">
-            {footerData.approvedBy?.map((approved, index) => (
-              <div key={index} className="flex items-center">
-                {approved.logoUrl && (
-                  <Image
-                    src={approved.logoUrl}
-                    alt={`Approved by ${approved.name}`}
-                    width={150}
-                    height={50}
-                    className="h-14 w-56 mr-4"
-                  />
-                )}
-                <p className="text-gray-300">{approved.name}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+  <h3 className="text-xl font-bold mb-4">Approved By</h3>
+  <div className="grid grid-cols-3 gap-4">
+    {footerData.approvedBy?.map((approved, index) => (
+      <div key={index} className="flex items-center justify-center">
+        {approved.logoUrl && (
+          <Image
+            src={approved.logoUrl}
+            alt="Approved logo"
+            width={100}
+            height={50}
+            className="h-14 w-auto"
+          />
+        )}
+      </div>
+    ))}
+  </div>
+</div>
+
+
       </div>
 
       {/* Bottom Section - Copyright */}

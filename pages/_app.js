@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
-import Script from 'next/script';
 import Head from 'next/head';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import Banner from './Banner'; // Import your existing Banner component
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'next/router';
 import '../styles/globals.css';
 import { ClipLoader } from 'react-spinners';
 import { FaArrowUp } from 'react-icons/fa'; // Import an arrow icon
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import Banner from './Banner';
+
 
 function MyApp({ Component, pageProps }) {
   const [isContentReady, setIsContentReady] = useState(false);
@@ -88,7 +90,7 @@ function MyApp({ Component, pageProps }) {
         {!isDashboard && (
           <>
             <Navbar />
-            <Banner />
+           <Banner />
           </>
         )}
 
