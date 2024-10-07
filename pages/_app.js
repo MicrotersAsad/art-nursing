@@ -9,7 +9,7 @@ import { ClipLoader } from 'react-spinners';
 import { FaArrowUp } from 'react-icons/fa'; // Import an arrow icon
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import Banner from './Banner';
+import Banner from './banner';  // Change 'Banner' to 'banner'
 
 
 function MyApp({ Component, pageProps }) {
