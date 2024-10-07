@@ -33,7 +33,7 @@ export default function WhyChooseANC() {
             whyChooseData.map((item, index) => (
               <div
                 key={index}
-                className={`bg-white p-5 rounded-lg shadow-md flex items-center ${index % 2 === 0 ? 'bg-[#0d1128]' : 'bg-blue-800'} text-black`}
+                className={`bg-white p-10 rounded-lg shadow-md flex items-center ${index % 2 === 0 ? 'bg-[#0d1128]' : 'bg-blue-800'} text-black`}
                 data-aos={index % 2 === 0 ? 'fade-right' : 'fade-left'}
               >
                 <div className="mr-4">

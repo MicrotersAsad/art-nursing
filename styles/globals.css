@@ -31,7 +31,7 @@ img, .container, .header {
     width: 300px;
   }
   a{
-    text-decoration: none!important;
+    text-decoration: none!;
     color: white!important;
   }
  
@@ -43,9 +43,7 @@ img, .container, .header {
   .nav-item:hover {
     background-color: #004c99; /* Exact hover background color */
   }
-  .bg-cover{
-    background-image: url("/public/img/Untitled-design.png");
-  }
+ 
   .dropdown-menu {
     display: none;
     position: absolute;

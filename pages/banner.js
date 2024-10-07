@@ -6,7 +6,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // Import AOS styles
 
-export default function Banner() {
+const Banner = () => {
   const [sliders, setSliders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -63,10 +63,7 @@ export default function Banner() {
     <div>
       <Slider {...settings}>
         {sliders.map((slider, index) => (
-          <div
-            key={index}
-            className="relative overflow-hidden h-[600px]"
-          >
+          <div key={index} className="relative overflow-hidden h-[600px]">
             <div
               className="absolute inset-0 bg-cover bg-center z-0 brightness-[60%]"
               style={{
@@ -74,9 +71,7 @@ export default function Banner() {
               }}
             ></div>
 
-            <div
-              className="relative z-10 flex flex-col justify-center max-w-7xl mx-auto h-full px-4"
-            >
+            <div className="relative z-10 flex flex-col justify-center max-w-7xl mx-auto h-full px-4">
               {/* Heading with AOS fade-up effect */}
               <h1
                 data-aos="fade-up"
@@ -84,7 +79,7 @@ export default function Banner() {
               >
                 {slider.heading}
               </h1>
-              
+
               {/* Subheading with AOS fade-up effect */}
               <p
                 data-aos="fade-up"
@@ -92,13 +87,11 @@ export default function Banner() {
               >
                 {slider.subHeading}
               </p>
-              
+
               {/* Conditionally render button if buttonLink and buttonText are available */}
               {slider.buttonLink && slider.buttonText && (
                 <Link href={slider.buttonLink} passHref>
-                  <button
-                    className="bg-blue-600 text-white rounded px-5 py-3 hover:bg-blue-700 transition duration-300 ease-in-out"
-                  >
+                  <button className="bg-blue-600 text-white rounded px-5 py-3 hover:bg-blue-700 transition duration-300 ease-in-out">
                     {slider.buttonText}
                   </button>
                 </Link>
@@ -110,9 +103,11 @@ export default function Banner() {
 
       <style jsx>{`
         .slick-slide {
-          height: 600px !important;
+          height: 607px !important;
         }
       `}</style>
     </div>
   );
-}
+};
+
+export default Banner;
