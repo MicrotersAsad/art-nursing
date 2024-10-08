@@ -889,7 +889,7 @@ const Layout = React.memo(({ children }) => {
           </div>
           <hr />
           <Link href="/profile" passHref>
-            <button className="flex items-center text-white w-full px-4 py-2 text-gray-800 hover:bg-gray-100">
+            <button className="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-100">
               <FaUser className="mr-3" />
               Profile
             </button>
@@ -897,7 +897,7 @@ const Layout = React.memo(({ children }) => {
 
           <button
             onClick={handleLogout}
-            className="flex items-center text-white w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
+            className="flex items-center  w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
           >
             <FaSignOutAlt className="mr-3" />
             Sign Out

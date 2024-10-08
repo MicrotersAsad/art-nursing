@@ -151,8 +151,8 @@ const Footer = () => {
 
         {/* Column 5 - Approved By Section */}
         <div>
-  <h3 className="text-xl font-bold mb-4">Approved By</h3>
-  <div className="grid grid-cols-3 gap-4">
+  <h3 className="text-xl font-bold mb-4 text-center">Approved By</h3>
+  <div className="grid grid-cols-1 gap-4">
     {footerData.approvedBy?.map((approved, index) => (
       <div key={index} className="flex items-center justify-center">
         {approved.logoUrl && (
@@ -161,7 +161,7 @@ const Footer = () => {
             alt="Approved logo"
             width={100}
             height={50}
-            className="h-14 w-auto"
+            className="h-20 w-auto"
           />
         )}
       </div>

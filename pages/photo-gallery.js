@@ -1,113 +1,138 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal'; // Modal for image preview
 import Zoom from 'react-medium-image-zoom'; // Zoom for image
 import 'react-medium-image-zoom/dist/styles.css'; // Zoom CSS
 import Image from 'next/image';
+import ClipLoader from 'react-spinners/ClipLoader'; // Import ClipLoader for loading animation
 
 Modal.setAppElement('#__next'); // Setting up the root for the modal
 
-const PhotoGallery = () => {
-  const [photos, setPhotos] = useState([]);
-  const [loading, setLoading] = useState(true);
+const PhotoGallery = ({ photos }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-
-  // Fetch all photos from API
-  useEffect(() => {
-    async function fetchPhotos() {
-      try {
-        const response = await fetch('/api/photo-gallery'); // Make sure the API endpoint is correct
-        const data = await response.json();
-        setPhotos(data);
-      } catch (error) {
-        console.error('Error fetching photos:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchPhotos();
-  }, []);
 
   // Open modal to show image
   const openModal = (image) => {
     setSelectedImage(image);
     setModalIsOpen(true);
+    document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
   };
 
   // Close modal
   const closeModal = () => {
     setModalIsOpen(false);
     setSelectedImage(null);
+    document.body.style.overflow = 'auto'; // Restore scrolling when modal is closed
   };
 
-  if (loading) {
-    return <div>Loading...</div>; // Loading state
-  }
-
   return (
-    <div className="max-w-7xl mx-auto bg-white">
-    <div className="photo-gallery grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 p-4">
-      {photos.map((photo, index) => (
-        <div key={index} className="photo-item">
-          <Zoom>
-            <Image
-              src={photo.img} // Ensure this is the correct path to your photo
-              alt={photo.alt || 'Photo'}
-              className="w-[400px] h-[300px] object-cover cursor-pointer" // Fixed width and height
-              width={400}
-              height={400}
-              onClick={() => openModal(photo.img)}
-            />
-          </Zoom>
-        </div>
-      ))}
+    <div className="max-w-7xl mx-auto p-4">
+      <h2 className="text-3xl text-center p-8 font-bold">Art Nursing Gallery</h2>
 
-      {/* Modal for viewing images */}
+      {photos.length === 0 ? (
+        <div className="flex justify-center items-center min-h-screen">
+          <ClipLoader color={'#123abc'} loading={true} size={50} />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {photos.map((photo, index) => (
+            <div key={index} className="photo-item cursor-pointer" onClick={() => openModal(photo.img)}>
+              <Image
+                src={photo.img}
+                alt={`Photo ${index}`}
+                width={400}
+                height={300}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Modal to display the clicked image */}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Image Modal"
-        className="modal"
-        overlayClassName="overlay"
+        style={{
+          overlay: { zIndex: 9999, backgroundColor: 'rgba(0, 0, 0, 0.8)' },
+          content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+            maxWidth: '90%',
+            maxHeight: '90vh',
+            padding: 0,
+            overflow: 'hidden',
+          },
+        }}
       >
-        <button onClick={closeModal} className="close-button">Close</button>
         {selectedImage && (
           <div className="modal-content">
             <Zoom>
               <Image
                 src={selectedImage}
                 alt="Selected"
-                layout="fill"
-                objectFit="contain"
+                width={1000}
+                height={700}
+                style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
               />
             </Zoom>
+            {/* Close button */}
+            <button
+              onClick={closeModal}
+              style={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                background: 'red',
+                color: 'white',
+                border: 'none',
+                padding: '5px 10px',
+                cursor: 'pointer',
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         )}
       </Modal>
-
-      <style jsx>{`
-        .modal {
-          max-width: 90%;
-          max-height: 90%;
-          margin: auto;
-          position: relative;
-        }
-        .overlay {
-          background: rgba(0, 0, 0, 0.8);
-        }
-        .close-button {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          background: #fff;
-          border: none;
-          padding: 10px;
-          cursor: pointer;
-        }
-      `}</style>
-    </div>
     </div>
   );
 };
+
+export async function getServerSideProps(context) {
+  const protocol = context.req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
+  const host = context.req.headers.host;
+
+  try {
+    const res = await fetch(`${protocol}://${host}/api/photo-gallery`);
+    const photos = await res.json();
+
+    return {
+      props: {
+        photos: photos || [], // Passing the photos as props
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return {
+      props: {
+        photos: [], // Fallback to empty array in case of error
+      },
+    };
+  }
+}
 
 export default PhotoGallery;

@@ -109,7 +109,7 @@ const Header = () => {
                       <button onClick={() => handleDropdown(menu._id)} className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r">
                         {menu.title} <FaAngleDown className="ml-2" />
                       </button>
-                      <div className={`absolute z-10 ${openDropdown === menu._id ? 'block' : 'hidden'} md:group-hover:block text-white shadow-lg rounded py-2 w-48 left-0 top-full bg-[#004080]`}>
+                      <div className={`absolute z-10 ${openDropdown === menu._id ? 'block' : 'hidden'} md:group-hover:block text-white shadow-lg rounded py-2 w-60 left-0 top-full bg-[#004080]`}>
                         {menu.submenus.map((submenu) => (
                           <Link key={submenu.title} href={submenu.link || '#'}>
                             <span className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b">{submenu.title}</span>
