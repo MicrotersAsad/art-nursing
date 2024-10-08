@@ -166,6 +166,60 @@ const Layout = React.memo(({ children }) => {
                 </div>
               )}
           </div>
+          {/* Result Board */}
+          <div className="mt-3">
+            <p
+              className={`flex items-center  py-2 text-white px-6 cursor-pointer rounded-md ${
+                isActiveRoute("/dashboard/all-notice") ||
+                isActiveRoute("/dashboard/add-result")
+                  ? "bg-gray-500 text-gray-700"
+                  : menuOpen === "result"
+                  ? "bg-gray-500 text-gray-700"
+                  : "hover:bg-gray-500 hover:text-white"
+              }`}
+              onClick={() => toggleMenu("result")}
+            >
+              <FaBell className="mr-3 text-green-500" />
+              {!isCollapsed && <span>Result</span>}
+              {!isCollapsed && (
+                <span className="ml-auto">
+                  {menuOpen === "result" ? <FaMinus /> : <FaPlus />}
+                </span>
+              )}
+            </p>
+
+            {(menuOpen === "result" ||
+              isActiveRoute("/dashboard/all-result") ||
+              isActiveRoute("/dashboard/add-result")) &&
+              !isCollapsed && (
+                <div className="ml-6">
+                  <Link href="/dashboard/all-result" passHref>
+                    <p
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
+                        isActiveRoute("/dashboard/all-result")
+                          ? "text-blue-400"
+                          : "hover:bg-gray-600 hover:text-white"
+                      }`}
+                    >
+                      <FaCircle className="mr-2 text-xs" />
+                      All Result
+                    </p>
+                  </Link>
+                  <Link href="/dashboard/add-result" passHref>
+                    <p
+                      className={`relative flex items-center text-white py-2 px-6 cursor-pointer ${
+                        isActiveRoute("/dashboard/add-result")
+                          ? "text-blue-400"
+                          : "hover:bg-gray-600 hover:text-white"
+                      }`}
+                    >
+                      <FaCircle className="mr-2 text-xs" />
+                      Add Result
+                    </p>
+                  </Link>
+                </div>
+              )}
+          </div>
 
           {/* Gallery */}
           <div className="mt-3">

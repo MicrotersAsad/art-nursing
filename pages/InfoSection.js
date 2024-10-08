@@ -1,37 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
+import axios from 'axios';
 
-export default function InfoSection() {
-  const [heroArea, setHeroArea] = useState([]);
-
-  useEffect(() => {
-    // Fetch data from the API
-    const fetchSettings = async () => {
-      try {
-        const response = await fetch('/api/setting');
-        if (response.ok) {
-          const data = await response.json();
-          setHeroArea(data.heroArea || []); // Set the heroArea from the API response
-        }
-      } catch (error) {
-        console.error('Error fetching heroArea data:', error);
-      }
-    };
-    
-    fetchSettings();
-  }, []);
+const InfoSection = ({ heroArea }) => {
+  console.log('Hero Area in Component:', heroArea); // Debugging log to ensure heroArea is not undefined
 
   return (
     <div className="w-full">
       {/* Full-width grid layout without gaps */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" data-aos="fade-up">
-        {heroArea.length > 0 ? (
+        {Array.isArray(heroArea) && heroArea.length > 0 ? (
           heroArea.map((hero, index) => (
             <div
               key={index}
-              className={`p-6 ${
-                (index % 2 === 0) ? 'bg-[#0d1128]' : 'bg-blue-800'
-              } text-white`}
+              className={`p-6 ${index % 2 === 0 ? 'bg-[#0d1128]' : 'bg-blue-800'} text-white`}
             >
               <div className="flex justify-center m-4">
                 <svg
@@ -64,9 +46,9 @@ export default function InfoSection() {
               {/* Button */}
               <div className="flex justify-center m-4">
                 <Link href={hero.buttonLink || '/'} passHref>
-                  <p className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300">
+                  <a className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300">
                     {hero.buttonText || 'Learn More'}
-                  </p>
+                  </a>
                 </Link>
               </div>
             </div>
@@ -77,4 +59,41 @@ export default function InfoSection() {
       </div>
     </div>
   );
+};
+
+// Fetch the data from the server
+export async function getServerSideProps({ req }) {
+  try {
+    const protocol = req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
+    const host = req.headers.host;
+    const apiUrl = `${protocol}://${host}/api/setting`;
+    console.log(apiUrl);
+    
+
+    // Fetch the data from the API
+    const { data } = await axios.get(apiUrl);
+    console.log('Fetched data in getServerSideProps:', data); // Debugging log to inspect the structure
+
+    // Ensure heroArea is accessed correctly
+    const heroArea = data?.heroArea || [];
+    console.log(heroArea);
+    
+
+    return {
+      props: {
+        heroArea, // Passing the correct heroArea to the component
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching data:', error.message);
+
+    return {
+      props: {
+        heroArea: [], // Return an empty array if fetching fails
+      },
+    };
+  }
 }
+
+
+export default InfoSection; // Ensure you export the component
