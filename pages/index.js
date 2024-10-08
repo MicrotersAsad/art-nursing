@@ -148,7 +148,7 @@ const AboutSection = ({ data }) => (
       <div className="lg:w-1/2 text-left" data-aos="fade-right">
         <h2 className="text-3xl font-bold mb-4">{data.headline || 'About Art Nursing College'}</h2>
         <p className="text-gray-700 mb-6">{data.description || 'A brief description.'}</p>
-        <Link href="/about">
+        <Link href={data.buttonLink}>
           <span className="inline-block px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded hover:bg-red-600 transition duration-300">
             Know More
           </span>

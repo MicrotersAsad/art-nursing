@@ -27,18 +27,18 @@ export default function ProgrammeDetails({ program, notices, error }) {
         {/* Sidebar Section */}
         <div className="col-span-12 md:col-span-4 lg:col-span-3 bg-gray-50 p-4">
           <h2 className="font-bold text-lg sm:text-base mb-4 text-center">Table of Contents</h2>
-          <ul className="space-y-2 ">
-            <li><a href="#about-department" className="text-blue-600 hover:underline sm:text-sm">About the Program</a></li>
-            <li><a href="#salient-features" className="text-blue-600 hover:underline sm:text-sm">Salient Features</a></li>
-            <li><a href="#curriculum-structure" className="text-blue-600 hover:underline sm:text-sm">Curriculum Structure</a></li>
-            <li><a href="#eligibility-requirements" className="text-blue-600 hover:underline sm:text-sm">Eligibility & Admission</a></li>
-            <li><a href="#tuition-fees" className="text-blue-600 hover:underline sm:text-sm">Tuition Fees</a></li>
+          <ul className="space-y-2 ms-2">
+            <li><Link href="#about-department"><span className="text-green-600 hover:underline sm:text-sm">About the Program</span></Link></li>
+            <li><Link href="#salient-features"><span className="text-green-600 hover:underline sm:text-sm">Salient Features</span></Link></li>
+            <li><Link href="#curriculum-structure"><span className="text-green-600 hover:underline sm:text-sm">Curriculum Structure</span></Link></li>
+            <li><Link href="#eligibility-requirements"><span className="text-green-600 hover:underline sm:text-sm">Eligibility & Admission</span></Link></li>
+            <li><Link href="#tuition-fees"><span className="text-green-600 hover:underline sm:text-sm">Tuition Fees</span></Link></li>
           </ul>
           <hr className='mt-3 mb-3' />
 
           {/* Notices Section */}
           <h2 className="font-bold text-lg sm:text-base mt-6 mb-4 text-center">Recent Notices</h2>
-          <ul className="space-y-2">
+          <ul className="space-y-2 ms-2">
             {notices.length === 0 ? <li>No notices available</li> : notices.map((notice, index) => (
               <li key={index}>
                 <Link href={`/notices/${notice.slug}`}>
@@ -105,7 +105,7 @@ export default function ProgrammeDetails({ program, notices, error }) {
       </div>
 
       {/* Styling for Jodit Editor Content */}
-      <style jsx>{`
+      <style jsx global>{`
         .jodit-content {
           font-family: Arial, sans-serif;
           line-height: 1.6;
@@ -157,7 +157,9 @@ export default function ProgrammeDetails({ program, notices, error }) {
           height: auto;
           border-radius: 8px;
         }
-
+        a span .span{
+        color:#3b82f6!important
+        }
         @media (max-width: 768px) {
           .jodit-content h2 {
             font-size: 1.3rem;

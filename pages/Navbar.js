@@ -10,34 +10,39 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [menus, setMenus] = useState([]); // Store dynamic menu data from API
   const [settings, setSettings] = useState(null); // Store dynamic settings from API
-  const { user } = useAuth();
+  const [isLoading, setIsLoading] = useState(false); // Loading state for API
+  const { user } = useAuth(); // Get the user object from AuthContext
   const router = useRouter();
 
   // Fetch dynamic menu data from API
   const fetchMenuData = async () => {
+    setIsLoading(true); // Set loading state
     try {
-      const response = await fetch('/api/menus');
+      const response = await fetch('/api/menus'); // Fetch menus from API
       const data = await response.json();
-      setMenus(data);
+      setMenus(data); // Set the menus data
     } catch (error) {
       console.error('Error fetching menus:', error);
     }
+    setIsLoading(false); // Stop loading
   };
 
   // Fetch dynamic settings from API
   const fetchSettingsData = async () => {
+    setIsLoading(true); // Set loading state
     try {
-      const response = await fetch('/api/settings');
+      const response = await fetch('/api/settings'); // Fetch settings from API
       const data = await response.json();
-      setSettings(data);
+      setSettings(data); // Set the settings data
     } catch (error) {
       console.error('Error fetching settings:', error);
     }
+    setIsLoading(false); // Stop loading
   };
 
   useEffect(() => {
-    fetchMenuData();
-    fetchSettingsData();
+    fetchMenuData(); // Fetch menus on mount
+    fetchSettingsData(); // Fetch settings on mount
   }, []);
 
   const handleDropdown = (menuId) => {
@@ -113,30 +118,30 @@ const Header = () => {
                       </div>
                     </div>
                   ) : (
-                    <Link href={menu.link || '#'} passHref>
+                    <Link href={menu.link || '#'}>
                       <span className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r">{menu.title}</span>
                     </Link>
                   )}
                 </div>
               ))}
 
-              {/* Static Links */}
-              <Link href="/notices" passHref>
+              {/* Other static links */}
+              <Link href="/notices">
                 <span className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r">Notice Board</span>
               </Link>
-              <Link href="/results" passHref>
+              <Link href="/results">
                 <span className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r">Results</span>
               </Link>
-              <Link href="/blog" passHref>
+              <Link href="/blog">
                 <span className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r">Blog</span>
               </Link>
-              <Link href="/contact" passHref>
+              <Link href="/contact">
                 <span className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all">Contact Us</span>
               </Link>
 
               {/* Conditionally render Dashboard link for super admin */}
               {user?.role === 'super admin' && (
-                <Link href="/dashboard/overview" passHref>
+                <Link href="/dashboard/overview">
                   <span className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r md:border-l">Dashboard</span>
                 </Link>
               )}
@@ -144,6 +149,13 @@ const Header = () => {
           </div>
         </div>
       </div>
+
+      {/* Loader */}
+      {isLoading && (
+        <div className="fixed inset-0 flex justify-center items-center bg-opacity-50 bg-gray-800">
+          <div className="loader">Loading...</div>
+        </div>
+      )}
     </header>
   );
 };
