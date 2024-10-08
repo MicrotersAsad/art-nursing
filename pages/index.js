@@ -9,13 +9,29 @@ import 'slick-carousel/slick/slick-theme.css';
 import Modal from 'react-modal';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
+import { ClipLoader } from 'react-spinners';
 
 const Home = ({ appData }) => {
+  const [isLoading, setIsLoading] = useState(true); // Loading state
   useEffect(() => {
     // Initialize AOS for animations
     AOS.init({ duration: 1000, once: true });
-  }, []);
+    // Set a timer to simulate loading
+    const timer = setTimeout(() => {
+      setIsLoading(false); // Set loading to false after data is loaded
+    }, 2000);
 
+    // Cleanup the timer when the component unmounts
+    return () => clearTimeout(timer);
+  }, []);
+  if (isLoading) {
+    // Show ClipLoader when loading state is true
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={100} color={"#3498db"} loading={isLoading} />
+      </div>
+    );
+  }
   return (
     <div>
       {/* Banner Section */}
