@@ -2,40 +2,36 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
+import ClipLoader from 'react-spinners/ClipLoader'; // Import ClipLoader from react-spinners
 
 const ResultDetail = ({ result, departments, error }) => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredData, setFilteredData] = useState('');
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
-    setFilteredData(result.content); // Initially show all data
+    if (result.content) {
+      setFilteredData(result.content); // Initially show all data
+      setLoading(false); // Data loaded, set loading to false
+    }
   }, [result.content]);
 
   const handleSearch = (event) => {
     const term = event.target.value.toLowerCase();
     setSearchTerm(term);
 
-    // Parse the content into a DOM structure to manipulate it
     const table = document.createElement('div');
     table.innerHTML = result.content;
 
-    // Get all rows except the first one in tbody (excluding the first tr)
     const rows = table.querySelectorAll('tbody tr');
     
-    // Skip the first row and apply filtering only to subsequent rows
     rows.forEach((row, index) => {
-      if (index === 0) return; // Skip the first row
-
+      if (index === 0) return;
       const rowText = row.textContent.toLowerCase();
-      if (rowText.includes(term)) {
-        row.style.display = ''; // Show row if it matches
-      } else {
-        row.style.display = 'none'; // Hide row if it doesn't match
-      }
+      row.style.display = rowText.includes(term) ? '' : 'none';
     });
 
-    // Set the modified HTML back as filtered data
     setFilteredData(table.innerHTML);
   };
 
@@ -51,14 +47,20 @@ const ResultDetail = ({ result, departments, error }) => {
       return;
     }
 
-    // Convert the HTML table to a worksheet
     const workbook = XLSX.utils.table_to_book(table, { sheet: 'Sheet1' });
-
-    // Generate excel file and trigger download
     XLSX.writeFile(workbook, 'result-data.xlsx');
   };
 
   if (error) return <p>Error: {error}</p>;
+
+  if (loading) {
+    // Show ClipLoader when loading state is true
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={150} color={"#3498db"} loading={loading} />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto p-4 border mt-5 mb-5">
@@ -71,7 +73,6 @@ const ResultDetail = ({ result, departments, error }) => {
           <p><strong>Department:</strong> {getDepartmentName(result.department)}</p>
           <p><strong>Date:</strong> {new Date(result.date).toLocaleDateString()}</p>
 
-          {/* Search Input */}
           <input
             type="text"
             value={searchTerm}
@@ -80,10 +81,8 @@ const ResultDetail = ({ result, departments, error }) => {
             className="mb-4 p-2 border border-gray-300 rounded"
           />
 
-          {/* Render dynamic content with filtered data */}
           <div className="result-content" dangerouslySetInnerHTML={{ __html: filteredData }} />
 
-          {/* Button to download data as Excel */}
           <button
             onClick={downloadExcel}
             className="mt-4 p-2 bg-green-500 text-white rounded hover:bg-green-600"
@@ -97,7 +96,6 @@ const ResultDetail = ({ result, departments, error }) => {
             <p>No PDF available</p>
           )}
 
-          {/* Global CSS Styling */}
           <style jsx global>{`
             .result-content table {
               width: 100%;

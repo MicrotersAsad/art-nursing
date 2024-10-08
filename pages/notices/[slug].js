@@ -1,52 +1,10 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import ClipLoader from 'react-spinners/ClipLoader'; // Import ClipLoader for loading state
 
-const NoticeDetail = () => {
-  const router = useRouter();
-  const { slug } = router.query; // Extract slug from the URL
-  const [notice, setNotice] = useState(null);
-  const [departments, setDepartments] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // Fetch notice details by slug
-  useEffect(() => {
-    if (slug) {
-      const fetchNotice = async () => {
-        try {
-          const response = await fetch(`/api/notice?slug=${slug}`);
-          if (!response.ok) {
-            throw new Error('Failed to fetch notice details');
-          }
-          const data = await response.json();
-          setNotice(data);
-        } catch (error) {
-          setError(error.message);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchNotice();
-    }
-  }, [slug]);
-
-  // Fetch departments to get department name
-  useEffect(() => {
-    const fetchDepartments = async () => {
-      try {
-        const response = await fetch('/api/department');
-        if (!response.ok) {
-          throw new Error('Failed to fetch departments');
-        }
-        const data = await response.json();
-        setDepartments(data);
-      } catch (error) {
-        setError(error.message);
-      }
-    };
-    fetchDepartments();
-  }, []);
+const NoticeDetail = ({ notice, departments, error }) => {
+  const [loading, setLoading] = useState(false);
 
   // Function to get department name from department ID
   const getDepartmentName = (departmentId) => {
@@ -54,7 +12,14 @@ const NoticeDetail = () => {
     return department ? department.name : 'Unknown Department';
   };
 
- 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={150} color={"#3498db"} loading={loading} />
+      </div>
+    );
+  }
+
   if (error) return <p>Error: {error}</p>;
 
   return (
@@ -80,5 +45,56 @@ const NoticeDetail = () => {
     </div>
   );
 };
+
+// Server-side rendering using getServerSideProps
+export async function getServerSideProps(context) {
+  const { req, query } = context;
+  const { slug } = query;
+
+  let notice = null;
+  let departments = [];
+  let error = null;
+
+  try {
+    // Determine the protocol (http or https) based on the request headers
+    const protocol = req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
+    const host = req.headers.host;
+
+    // Fetch the notice details based on the slug
+    const noticeResponse = await fetch(`${protocol}://${host}/api/notice?slug=${slug}`, {
+      headers: {
+        // Pass request headers if needed (e.g., for authentication)
+        Authorization: req.headers.authorization || '', // Example for including authorization headers
+      },
+    });
+
+    if (!noticeResponse.ok) {
+      throw new Error('Failed to fetch notice details');
+    }
+    notice = await noticeResponse.json();
+
+    // Fetch the departments
+    const departmentResponse = await fetch(`${protocol}://${host}/api/department`, {
+      headers: {
+        Authorization: req.headers.authorization || '',
+      },
+    });
+
+    if (!departmentResponse.ok) {
+      throw new Error('Failed to fetch departments');
+    }
+    departments = await departmentResponse.json();
+  } catch (err) {
+    error = err.message;
+  }
+
+  return {
+    props: {
+      notice,
+      departments,
+      error,
+    },
+  };
+}
 
 export default NoticeDetail;
