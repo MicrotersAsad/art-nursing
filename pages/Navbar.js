@@ -2,60 +2,43 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaAngleDown, FaEnvelope, FaPhoneAlt, FaRegArrowAltCircleRight } from 'react-icons/fa';
+import { FaAngleDown, FaEnvelope, FaPhoneAlt } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 
 const Header = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [menus, setMenus] = useState([]); // Store dynamic menu data
-  const [settings, setSettings] = useState(null); // Store dynamic settings
-  const [isLoading, setIsLoading] = useState(false); // Loading state
-  const { user } = useAuth(); // Get the user object from AuthContext
+  const [menus, setMenus] = useState([]); // Store dynamic menu data from API
+  const [settings, setSettings] = useState(null); // Store dynamic settings from API
+  const { user } = useAuth();
   const router = useRouter();
 
+  // Fetch dynamic menu data from API
+  const fetchMenuData = async () => {
+    try {
+      const response = await fetch('/api/menus');
+      const data = await response.json();
+      setMenus(data);
+    } catch (error) {
+      console.error('Error fetching menus:', error);
+    }
+  };
+
+  // Fetch dynamic settings from API
+  const fetchSettingsData = async () => {
+    try {
+      const response = await fetch('/api/settings');
+      const data = await response.json();
+      setSettings(data);
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchMenuData = async () => {
-      try {
-        const response = await fetch('/api/menus');
-        const data = await response.json();
-        setMenus(data);
-      } catch (error) {
-        console.error('Error fetching menus:', error);
-      }
-    };
-
-    const fetchSettingsData = async () => {
-      try {
-        const response = await fetch('/api/setting');
-        const data = await response.json();
-        setSettings(data);
-      } catch (error) {
-        console.error('Error fetching settings:', error);
-      }
-    };
-
     fetchMenuData();
     fetchSettingsData();
   }, []);
-
-  const handleRouteChangeStart = () => {
-    setIsLoading(true);
-  };
-
-  const handleRouteChangeComplete = () => {
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    router.events.on('routeChangeStart', handleRouteChangeStart);
-    router.events.on('routeChangeComplete', handleRouteChangeComplete);
-
-    return () => {
-      router.events.off('routeChangeStart', handleRouteChangeStart);
-      router.events.off('routeChangeComplete', handleRouteChangeComplete);
-    };
-  }, [router.events]);
 
   const handleDropdown = (menuId) => {
     setOpenDropdown(openDropdown === menuId ? null : menuId);
@@ -69,27 +52,24 @@ const Header = () => {
           <div className="flex flex-col md:flex-row items-center space-x-4">
             <span className="flex items-center whitespace-nowrap">
               <FaPhoneAlt className="text-[#F4A139] me-2" />
+              {/* Show dynamic phone number from API or default value */}
               {settings?.topHeading?.mobileNo || '+8802222291453'}
             </span>
             <span className="flex items-center whitespace-nowrap">
               <FaEnvelope className="text-[#F4A139] me-2" />
+              {/* Show dynamic email from API or default value */}
               {settings?.topHeading?.email || 'artnursingcollege@gmail.com'}
-            </span>
-            <span className="flex items-center mt-1 md:mt-0 whitespace-nowrap">
-              <FaRegArrowAltCircleRight className="text-[#F4A139] me-2" />
-              <Link href="#" className="text-white">
-                Online Certificate Verification
-              </Link>
             </span>
           </div>
         </div>
       </div>
 
       {/* Main Header */}
-      <div className="relative bg-cover bg-center" style={{ backgroundImage: `url('https://artncedubd.com/uploads/untitled-design.png')` }}>
+      <div className="relative bg-cover bg-center" style={{ backgroundImage: `url(${settings?.headerImageUrl || 'https://artncedubd.com/uploads/untitled-design.png'})` }}>
         <div className="bg-opacity-90 py-4 px-4 md:px-8">
           <div className="flex justify-between items-center max-w-7xl mx-auto">
             <div className="flex items-center space-x-4">
+              {/* Dynamic Logo */}
               <Image
                 src={settings?.logoUrl || '/img/default-logo.png'}
                 alt="Logo"
@@ -99,6 +79,7 @@ const Header = () => {
               />
             </div>
 
+            {/* Mobile Menu Toggle */}
             <button className="block md:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {isMenuOpen ? (
@@ -115,6 +96,7 @@ const Header = () => {
         <div className="bg-opacity-90 bg-[#004080]">
           <div className="max-w-7xl mx-auto">
             <nav className={`md:flex items-center text-white text-lg ${isMenuOpen ? 'block' : 'hidden'} md:block`}>
+              {/* Render dynamic menus */}
               {menus?.map((menu) => (
                 <div key={menu._id} className="relative group">
                   {menu.submenus && menu.submenus.length > 0 ? (
@@ -131,28 +113,30 @@ const Header = () => {
                       </div>
                     </div>
                   ) : (
-                    <Link href={menu.link || '#'}>
+                    <Link href={menu.link || '#'} passHref>
                       <span className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r">{menu.title}</span>
                     </Link>
                   )}
                 </div>
               ))}
 
-              <Link href="/notices">
+              {/* Static Links */}
+              <Link href="/notices" passHref>
                 <span className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r">Notice Board</span>
               </Link>
-              <Link href="/results">
+              <Link href="/results" passHref>
                 <span className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r">Results</span>
               </Link>
-              <Link href="/blog">
+              <Link href="/blog" passHref>
                 <span className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r">Blog</span>
               </Link>
-              <Link href="/contact">
+              <Link href="/contact" passHref>
                 <span className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all">Contact Us</span>
               </Link>
 
+              {/* Conditionally render Dashboard link for super admin */}
               {user?.role === 'super admin' && (
-                <Link href="/dashboard/overview">
+                <Link href="/dashboard/overview" passHref>
                   <span className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r md:border-l">Dashboard</span>
                 </Link>
               )}
@@ -160,13 +144,6 @@ const Header = () => {
           </div>
         </div>
       </div>
-
-      {/* Loader */}
-      {isLoading && (
-        <div className="fixed inset-0 flex justify-center items-center bg-opacity-50 bg-gray-800">
-          <div className="loader">Loading...</div>
-        </div>
-      )}
     </header>
   );
 };
