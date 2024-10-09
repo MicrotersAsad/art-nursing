@@ -828,7 +828,7 @@ const Layout = React.memo(({ children }) => {
       <FaSearch className="absolute top-3 right-3 text-gray-400" />
     </div>
     <button
-        className="flex items-center text-white space-x-2 mt-4 text-blue-600 hover:text-blue-800 mb-4"
+        className="flex items-center  space-x-2 mt-4 text-blue-600 hover:text-blue-800 mb-4"
         onClick={() => router.push('/')}
       >
         <FaArrowLeft className="w-4 h-4" />
