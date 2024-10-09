@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaFacebookF, FaLinkedinIn, FaYoutube } from 'react-icons/fa';
+import { FaArrowRight, FaFacebookF, FaLinkedinIn, FaYoutube } from 'react-icons/fa';
 
 // Component for displaying Governing Body information
 const StaffInfo = () => {
@@ -76,50 +76,56 @@ const StaffInfo = () => {
       </div>
 
       {/* Sidebar */}
-      <div className="w-1/4 bg-gray-200 p-4 mb-5">
-        <h2 className="text-2xl font-bold mb-4">Notices</h2>
-        <ul className="space-y-4">
-          {notices.slice(0,5).map((notice, index) => (
-            <li key={index} className="bg-white p-2 shadow-md">
-                 <Link href={`/notices/${notice.slug}`}>
-              <p className="font-semibold text-blue-600">{notice.title}</p>
-              </Link>
-              <p className="text-sm text-gray-500">{notice.date}</p>
-            </li>
-          ))}
-        </ul>
+      <div className="w-full md:w-1/4 bg-gray-100 p-4 mb-5 shadow-lg border rounded-lg">
+          <h2 className="text-2xl font-bold mb-4 text-center">Notices</h2>
+          <ul className="space-y-4">
+            {notices.slice(0, 5).map((notice, index) => (
+              <li key={index} className="bg-white p-3 shadow-md rounded-md flex items-center">
+                <FaArrowRight className="text-blue-600 mr-2" />
+                <div>
+                  <Link href={`/notices/${notice.slug}`}>
+                    <p className="font-semibold text-blue-600 hover:underline">{notice.title}</p>
+                  </Link>
+                  <p className="text-sm text-gray-500">{notice.date}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
 
-       {/* Additional Sidebar Information */}
-<div className="mt-8 text-center" >
- 
-
-  {/* Social Media Links */}
-  <div className="mt-8">
-    <h2 className="text-2xl font-bold mb-4">Follow Us</h2>
-    <div className="flex space-x-4 justify-center">
-      {/* Facebook */}
-      <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">
-        <i className="text-2xl">
-          <FaFacebookF />
-        </i>
-      </a>
-      {/* YouTube */}
-      <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800">
-        <i className="text-2xl">
-          <FaYoutube />
-        </i>
-      </a>
-      {/* LinkedIn */}
-      <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700">
-        <i className="text-2xl">
-          <FaLinkedinIn />
-        </i>
-      </a>
-    </div>
-  </div>
-</div>
-
-      </div>
+          {/* Additional Sidebar Information */}
+          <div className="mt-8 text-center">
+            <h2 className="text-2xl font-bold mb-4">Follow Us</h2>
+            <div className="flex space-x-4 justify-center">
+              {/* Facebook */}
+              <a
+                href="https://www.facebook.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800"
+              >
+                <FaFacebookF className="text-2xl text-blue-600 hover:text-blue-800" />
+              </a>
+              {/* YouTube */}
+              <a
+                href="https://www.youtube.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-red-600 hover:text-red-800"
+              >
+                <FaYoutube className="text-2xl text-red-600 hover:text-red-800" />
+              </a>
+              {/* LinkedIn */}
+              <a
+                href="https://www.linkedin.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:text-blue-700"
+              >
+                <FaLinkedinIn className="text-2xl text-blue-500 hover:text-blue-700" />
+              </a>
+            </div>
+          </div>
+        </div>
     </div>
     </div>
   );

@@ -70,7 +70,7 @@ const MemoizedBanner = memo(({ data }) => {
         {data.map((slider, index) => (
           <div key={index} className="relative overflow-hidden h-[600px]">
             <div
-              className="absolute inset-0 bg-cover bg-center z-0 brightness-[60%]"
+              className="absolute inset-0 bg-cover bg-center z-0 brightness-[50%]"
               style={{ backgroundImage: `url(${slider.img})` }}
             ></div>
             <div className="relative z-10 flex flex-col justify-center max-w-7xl mx-auto h-full px-4">
@@ -125,22 +125,34 @@ const MemoizedInfoSection = memo(({ data }) => (
 // About Section Component
 const MemoizedAboutSection = memo(({ data }) => (
   <div className="max-w-7xl mx-auto bg-white py-12 px-4 md:px-10">
-    <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
+    <div className="max-w-7xl mx-auto flex flex-col lg:flex-row-reverse items-center justify-between gap-8">
+      {/* Image comes first on mobile, last on desktop */}
+      <div data-aos="fade-left" className="lg:w-1/2">
+        <Image
+          src={data.aboutImageUrl || '/default-about-image.png'}
+          alt="Art Nursing College Campus"
+          width={500}
+          height={500}
+          className="w-full h-auto object-cover"
+        />
+      </div>
+      
+      {/* Text content */}
       <div className="lg:w-1/2 text-left" data-aos="fade-right">
-        <h2 className="text-3xl font-bold mb-4">{data.headline || 'About Art Nursing College'}</h2>
-        <p className="text-gray-700 mb-6">{data.description || 'A brief description.'}</p>
+        <h2 className="text-3xl font-bold mb-4">
+          {data.headline || 'About Art Nursing College'}
+        </h2>
+        <div className="result-content" dangerouslySetInnerHTML={{ __html: data.description }} />
         <Link href={data.buttonLink}>
-          <span className="inline-block px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded hover:bg-red-600 transition duration-300">
+          <span className="inline-block px-4 py-2 mt-5 bg-red-500 text-white text-sm font-semibold rounded hover:bg-red-600 transition duration-300">
             Know More
           </span>
         </Link>
       </div>
-      <div className="lg:w-1/2" data-aos="fade-left">
-        <Image src={data.aboutImageUrl || '/default-about-image.png'} alt="Art Nursing College Campus" width={500} height={300} />
-      </div>
     </div>
   </div>
 ));
+
 
 // Courses Section Component
 const MemoizedCoursesSection = memo(({ data }) => (
@@ -170,7 +182,7 @@ const MemoizedCoursesSection = memo(({ data }) => (
             <h3 className="text-xl font-semibold mb-2">{course.heading}</h3>
             <p>{course.description}</p>
             <Link href={course.buttonLink || "#"}>
-              <p className="mt-4 inline-block px-6 py-2 bg-[#F4A139] text-blue-900 font-semibold rounded-md">
+              <p className="mt-4 inline-block px-6 py-2 bg-[#F4A139] text-white font-semibold rounded-md">
                 {course.buttonText || "Read More"}
               </p>
             </Link>
@@ -186,21 +198,30 @@ const MemoizedCoursesSection = memo(({ data }) => (
 // Statistics Component
 const MemoizedStatistics = memo(({ data }) => (
   <div className="pt-5 pb-5 bg-gray-100 flex flex-col justify-center items-center px-4">
-    <h1 className="text-3xl font-extrabold text-gray-800 mb-16 text-center" data-aos="fade-up">
+    <h1 className="text-2xl md:text-3xl font-extrabold text-gray-800 mb-8 md:mb-16 text-center" data-aos="fade-up">
       Our Community Statistics
     </h1>
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 w-full h-auto  max-w-7xl">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-12 w-full h-auto max-w-7xl">
       {data.map((counter, index) => (
-        <div key={index} data-aos="fade-up" className="p-12 bg-white shadow-2xl rounded-2xl w-full h-auto mx-auto max-w-lg">
-          <h2 className="text-4xl font-bold mb-6 text-gray-700 text-center">{counter.headline}</h2>
+        <div
+          key={index}
+          data-aos="fade-up"
+          className="p-6 md:p-12 bg-white shadow-2xl rounded-2xl w-full h-auto mx-auto max-w-md md:max-w-lg"
+        >
+          <h2 className="text-2xl md:text-4xl font-bold mb-4 md:mb-6 text-gray-700 text-center">
+            {counter.headline}
+          </h2>
           <div className="text-center">
-            <span className="text-7xl font-extrabold text-blue-600">{counter.counter}+</span>
+            <span className="text-4xl md:text-7xl font-extrabold text-blue-600">
+              {counter.counter}+
+            </span>
           </div>
         </div>
       ))}
     </div>
   </div>
 ));
+
 
 // Notices and Blogs Component
 const MemoizedNoticesAndBlogs = memo(({ notices, blogs }) => {

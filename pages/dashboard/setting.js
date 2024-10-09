@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Layout from "./layout";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+// Dynamically load the Quill editor to prevent SSR issues
+const QuillWrapper = dynamic(() => import('../../components/EditorWrapper'), { ssr: false });
 
 const AdminHomepage = () => {
   const router = useRouter();
@@ -336,13 +339,11 @@ const AdminHomepage = () => {
               onChange={(e) => handleInputChange(e, "aboutSection", null, "headline")}
               placeholder="About Section Headline"
             />
-            <textarea
-              name="description"
-              className="border p-2 rounded w-full mt-4"
-              value={settings.aboutSection.description}
-              onChange={(e) => handleInputChange(e, "aboutSection", null, "description")}
-              placeholder="About Section Description"
-            />
+            <QuillWrapper 
+  initialContent={settings.aboutSection.description} 
+  onChange={(content) => handleInputChange({ target: { value: content } }, "aboutSection", null, "description")}
+/>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <input
                 type="text"

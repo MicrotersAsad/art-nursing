@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaAngleDown, FaEnvelope, FaPhoneAlt } from 'react-icons/fa';
@@ -12,7 +11,6 @@ const Header = () => {
   const [settings, setSettings] = useState(null); // Store dynamic settings from API
   const [isLoading, setIsLoading] = useState(false); // Loading state for API
   const { user } = useAuth(); // Get the user object from AuthContext
-  const router = useRouter();
 
   // Fetch dynamic menu data from API
   const fetchMenuData = async () => {
@@ -34,8 +32,6 @@ const Header = () => {
       const response = await fetch('/api/setting'); // Fetch settings from API
       const data = await response.json();
       setSettings(data); // Set the settings data
-      console.log(settings);
-      
     } catch (error) {
       console.error('Error fetching settings:', error);
     }
@@ -59,12 +55,10 @@ const Header = () => {
           <div className="flex flex-col md:flex-row items-center space-x-4">
             <span className="flex items-center whitespace-nowrap">
               <FaPhoneAlt className="text-[#F4A139] me-2" />
-              {/* Show dynamic phone number from API or default value */}
               {settings?.topHeading?.mobileNo || '+8802222291453'}
             </span>
             <span className="flex items-center whitespace-nowrap">
               <FaEnvelope className="text-[#F4A139] me-2" />
-              {/* Show dynamic email from API or default value */}
               {settings?.topHeading?.email || 'artnursingcollege@gmail.com'}
             </span>
           </div>
@@ -76,14 +70,7 @@ const Header = () => {
         <div className="bg-opacity-90 py-4 px-4 md:px-8">
           <div className="flex justify-between items-center max-w-7xl mx-auto">
             <div className="flex items-center space-x-4">
-              {/* Dynamic Logo */}
-              <Image
-                src={settings?.logoUrl || '/img/default-logo.png'}
-                alt="Logo"
-                width={150}
-                height={80}
-                className="header-logo"
-              />
+              <Image src={settings?.logoUrl || '/img/default-logo.png'} alt="Logo" width={150} height={80} className="header-logo" />
             </div>
 
             {/* Mobile Menu Toggle */}
@@ -103,20 +90,37 @@ const Header = () => {
         <div className="bg-opacity-90 bg-[#004080]">
           <div className="max-w-7xl mx-auto">
             <nav className={`md:flex items-center text-white text-lg ${isMenuOpen ? 'block' : 'hidden'} md:block`}>
-              {/* Render dynamic menus */}
               {menus?.map((menu) => (
                 <div key={menu._id} className="relative group">
                   {menu.submenus && menu.submenus.length > 0 ? (
                     <div>
-                      <button onClick={() => handleDropdown(menu._id)} className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r">
-                        {menu.title} <FaAngleDown className="ml-2" />
+                      <button
+                        onClick={() => handleDropdown(menu._id)}
+                        className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r"
+                      >
+                        {menu.title} <FaAngleDown className={`ml-2 md:hidden ${openDropdown === menu._id ? 'rotate-180' : 'rotate-0'}`} />
                       </button>
-                      <div className={`absolute z-10 ${openDropdown === menu._id ? 'block' : 'hidden'} md:group-hover:block text-white shadow-lg rounded py-2 w-60 left-0 top-full bg-[#004080]`}>
+
+                      {/* Desktop version: hover to show */}
+                      <div className={`hidden md:group-hover:block absolute z-10 text-white shadow-lg rounded py-2 w-60 left-0 top-full bg-[#004080]`}>
                         {menu.submenus.map((submenu) => (
                           <Link key={submenu.title} href={submenu.link || '#'}>
                             <span className="block px-4 py-2 hover:bg-[#F4A139] text-white border-b">{submenu.title}</span>
                           </Link>
                         ))}
+                      </div>
+
+                      {/* Mobile version: click to show */}
+                      <div className={`md:hidden overflow-hidden transition-max-height duration-300 ${openDropdown === menu._id ? 'max-h-screen' : 'max-h-0'}`}>
+                        <ul className="bg-[#004080] py-2 w-60 text-white shadow-lg">
+                          {menu.submenus.map((submenu) => (
+                            <li key={submenu.title} className="border-b">
+                              <Link href={submenu.link || '#'}>
+                                <span className="block px-4 py-2 hover:bg-[#F4A139]">{submenu.title}</span>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     </div>
                   ) : (
@@ -127,7 +131,6 @@ const Header = () => {
                 </div>
               ))}
 
-              {/* Other static links */}
               <Link href="/notices">
                 <span className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r">Notice Board</span>
               </Link>
@@ -141,7 +144,6 @@ const Header = () => {
                 <span className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all">Contact Us</span>
               </Link>
 
-              {/* Conditionally render Dashboard link for super admin */}
               {user?.role === 'super admin' && (
                 <Link href="/dashboard/overview">
                   <span className="hover:bg-[#F4A139] px-6 py-2 flex items-center focus:outline-none transition-all md:border-r md:border-l">Dashboard</span>
