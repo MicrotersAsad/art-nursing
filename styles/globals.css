@@ -43,7 +43,15 @@ img, .container, .header {
   .nav-item:hover {
     background-color: #004c99; /* Exact hover background color */
   }
- 
+  a[href="/notices"] {
+    min-height: 20px;
+    display: block; /* Make sure it's block to set min-height */
+  }
+  
+  a[href="/contact"] {
+    min-height: 20px;
+    display: block;
+  }
   .dropdown-menu {
     display: none;
     position: absolute;
@@ -337,7 +345,9 @@ thead th {
   background-color: transparent !important; /* যদি ব্যাকগ্রাউন্ডে সমস্যা থাকে */
   z-index: 10; /* নিশ্চিত করুন যে আইকন উপরে প্রদর্শিত হচ্ছে */
 }
-
+.info{
+  margin-top: -7px;
+}
 .content-container p {
   margin: 1em 0;
   line-height: 1.6;

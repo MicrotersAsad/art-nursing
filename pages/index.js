@@ -97,7 +97,7 @@ const MemoizedBanner = memo(({ data }) => {
 
 // Info Section Component
 const MemoizedInfoSection = memo(({ data }) => (
-  <div className="w-full">
+  <div className="w-full h-auto info">
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" data-aos="fade-up">
       {data.map((hero, index) => (
         <div key={index} className={`p-6 ${index % 2 === 0 ? 'bg-[#0d1128]' : 'bg-blue-800'} text-white`}>
@@ -156,13 +156,16 @@ const MemoizedCoursesSection = memo(({ data }) => (
             data-aos-delay={index * 50}
           >
             <div className="mb-4">
-              <Image
-                src={course.iconUrl}
-                alt={course.heading}
-                className="w-12 h-12 mx-auto"
-                width={24}
-                height={24}
-              />
+            <Image
+  src={course.iconUrl}
+  alt={course.heading}
+  className="w-12 h-12 mx-auto"
+  width={24}  
+  height={24}  
+  layout="intrinsic"  
+  priority  
+/>
+
             </div>
             <h3 className="text-xl font-semibold mb-2">{course.heading}</h3>
             <p>{course.description}</p>
@@ -186,9 +189,9 @@ const MemoizedStatistics = memo(({ data }) => (
     <h1 className="text-3xl font-extrabold text-gray-800 mb-16 text-center" data-aos="fade-up">
       Our Community Statistics
     </h1>
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 w-full max-w-7xl">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 w-full h-auto  max-w-7xl">
       {data.map((counter, index) => (
-        <div key={index} data-aos="fade-up" className="p-12 bg-white shadow-2xl rounded-2xl w-full mx-auto max-w-lg">
+        <div key={index} data-aos="fade-up" className="p-12 bg-white shadow-2xl rounded-2xl w-full h-auto mx-auto max-w-lg">
           <h2 className="text-4xl font-bold mb-6 text-gray-700 text-center">{counter.headline}</h2>
           <div className="text-center">
             <span className="text-7xl font-extrabold text-blue-600">{counter.counter}+</span>
@@ -234,10 +237,10 @@ const MemoizedNoticesAndBlogs = memo(({ notices, blogs }) => {
                   <div key={notice._id} className="flex items-center mb-4">
                     {/* Date Box */}
                     <div className="flex flex-col items-center justify-center text-white rounded-md overflow-hidden w-20 h-20">
-                      <div className="bg-blue-900 w-full text-center py-1 text-3xl font-bold">
+                      <div className="bg-blue-900 w-full h-auto text-center py-1 text-3xl font-bold">
                         {new Date(notice.date).getDate()}
                       </div>
-                      <div className="bg-blue-500 w-full text-center py-1 text-xs">
+                      <div className="bg-blue-500 w-full h-auto text-center py-1 text-xs">
                         {new Date(notice.date).toLocaleString('default', { month: 'short' })}-{new Date(notice.date).getFullYear()}
                       </div>
                     </div>
@@ -277,10 +280,10 @@ const MemoizedNoticesAndBlogs = memo(({ notices, blogs }) => {
                 <div key={blog._id} className="flex items-center mb-4">
                   {/* Date Box */}
                   <div className="flex flex-col items-center justify-center text-white rounded-md overflow-hidden w-16 h-16">
-                    <div className="bg-blue-900 w-full text-center py-1 text-xl font-bold">
+                    <div className="bg-blue-900 w-full h-auto text-center py-1 text-xl font-bold">
                       {new Date(blog.date).getDate()}
                     </div>
-                    <div className="bg-blue-500 w-full text-center py-1 text-xs">
+                    <div className="bg-blue-500 w-full h-auto text-center py-1 text-xs">
                       {new Date(blog.date).toLocaleString('default', { month: 'short' })}-{new Date(blog.date).getFullYear()}
                     </div>
                   </div>
@@ -314,7 +317,16 @@ const MemoizedWhyChooseANC = memo(({ data }) => (
         {data.map((item, index) => (
           <div key={index} className={`bg-white p-10 rounded-lg shadow-md flex items-center ${index % 2 === 0 ? 'bg-[#0d1128]' : 'bg-blue-800'} text-black`} data-aos={index % 2 === 0 ? 'fade-right' : 'fade-left'}>
             <div className="mr-4">
-              <Image src={item?.iconUrl} alt="Logo" width={128} height={128} className="icon-logo" />
+            <Image
+  src={item?.iconUrl}
+  alt="Logo"
+  width={128} 
+  height={128}  
+  className="icon-logo"
+  layout="intrinsic" 
+  priority  
+/>
+
             </div>
             <div>
               <h3 className="text-xl font-semibold mb-2">{item.heading}</h3>
@@ -385,15 +397,18 @@ const MemoizedPhotoGallery = ({ data }) => {
     <div>
       {/* Main gallery slider */}
       <Slider {...settings}>
-        {data.map((photo, index) => (
+        {data.slice(0,8).map((photo, index) => (
           <div key={index} onClick={() => openModal(photo.img, index)}>
-            <Image
+             <Image
               width={500}
               height={400}
               src={photo.img}
               alt={`Photo ${index}`}
               style={{ width: '100%', height: '300px', objectFit: 'cover', cursor: 'pointer' }}
             />
+
+
+
           </div>
         ))}
       </Slider>
@@ -426,13 +441,17 @@ const MemoizedPhotoGallery = ({ data }) => {
               {data.map((photo, index) => (
                 <div key={index}>
                   <Zoom>
-                    <Image
-                      width={1000}
-                      height={600}
-                      src={photo.img}
-                      alt={`Modal Image ${index}`}
-                      style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
-                    />
+                  <Image
+  width={1000}
+  height={600}
+  src={photo.img}
+  alt={`Modal Image ${index}`}
+  layout="intrinsic"  // লেআউট শিফট এড়াতে
+  objectFit="contain"  // style এর পরিবর্তে Next.js এর property ব্যবহার করা
+  priority={index === 0}  // প্রথম ইমেজকে দ্রুত লোড করতে (অপশনাল)
+  className="w-full h-auto"  // CSS ক্লাসে স্টাইল অ্যাপ্লাই করা
+/>
+
                   </Zoom>
                 </div>
               ))}
