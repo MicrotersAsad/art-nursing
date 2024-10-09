@@ -126,7 +126,7 @@ export default function ImageGallery() {
                   </td>
                   <td className="border px-4 py-2">
                     <Link href={image.url} target="_blank" rel="noopener noreferrer" className="text-blue-500">
-                      {formatUrlForDisplay(image.url)}
+                     <span className="text-blue-500"> {formatUrlForDisplay(image.url)}</span>
                     </Link>
                   </td>
                   <td className="border px-4 py-2">{image.title}</td>

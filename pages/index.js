@@ -1,68 +1,58 @@
-import React, { useEffect,useState  } from 'react';
+import React, { useEffect, useState, memo } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import Slider from 'react-slick';
 import Image from 'next/image';
 import AOS from 'aos';
-import 'aos/dist/aos.css';
+import 'aos/dist/aos.css'; // AOS CSS for animations
+import { ClipLoader } from 'react-spinners';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import Modal from 'react-modal';
-import Zoom from 'react-medium-image-zoom';
-import 'react-medium-image-zoom/dist/styles.css';
-import { ClipLoader } from 'react-spinners';
+import 'react-medium-image-zoom/dist/styles.css'; // Zoom library CSS
+
+// Lazy load components for performance optimization
+const Slider = dynamic(() => import('react-slick'), { ssr: false });
+const Modal = dynamic(() => import('react-modal'), { ssr: false });
+const Zoom = dynamic(() => import('react-medium-image-zoom'), { ssr: false });
 
 const Home = ({ appData }) => {
-  const [isLoading, setIsLoading] = useState(true); // Loading state
-  useEffect(() => {
-    // Initialize AOS for animations
-    AOS.init({ duration: 1000, once: true });
-    // Set a timer to simulate loading
-    const timer = setTimeout(() => {
-      setIsLoading(false); // Set loading to false after data is loaded
-    }, 2000);
+  const [isLoading, setIsLoading] = useState(true);
 
-    // Cleanup the timer when the component unmounts
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+    // Simulate loading process
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 100);
+
     return () => clearTimeout(timer);
   }, []);
+
   if (isLoading) {
-    // Show ClipLoader when loading state is true
     return (
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={100} color={"#3498db"} loading={isLoading} />
       </div>
     );
   }
+
   return (
     <div>
-      {/* Banner Section */}
-      <Banner data={appData.bannerData} />
-
-      {/* Info Section */}
-      <InfoSection data={appData.heroArea} />
-
-      {/* About Section */}
-      <AboutSection data={appData.aboutSection} />
-
-      {/* Courses Section */}
-      <CoursesSection data={appData.ourCourses} />
-
-      {/* Statistics Section */}
-      <Statistics data={appData.counters} />
-
-      {/* Notices and Blogs Section */}
-      <NoticesAndBlogs notices={appData.notices} blogs={appData.blogs} />
-
-      {/* Why Choose Section */}
-      <WhyChooseANC data={appData.whyChooseANC} />
-
-      {/* Photo Gallery Section */}
-      <PhotoGallery data={appData.photos} />
+      <MemoizedBanner data={appData.bannerData} />
+      <MemoizedInfoSection data={appData.heroArea} />
+      <MemoizedAboutSection data={appData.aboutSection} />
+      <MemoizedCoursesSection data={appData.ourCourses} />
+      <MemoizedStatistics data={appData.counters} />
+      <MemoizedNoticesAndBlogs notices={appData.notices} blogs={appData.blogs} />
+      <MemoizedWhyChooseANC data={appData.whyChooseANC} />
+      <MemoizedPhotoGallery data={appData.photos} />
     </div>
   );
 };
 
+// Memoized Components to optimize rendering
+
 // Banner Component
-const Banner = ({ data }) => {
+const MemoizedBanner = memo(({ data }) => {
   const settings = {
     dots: true,
     infinite: true,
@@ -101,48 +91,39 @@ const Banner = ({ data }) => {
           </div>
         ))}
       </Slider>
-      <style jsx>{`
-        .slick-slide {
-          height: 607px !important;
-        }
-      `}</style>
     </div>
   );
-};
+});
 
 // Info Section Component
-const InfoSection = ({ data }) => (
+const MemoizedInfoSection = memo(({ data }) => (
   <div className="w-full">
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" data-aos="fade-up">
-      {Array.isArray(data) && data.length > 0 ? (
-        data.map((hero, index) => (
-          <div key={index} className={`p-6 ${index % 2 === 0 ? 'bg-[#0d1128]' : 'bg-blue-800'} text-white`}>
-            <div className="flex justify-center m-4">
-              <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 20l9-5-9-5-9 5 9 5z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 12l9-5-9-5-9 5z" />
-              </svg>
-            </div>
-            <h3 className="text-2xl font-semibold text-center mb-3">{hero.title || 'No Title'}</h3>
-            <p className="text-center text-gray-300">{hero.description || 'No description available.'}</p>
-            <div className="flex justify-center m-4">
-              <Link href={hero.buttonLink || '/'} passHref>
-                <span className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300">
-                  {hero.buttonText || 'Learn More'}
-                </span>
-              </Link>
-            </div>
+      {data.map((hero, index) => (
+        <div key={index} className={`p-6 ${index % 2 === 0 ? 'bg-[#0d1128]' : 'bg-blue-800'} text-white`}>
+          <div className="flex justify-center m-4">
+            <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 20l9-5-9-5-9 5 9 5z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 12l9-5-9-5-9 5z" />
+            </svg>
           </div>
-        ))
-      ) : (
-        <p>No hero sections available</p>
-      )}
+          <h3 className="text-2xl font-semibold text-center mb-3">{hero.title}</h3>
+          <p className="text-center text-gray-300">{hero.description}</p>
+          <div className="flex justify-center m-4">
+            <Link href={hero.buttonLink || '/'} passHref>
+              <span className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300">
+                {hero.buttonText || 'Learn More'}
+              </span>
+            </Link>
+          </div>
+        </div>
+      ))}
     </div>
   </div>
-);
+));
 
 // About Section Component
-const AboutSection = ({ data }) => (
+const MemoizedAboutSection = memo(({ data }) => (
   <div className="max-w-7xl mx-auto bg-white py-12 px-4 md:px-10">
     <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
       <div className="lg:w-1/2 text-left" data-aos="fade-right">
@@ -159,53 +140,48 @@ const AboutSection = ({ data }) => (
       </div>
     </div>
   </div>
-);
+));
 
 // Courses Section Component
-const CoursesSection = ({ data }) => (
+const MemoizedCoursesSection = memo(({ data }) => (
   <div className="max-w-7xl mx-auto py-12">
-      {/* Section Title */}
-      <h2 className="text-3xl font-bold text-center mb-8">Our Courses</h2>
-
-      {/* Course Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {data.length > 0 ? (
-          data.map((course, index) => (
-            <div
-              key={index}
-              className="bg-blue-900 text-white p-6 rounded-lg text-center pt-14 pb-14"
-              data-aos="fade-up"
-              data-aos-delay={index * 50}
-            >
-              <div className="mb-4">
-                {/* Course Icon */}
-                <Image
-                  src={course.iconUrl} // Assuming the API returns an icon URL for each course
-                  alt={course.heading}
-                  className="w-12 h-12 mx-auto"
-                  width={24}
-                  height={24}
-                />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">{course.heading}</h3>
-              <p>{course.description}</p>
-              {/* Read More Button */}
-              <Link href={course.buttonLink || "#"}>
-                <p className="mt-4 inline-block px-6 py-2 bg-[#F4A139] text-blue-900 font-semibold rounded-md">
-                  {course.buttonText || "Read More"}
-                </p>
-              </Link>
+    <h2 className="text-3xl font-bold text-center mb-8">Our Courses</h2>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {data.length > 0 ? (
+        data.map((course, index) => (
+          <div
+            key={index}
+            className="bg-blue-900 text-white p-6 rounded-lg text-center pt-14 pb-14"
+            data-aos="fade-up"
+            data-aos-delay={index * 50}
+          >
+            <div className="mb-4">
+              <Image
+                src={course.iconUrl}
+                alt={course.heading}
+                className="w-12 h-12 mx-auto"
+                width={24}
+                height={24}
+              />
             </div>
-          ))
-        ) : (
-          <p className="text-center text-gray-700">No courses available at the moment.</p>
-        )}
-      </div>
+            <h3 className="text-xl font-semibold mb-2">{course.heading}</h3>
+            <p>{course.description}</p>
+            <Link href={course.buttonLink || "#"}>
+              <p className="mt-4 inline-block px-6 py-2 bg-[#F4A139] text-blue-900 font-semibold rounded-md">
+                {course.buttonText || "Read More"}
+              </p>
+            </Link>
+          </div>
+        ))
+      ) : (
+        <p className="text-center text-gray-700">No courses available at the moment.</p>
+      )}
     </div>
-);
+  </div>
+));
 
 // Statistics Component
-const Statistics = ({ data }) => (
+const MemoizedStatistics = memo(({ data }) => (
   <div className="pt-5 pb-5 bg-gray-100 flex flex-col justify-center items-center px-4">
     <h1 className="text-3xl font-extrabold text-gray-800 mb-16 text-center" data-aos="fade-up">
       Our Community Statistics
@@ -221,23 +197,17 @@ const Statistics = ({ data }) => (
       ))}
     </div>
   </div>
-);
+));
 
 // Notices and Blogs Component
-
-
-const NoticesAndBlogs = ({ notices, blogs }) => {
+const MemoizedNoticesAndBlogs = memo(({ notices, blogs }) => {
   const [searchTermNotices, setSearchTermNotices] = useState('');
   const [searchTermBlogs, setSearchTermBlogs] = useState('');
-  const [visibleNotices, setVisibleNotices] = useState(5); // Number of notices initially visible
-  const [visibleBlogs, setVisibleBlogs] = useState(5); // Number of blogs initially visible
 
-  // Handle search functionality for notices
   const filteredNotices = notices.filter(notice =>
     notice.title.toLowerCase().includes(searchTermNotices.toLowerCase())
   );
 
-  // Handle search functionality for blogs
   const filteredBlogs = blogs.filter(blog =>
     blog.title.toLowerCase().includes(searchTermBlogs.toLowerCase())
   );
@@ -260,7 +230,7 @@ const NoticesAndBlogs = ({ notices, blogs }) => {
           ) : (
             <div className="overflow-x-auto">
               <div className="max-h-48 overflow-y-auto">
-                {filteredNotices.slice(0, visibleNotices).map((notice) => (
+                {filteredNotices.map((notice) => (
                   <div key={notice._id} className="flex items-center mb-4">
                     {/* Date Box */}
                     <div className="flex flex-col items-center justify-center text-white rounded-md overflow-hidden w-20 h-20">
@@ -279,7 +249,7 @@ const NoticesAndBlogs = ({ notices, blogs }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                         <span   className="text-blue-600 hover:underline font-medium">{notice.title}</span>
+                        <span className="text-blue-600 hover:underline font-medium">{notice.title}</span>
                       </Link>
                     </div>
                   </div>
@@ -303,7 +273,7 @@ const NoticesAndBlogs = ({ notices, blogs }) => {
             <div className="text-center py-4 text-gray-600">No blogs available.</div>
           ) : (
             <div className="max-h-48 overflow-y-auto">
-              {filteredBlogs.slice(0, visibleBlogs).map((blog) => (
+              {filteredBlogs.map((blog) => (
                 <div key={blog._id} className="flex items-center mb-4">
                   {/* Date Box */}
                   <div className="flex flex-col items-center justify-center text-white rounded-md overflow-hidden w-16 h-16">
@@ -322,7 +292,7 @@ const NoticesAndBlogs = ({ notices, blogs }) => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <span   className="text-blue-600 hover:underline font-medium">{blog.title}</span>
+                      <span className="text-blue-600 hover:underline font-medium">{blog.title}</span>
                     </Link>
                   </div>
                 </div>
@@ -333,12 +303,10 @@ const NoticesAndBlogs = ({ notices, blogs }) => {
       </div>
     </div>
   );
-};
-
-
+});
 
 // Why Choose ANC Component
-const WhyChooseANC = ({ data }) => (
+const MemoizedWhyChooseANC = memo(({ data }) => (
   <div className="w-full bg-gray-200 py-12">
     <div className="max-w-7xl mx-auto">
       <h2 className="text-3xl font-bold text-center mb-8">Why Choose ANC</h2>
@@ -357,12 +325,12 @@ const WhyChooseANC = ({ data }) => (
       </div>
     </div>
   </div>
-);
+));
 
 // Photo Gallery Component
-const PhotoGallery = ({ data }) => {
+const MemoizedPhotoGallery = ({ data }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null); // Selected image to show in modal
   const [modalIndex, setModalIndex] = useState(0); // Track index for modal slider
 
   const settings = {
@@ -392,16 +360,15 @@ const PhotoGallery = ({ data }) => {
   };
 
   const openModal = (image, index) => {
-    setSelectedImage(image);
-    setModalIndex(index);
-    setModalIsOpen(true);
-    document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+    setSelectedImage(image); // Set the selected image
+    setModalIndex(index); // Set the index of the clicked image
+    setModalIsOpen(true); // Open the modal
+    document.body.style.overflow = 'hidden'; // Prevent page scrolling when modal is open
   };
 
   const closeModal = () => {
-    setModalIsOpen(false);
-    setSelectedImage(null);
-    document.body.style.overflow = 'auto'; // Restore scrolling when modal is closed
+    setModalIsOpen(false); // Close the modal
+    document.body.style.overflow = 'auto'; // Restore page scrolling when modal is closed
   };
 
   const modalSettings = {
@@ -420,7 +387,13 @@ const PhotoGallery = ({ data }) => {
       <Slider {...settings}>
         {data.map((photo, index) => (
           <div key={index} onClick={() => openModal(photo.img, index)}>
-            <Image width={100} height={100} src={photo.img} alt={`Photo ${index}`} style={{ width: '100%', height: '400px', objectFit: 'cover', cursor: 'pointer' }} />
+            <Image
+              width={500}
+              height={400}
+              src={photo.img}
+              alt={`Photo ${index}`}
+              style={{ width: '100%', height: '300px', objectFit: 'cover', cursor: 'pointer' }}
+            />
           </div>
         ))}
       </Slider>
@@ -430,7 +403,7 @@ const PhotoGallery = ({ data }) => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Image Modal"
-        shouldCloseOnOverlayClick={false} // Prevent modal from closing on overlay click
+        shouldCloseOnOverlayClick={true} // Allow modal to close on overlay click
         style={{
           overlay: { zIndex: 9999, backgroundColor: 'rgba(0, 0, 0, 0.8)' },
           content: {
@@ -447,13 +420,19 @@ const PhotoGallery = ({ data }) => {
           },
         }}
       >
-        {data.length > 0 && (
+        {selectedImage && (
           <div>
             <Slider {...modalSettings}>
               {data.map((photo, index) => (
                 <div key={index}>
                   <Zoom>
-                    <Image width={100} height={100} src={photo.img} alt={`Modal Image ${index}`} style={{ width: '100%', height: 'auto', maxHeight: '90vh', objectFit: 'contain' }} />
+                    <Image
+                      width={1000}
+                      height={600}
+                      src={photo.img}
+                      alt={`Modal Image ${index}`}
+                      style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+                    />
                   </Zoom>
                 </div>
               ))}
@@ -484,31 +463,19 @@ const PhotoGallery = ({ data }) => {
   );
 };
 
-// Fetching data server-side
-export async function getServerSideProps({ req }) {
+// Fetching data server-side using getStaticProps
+export async function getStaticProps() {
   try {
-    const protocol = req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
-    const host = req.headers.host;
+    const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+    const host = 'artncedubd.com' || 'localhost:3000'; // Default to localhost for development
 
-    // Fetch banner data from /api/banner
-    const bannerResponse = await fetch(`${protocol}://${host}/api/banner`);
-    const bannerData = await bannerResponse.json();
-
-    // Fetch setting data from /api/setting
-    const settingResponse = await fetch(`${protocol}://${host}/api/setting`);
-    const settingData = await settingResponse.json();
-
-    // Fetch photo gallery data from /api/photo-gallery
-    const photoGalleryResponse = await fetch(`${protocol}://${host}/api/photo-gallery`);
-    const photoGalleryData = await photoGalleryResponse.json();
-
-    // Fetch notices data from /api/notices
-    const noticesResponse = await fetch(`${protocol}://${host}/api/notice`);
-    const noticesData = await noticesResponse.json();
-
-    // Fetch blogs data from /api/blog
-    const blogsResponse = await fetch(`${protocol}://${host}/api/blogs`);
-    const blogsData = await blogsResponse.json();
+    const [bannerData, settingData, photoGalleryData, noticesData, blogsData] = await Promise.all([
+      fetch(`${protocol}://${host}/api/banner`).then(res => res.json()),
+      fetch(`${protocol}://${host}/api/setting`).then(res => res.json()),
+      fetch(`${protocol}://${host}/api/photo-gallery`).then(res => res.json()),
+      fetch(`${protocol}://${host}/api/notice`).then(res => res.json()),
+      fetch(`${protocol}://${host}/api/blogs`).then(res => res.json())
+    ]);
 
     return {
       props: {
@@ -524,6 +491,7 @@ export async function getServerSideProps({ req }) {
           photos: photoGalleryData || [],
         },
       },
+      revalidate: 10, // Re-generate the page every 10 seconds
     };
   } catch (error) {
     console.error('Error fetching data:', error);

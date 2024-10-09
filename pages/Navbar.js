@@ -31,9 +31,11 @@ const Header = () => {
   const fetchSettingsData = async () => {
     setIsLoading(true); // Set loading state
     try {
-      const response = await fetch('/api/settings'); // Fetch settings from API
+      const response = await fetch('/api/setting'); // Fetch settings from API
       const data = await response.json();
       setSettings(data); // Set the settings data
+      console.log(settings);
+      
     } catch (error) {
       console.error('Error fetching settings:', error);
     }

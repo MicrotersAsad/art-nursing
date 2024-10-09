@@ -34,6 +34,7 @@ export const config = {
 const handler = async (req, res) => {
   const { db } = await connectToDatabase();
 
+  // POST method for creating new slider
   if (req.method === 'POST') {
     try {
       // Run the multer middleware to handle the file upload
@@ -66,52 +67,71 @@ const handler = async (req, res) => {
       res.status(500).json({ message: 'Error uploading slider', error: error.message });
     }
   } 
-  // Get all sliders
+  
+  // GET method for retrieving all sliders
   else if (req.method === 'GET') {
     try {
       // Retrieve all sliders from the database
       const sliders = await db.collection('sliders').find({}).toArray();
+      
+      if (!sliders || sliders.length === 0) {
+        return res.status(404).json({ message: 'Sliders not found' });
+      }
+
       res.status(200).json(sliders);
     } catch (error) {
       console.error('Error retrieving sliders:', error);
       res.status(500).json({ message: 'Error retrieving sliders', error: error.message });
     }
   }
-  // Update a slider (PUT)
+
   else if (req.method === 'PUT') {
     try {
-      const { id } = req.query; // Extract the ID from the request query
-      await runMiddleware(req, res); // Run the multer middleware to handle file upload (if any)
-      
+      const { id } = req.query; // Request query থেকে ID নেওয়া হচ্ছে
+      console.log("Received ID for update:", id);
+  
+      // ObjectId চেক করা হচ্ছে
+      if (!ObjectId.isValid(id)) {
+        return res.status(400).json({ message: 'Invalid slider ID' });
+      }
+  
+      const queryId = new ObjectId(id); // ObjectId এ কনভার্ট করা হচ্ছে
+      console.log("Final query ID:", queryId);
+  
+      await runMiddleware(req, res); // Multer middleware রান করা হচ্ছে, ফাইল আপলোড থাকলে
+  
       const { heading, subHeading, buttonText, buttonLink } = req.body;
-
+  
       const updatedFields = {
         heading,
         subHeading,
         buttonText,
         buttonLink,
       };
-
-      // Add the image path if a new image was uploaded
+  
+      // নতুন ইমেজ আপলোড করা হলে সেটি যোগ করা হচ্ছে
       if (req.file) {
         updatedFields.img = `/uploads/${req.file.filename}`;
       }
-
-      // Update the slider with the provided ID
-      const result = await db.collection('sliders').findOneAndUpdate(
-        { _id: new ObjectId(id) },
-        { $set: updatedFields },
-        { returnDocument: 'after' }
+  
+      // স্লাইডার আপডেট করা হচ্ছে ObjectId দিয়ে
+      const result = await db.collection('sliders').updateOne(
+        { _id: queryId }, // কনভার্টেড queryId দিয়ে মিলানো হচ্ছে
+        { $set: updatedFields } // আপডেট করা ফিল্ডগুলো সেট করা হচ্ছে
       );
-
-      if (!result.value) {
-        res.status(404).json({ message: 'Slider not found' });
-        return;
+  
+      // যদি কোনো স্লাইডার ম্যাচ না করে
+      if (result.matchedCount === 0) {
+        console.log("Slider not found in the database for ID:", queryId);
+        return res.status(404).json({ message: 'Slider not found' });
       }
-
+  
+      // আপডেটকৃত স্লাইডার পুনরায় নিয়ে আসা
+      const updatedSlider = await db.collection('sliders').findOne({ _id: queryId });
+  
       res.status(200).json({
         message: 'Slider updated successfully!',
-        slider: result.value,  // Return the updated slider data
+        slider: updatedSlider,  // আপডেটকৃত স্লাইডার রিটার্ন করা হচ্ছে
       });
     } catch (error) {
       console.error('Error updating slider:', error);
@@ -119,10 +139,16 @@ const handler = async (req, res) => {
     }
   }
   
-  // Delete a slider (DELETE)
+
+
+  // DELETE method for deleting a slider
   else if (req.method === 'DELETE') {
     try {
       const { id } = req.query; // Extract the ID from the request query
+
+      if (!ObjectId.isValid(id)) {
+        return res.status(400).json({ message: 'Invalid slider ID' });
+      }
 
       // Delete the slider with the provided ID
       const result = await db.collection('sliders').deleteOne({ _id: new ObjectId(id) });
@@ -138,6 +164,7 @@ const handler = async (req, res) => {
       res.status(500).json({ message: 'Error deleting slider', error: error.message });
     }
   } 
+  
   else {
     res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);
     res.status(405).json({ message: `Method ${req.method} Not Allowed` });

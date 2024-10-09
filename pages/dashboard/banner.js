@@ -21,24 +21,25 @@ export default function Dashboard() {
 
   // Fetch all sliders on component mount
   useEffect(() => {
-    async function fetchSliders() {
-      try {
-        const response = await fetch("/api/banner");
-        if (!response.ok) {
-          throw new Error("Failed to fetch sliders");
-        }
-        const data = await response.json();
-        setSliders(data);
-      } catch (error) {
-        console.error("Error fetching sliders:", error);
-        setSliders([]);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchSliders();
+    fetchSliders(); // Call fetch function on component mount
   }, []);
+
+  // Function to fetch all sliders
+  const fetchSliders = async () => {
+    try {
+      const response = await fetch("/api/banner");
+      if (!response.ok) {
+        throw new Error("Failed to fetch sliders");
+      }
+      const data = await response.json();
+      setSliders(data);
+    } catch (error) {
+      console.error("Error fetching sliders:", error);
+      setSliders([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -67,64 +68,66 @@ export default function Dashboard() {
     setExistingImage("");
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+// After adding slider, refetch all sliders
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const formDataObj = new FormData();
-    if (formData.img) {
-      formDataObj.append("img", formData.img);
-    }
-    formDataObj.append("heading", formData.heading);
-    formDataObj.append("subHeading", formData.subHeading);
-    formDataObj.append("buttonText", formData.buttonText);
-    formDataObj.append("buttonLink", formData.buttonLink);
+  const formDataObj = new FormData();
+  if (formData.img) {
+    formDataObj.append("img", formData.img);
+  }
+  formDataObj.append("heading", formData.heading);
+  formDataObj.append("subHeading", formData.subHeading);
+  formDataObj.append("buttonText", formData.buttonText);
+  formDataObj.append("buttonLink", formData.buttonLink);
 
-    try {
-      const method = editId ? "PUT" : "POST";
-      const url = editId ? `/api/banner?id=${editId}` : "/api/banner";
+  try {
+    const method = editId ? "PUT" : "POST";
+    const url = editId ? `/api/banner?id=${editId}` : "/api/banner";
 
-      const response = await fetch(url, {
-        method,
-        body: formDataObj,
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-
-        if (editId) {
-          setSliders((prevSliders) =>
-            prevSliders.map((slider) =>
-              slider._id === editId ? result.slider : slider
-            )
-          );
-          toast.success("Slider updated successfully!");
-        } else {
-          setSliders((prevSliders) => [...prevSliders, result.slider]);
-          toast.success("Slider uploaded successfully!");
-        }
-
-        resetForm();
-      } else {
-        const errorData = await response.json();
-        toast.error(errorData.message || "Failed to upload slider.");
-      }
-    } catch (error) {
-      console.error("Error uploading slider:", error);
-      toast.error("An unexpected error occurred. Please try again.");
-    }
-  };
-
-  const handleEdit = (slider) => {
-    setFormData({
-      img: null, // Reset the img field to null for a new upload if desired
-      heading: slider.heading,
-      subHeading: slider.subHeading,
-      buttonText: slider.buttonText,
-      buttonLink: slider.buttonLink,
+    const response = await fetch(url, {
+      method,
+      body: formDataObj,
     });
-    setEditId(slider._id); // Set edit mode with slider ID
-    setExistingImage(slider.img); // Store the existing image
-  };
+
+    if (response.ok) {
+      const result = await response.json();
+
+      if (editId) {
+        setSliders((prevSliders) =>
+          prevSliders.map((slider) =>
+            slider._id === editId ? result.slider : slider
+          )
+        );
+        toast.success("Slider updated successfully!");
+      } else {
+        setSliders((prevSliders) => [...prevSliders, result.slider]);
+        toast.success("Slider uploaded successfully!");
+      }
+
+      resetForm();
+    } else {
+      const errorData = await response.json();
+      toast.error(errorData.message || "Failed to upload slider.");
+    }
+  } catch (error) {
+    console.error("Error uploading slider:", error);
+    toast.error("An unexpected error occurred. Please try again.");
+  }
+};
+
+
+const handleEdit = (slider) => {
+  setFormData({
+    img: null, // Reset the img field to null for a new upload if desired
+    heading: slider.heading,
+    subHeading: slider.subHeading,
+    buttonText: slider.buttonText,
+    buttonLink: slider.buttonLink,
+  });
+  setEditId(slider._id); // Ensure that _id is being correctly set
+  setExistingImage(slider.img); // Store the existing image
+};
 
   const handleDelete = async (id) => {
     try {
@@ -162,10 +165,7 @@ export default function Dashboard() {
           </h1>
 
           {/* Form for slider upload */}
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-8 bg-white p-8 rounded-lg shadow-md"
-          >
+          <form onSubmit={handleSubmit} className="space-y-8 bg-white p-8 rounded-lg shadow-md">
             <div>
               <label className="block text-md font-semibold text-gray-800 mb-1">
                 Upload Image

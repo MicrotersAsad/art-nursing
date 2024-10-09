@@ -1,19 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import Head from 'next/head';
-import Navbar from './Navbar';
-import Footer from './Footer';
+import dynamic from 'next/dynamic';
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'next/router';
 import '../styles/globals.css';
-import { ClipLoader } from 'react-spinners';
-import { FaArrowUp } from 'react-icons/fa';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+
+// Dynamic imports for non-critical components
+const Navbar = dynamic(() => import('./Navbar'), { ssr: false });
+const Footer = dynamic(() => import('./Footer'), { ssr: false });
+const ClipLoader = dynamic(() => import('react-spinners').then(mod => mod.ClipLoader), { ssr: false });
+const FaArrowUp = dynamic(() => import('react-icons/fa').then(mod => mod.FaArrowUp), { ssr: false });
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
-  const isDashboard = router.pathname.startsWith('/dashboard'); 
-  const isLoginPage = router.pathname === '/login'; 
+  const isDashboard = router.pathname.startsWith('/dashboard');
+  const isLoginPage = router.pathname === '/login';
 
   return (
     <>
@@ -26,18 +27,19 @@ function MyApp({ Component, pageProps }) {
 
       <AuthProvider>
         {!isDashboard && <Navbar />}
-        <AuthGuard isDashboard={isDashboard} isLoginPage={isLoginPage}>
+        <MemoizedAuthGuard isDashboard={isDashboard} isLoginPage={isLoginPage}>
           <div className={isDashboard ? 'dashboard-container' : 'site-container'}>
             <Component {...pageProps} />
-            <BackToTopButton />
+            <MemoizedBackToTopButton />
           </div>
-        </AuthGuard>
+        </MemoizedAuthGuard>
         {!isDashboard && <Footer />}
       </AuthProvider>
     </>
   );
 }
 
+// Memoize AuthGuard to prevent unnecessary re-renders
 const AuthGuard = ({ children, isDashboard, isLoginPage }) => {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -67,6 +69,7 @@ const AuthGuard = ({ children, isDashboard, isLoginPage }) => {
   return children;
 };
 
+// Memoize BackToTopButton to prevent re-renders
 const BackToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -105,5 +108,9 @@ const BackToTopButton = () => {
     </>
   );
 };
+
+// Memoizing components to avoid unnecessary re-renders
+const MemoizedAuthGuard = memo(AuthGuard);
+const MemoizedBackToTopButton = memo(BackToTopButton);
 
 export default MyApp;
