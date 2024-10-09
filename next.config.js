@@ -25,8 +25,15 @@ const nextConfig = {
   swcMinify: true,
 
   webpack(config) {
+    // Separate rule for handling SVG files as React components using @svgr/webpack
     config.module.rules.push({
-      test: /\.(png|jpe?g|gif|svg)$/i,
+      test: /\.svg$/i,
+      use: ['@svgr/webpack'],
+    });
+
+    // Existing rule for handling image optimization for other image types
+    config.module.rules.push({
+      test: /\.(png|jpe?g|gif)$/i,
       use: [
         {
           loader: 'image-webpack-loader',
