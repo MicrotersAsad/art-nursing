@@ -159,7 +159,7 @@ const Dashboard = () => {
   return (
     <Layout>
       <h1 className="text-2xl font-bold mb-8">Hi, {user?.username}</h1>
-      {user?.role === 'super admin' && (
+      {(user?.role === 'admin' || user?.role === 'super admin') && (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="border border-blue-500 rounded-lg p-6 flex items-center justify-between">
