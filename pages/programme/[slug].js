@@ -1,18 +1,28 @@
+
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router'; 
 import Image from 'next/image';
 import Link from 'next/link';
+import { FaArrowRight, FaFacebookF, FaLinkedinIn, FaYoutube } from 'react-icons/fa';
+import ClipLoader from 'react-spinners/ClipLoader';
 import PageHeader from '../../components/PageHeader';
-import ClipLoader from 'react-spinners/ClipLoader'; // For loading spinner
 
-export default function ProgrammeDetails({ program, notices, error }) {
+const ProgrammeDetails = ({ program, notices, error }) => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  
-  if (error) {
-    return <div className="flex justify-center items-center h-screen">Error: {error}</div>;
-  }
+  useEffect(() => {
+    const handleRouteChangeStart = () => setLoading(true);
+    const handleRouteChangeComplete = () => setLoading(false);
 
-  if (!program) {
-    return <div className="flex justify-center items-center h-screen"><ClipLoader size={150} color={"#3498db"} /></div>;
-  }
+    router.events.on('routeChangeStart', handleRouteChangeStart);
+    router.events.on('routeChangeComplete', handleRouteChangeComplete);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChangeStart);
+      router.events.off('routeChangeComplete', handleRouteChangeComplete);
+    };
+  }, [router]);
 
   return (
     <>
@@ -23,42 +33,24 @@ export default function ProgrammeDetails({ program, notices, error }) {
           { label: `${program.name}` }
         ]}
       />
-      <div className="max-w-7xl mx-auto p-4 sm:p-6 md:p-8 grid grid-cols-1 md:grid-cols-12 gap-6">
-        {/* Sidebar Section */}
-        <div className="col-span-12 md:col-span-4 lg:col-span-3 bg-gray-50 p-4">
-          <h2 className="font-bold text-lg sm:text-base mb-4 text-center">Table of Contents</h2>
-          <ul className="space-y-2 ms-2">
-            <li><Link href="#about-department"><span className="text-green-600 hover:underline sm:text-sm">About the Program</span></Link></li>
-            <li><Link href="#salient-features"><span className="text-green-600 hover:underline sm:text-sm">Salient Features</span></Link></li>
-            <li><Link href="#curriculum-structure"><span className="text-green-600 hover:underline sm:text-sm">Curriculum Structure</span></Link></li>
-            <li><Link href="#eligibility-requirements"><span className="text-green-600 hover:underline sm:text-sm">Eligibility & Admission</span></Link></li>
-            <li><Link href="#tuition-fees"><span className="text-green-600 hover:underline sm:text-sm">Tuition Fees</span></Link></li>
-          </ul>
-          <hr className='mt-3 mb-3' />
+      <div className="max-w-7xl mx-auto p-4">
+        {loading && (
+          <div className="flex justify-center items-center h-screen">
+            <ClipLoader size={50} color={"#3498db"} loading={loading} />
+          </div>
+        )}
 
-          {/* Notices Section */}
-          <h2 className="font-bold text-lg sm:text-base mt-6 mb-4 text-center">Recent Notices</h2>
-          <ul className="space-y-2 ms-2">
-            {notices.length === 0 ? <li>No notices available</li> : notices.map((notice, index) => (
-              <li key={index}>
-                <Link href={`/notices/${notice.slug}`}>
-                  <p className="text-green-600 hover:underline sm:text-sm">{notice.title}</p>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <hr className='mt-3 mb-3' />
-        </div>
-
-        {/* Main Content Section */}
-        <div className="col-span-12 md:col-span-8 lg:col-span-9 bg-white p-6 border rounded-lg shadow-md">
-          {/* About the Department/Program */}
+        {/* Responsive Layout for Main Section, Table of Contents, and Notices */}
+        <div className={`grid grid-cols-1 md:grid-cols-3 gap-6 ${loading ? 'hidden' : ''}`}>
+          
+          {/* Main Content Section */}
+          <div className="order-2 md:order-1 md:col-span-2 p-3 rounded">
+               {/* About the Department/Program */}
           <section id="about-department" className="mb-8 border rounded p-4 jodit-content">
             <h2 className="text-2xl sm:text-xl font-semibold mb-4 text-center">About the Program</h2>
             <div className="text-gray-700 sm:text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: program.departmentInfo }} />
           </section>
-
-          {/* Faculty Members Section */}
+             {/* Faculty Members Section */}
           <section id="faculty-members" className="mb-8 border rounded p-4 text-center">
             <h2 className="text-2xl sm:text-xl font-semibold mb-4">Faculty Members</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -101,74 +93,83 @@ export default function ProgrammeDetails({ program, notices, error }) {
             <h2 className="text-2xl sm:text-xl font-semibold mb-4 text-center">Tuition Fees</h2>
             <div className="text-gray-700 sm:text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: program.tuitionFees }} />
           </section>
-        </div>
+     
+
+          </div>
+          {/* For Mobile Version */}
+          <div className=" block md:hidden order-3 p-4  border rounded-lg">
+        <h2 className="text-2xl font-bold mb-4 text-center">Notices</h2>
+        <ul className="space-y-4">
+          {notices.slice(0, 5).map((notice, index) => (
+            <li key={index} className="bg-white p-3 flex items-center border-b">
+              <FaArrowRight className="text-blue-600 mr-2" />
+              <div>
+                <Link href={`/notices/${notice.slug}`}>
+                  <p className="font-semibold text-blue-600 hover:underline">{notice.title}</p>
+                </Link>
+                <p className="text-sm text-gray-500">{notice.date}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+          {/* Sidebar for Desktop (Both Table of Contents and Notices in one column) */}
+          <div className="order-1 md:order-2 md:col-span-1 space-y-6 relative">
+      {/* Table of Contents (Sticky Sidebar for Desktop) */}
+      <div className="p-4 border rounded-lg is-sticky">
+        <h2 className="text-2xl font-bold mb-4 text-center">Table of Contents</h2>
+        <ul className="space-y-4">
+          <Link href="#about-department">
+            <p className="font-semibold text-blue-600 hover:underline border-b p-3">
+              <FaArrowRight className="inline-block mr-2" /> About the Program
+            </p>
+          </Link>
+          <Link href="#salient-features">
+            <p className="font-semibold text-blue-600 hover:underline pt-2 border-b p-3">
+              <FaArrowRight className="inline-block mr-2" /> Salient Features
+            </p>
+          </Link>
+          <Link href="#curriculum-structure">
+            <p className="font-semibold text-blue-600 hover:underline pt-2 border-b p-3">
+              <FaArrowRight className="inline-block mr-2" /> Curriculum Structure
+            </p>
+          </Link>
+          <Link href="#eligibility-requirements">
+            <p className="font-semibold text-blue-600 hover:underline pt-2 border-b p-3">
+              <FaArrowRight className="inline-block mr-2" /> Eligibility & Admission
+            </p>
+          </Link>
+          <Link href="#tuition-fees">
+            <p className="font-semibold text-blue-600 hover:underline pt-2 border-b p-3">
+              <FaArrowRight className="inline-block mr-2" /> Tuition Fees
+            </p>
+          </Link>
+        </ul>
       </div>
 
-      {/* Styling for Jodit Editor Content */}
-      <style jsx global>{`
-        .jodit-content {
-          font-family: Arial, sans-serif;
-          line-height: 1.6;
-          color: #333;
-        }
-
-        .jodit-content p {
-          margin-bottom: 1.2rem;
-          font-size: 1rem;
-        }
-
-        .jodit-content h2 {
-          font-size: 1.75rem;
-          font-weight: bold;
-          color: #34495e;
-          margin-bottom: 1rem;
-        }
-
-        .jodit-content strong {
-          font-weight: bold;
-          color: #e74c3c;
-        }
-
-        .jodit-content em {
-          font-style: italic;
-          color: #3498db;
-        }
-
-        .jodit-content a {
-          color: #3498db;
-          text-decoration: none;
-        }
-
-        .jodit-content a:hover {
-          text-decoration: underline;
-        }
-
-        .jodit-content ul, .jodit-content ol {
-          padding-left: 1.5rem;
-          margin-bottom: 1.2rem;
-        }
-
-        .jodit-content li {
-          margin-bottom: 0.5rem;
-        }
-
-        .jodit-content img {
-          max-width: 100%;
-          height: auto;
-          border-radius: 8px;
-        }
-        a span .span{
-        color:#3b82f6!important
-        }
-        @media (max-width: 768px) {
-          .jodit-content h2 {
-            font-size: 1.3rem;
-          }
-        }
-      `}</style>
+      {/* Notices Section (Hidden on Mobile) */}
+      <div className="hidden md:block p-4 border rounded-lg sticky top-20">
+        <h2 className="text-2xl font-bold mb-4 text-center">Notices</h2>
+        <ul className="space-y-4">
+          {notices.slice(0, 5).map((notice, index) => (
+            <li key={index} className="bg-white p-3 flex items-center border-b">
+              <FaArrowRight className="text-blue-600 mr-2" />
+              <div>
+                <Link href={`/notices/${notice.slug}`}>
+                  <p className="font-semibold text-blue-600 hover:underline">{notice.title}</p>
+                </Link>
+                <p className="text-sm text-gray-500">{notice.date}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+        </div>
+      </div>
     </>
   );
-}
+};
 
 // Fetching data server-side using req.headers to construct the base URL
 export async function getServerSideProps(context) {
@@ -179,26 +180,16 @@ export async function getServerSideProps(context) {
   let error = null;
 
   try {
-    // Determine protocol (http or https) based on req.headers
     const protocol = req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
     const host = req.headers.host;
 
-    // Fetch program details
-    const programResponse = await fetch(`${protocol}://${host}/api/programme/${slug}`, {
-    
-    });
-
+    const programResponse = await fetch(`${protocol}://${host}/api/programme/${slug}`);
     if (!programResponse.ok) {
       throw new Error('Failed to fetch program details');
     }
     program = await programResponse.json();
 
-
-    // Fetch notices
-    const noticeResponse = await fetch(`${protocol}://${host}/api/notice`, {
-     
-    });
-
+    const noticeResponse = await fetch(`${protocol}://${host}/api/notice`);
     if (!noticeResponse.ok) {
       throw new Error('Failed to fetch notices');
     }
@@ -209,9 +200,11 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      program:program.data,
-      notices: notices.slice(0, 5), // Only the first 5 notices
+      program: program.data,
+      notices: notices.slice(0, 5),
       error,
     },
   };
 }
+
+export default ProgrammeDetails;

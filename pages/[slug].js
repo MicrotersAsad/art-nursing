@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import PageHeader from '../components/PageHeader';
 import Image from 'next/image';
 import DOMPurify from 'dompurify';
@@ -7,15 +8,34 @@ import ClipLoader from 'react-spinners/ClipLoader'; // Import ClipLoader for loa
 
 const ViewPage = ({ pageData, error }) => {
   const [loading, setLoading] = useState(false);
+  const router = useRouter(); // Use useRouter for navigation
+
+  useEffect(() => {
+    const handleRouteChangeStart = () => {
+      setLoading(true); // Set loading true when route starts changing
+    };
+    
+    const handleRouteChangeComplete = () => {
+      setLoading(false); // Set loading false when route change completes
+    };
+
+    router.events.on('routeChangeStart', handleRouteChangeStart);
+    router.events.on('routeChangeComplete', handleRouteChangeComplete);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChangeStart);
+      router.events.off('routeChangeComplete', handleRouteChangeComplete);
+    };
+  }, [router]);
 
   if (error) {
     return <div className="flex justify-center items-center h-screen">Error: {error}</div>;
   }
 
-  if (!pageData) {
+  if (loading || !pageData) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={150} color={"#3498db"} loading={true} />
+        <ClipLoader size={50} color={"#3498db"} loading={true} />
       </div>
     );
   }

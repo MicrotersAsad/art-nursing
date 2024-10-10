@@ -8,6 +8,7 @@ import { ClipLoader } from 'react-spinners';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'react-medium-image-zoom/dist/styles.css'; // Zoom library CSS
+import { useRouter } from 'next/router';
 
 // Lazy load components for performance optimization
 const Slider = dynamic(() => import('react-slick'), { ssr: false });
@@ -16,16 +17,35 @@ const Zoom = dynamic(() => import('react-medium-image-zoom'), { ssr: false });
 
 const Home = ({ appData }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter(); // Initialize useRouter hook
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
-    // Simulate loading process
+
+    // Set loading state to true for 1 second
     const timer = setTimeout(() => {
-      setIsLoading(false);
+      setIsLoading(false); // Hide loading spinner after 1 second
     }, 100);
 
-    return () => clearTimeout(timer);
-  }, []);
+    const handleRouteChangeStart = () => {
+      setIsLoading(true); // Show loading spinner
+    };
+
+    const handleRouteChangeComplete = () => {
+      setIsLoading(false); // Hide loading spinner when navigation completes
+    };
+
+    router.events.on('routeChangeStart', handleRouteChangeStart);
+    router.events.on('routeChangeComplete', handleRouteChangeComplete);
+
+    return () => {
+      clearTimeout(timer); // Clear the timer when the component unmounts
+      router.events.off('routeChangeStart', handleRouteChangeStart);
+      router.events.off('routeChangeComplete', handleRouteChangeComplete);
+    };
+  }, [router]);
+    
+
 
   if (isLoading) {
     return (
@@ -153,7 +173,6 @@ const MemoizedAboutSection = memo(({ data }) => (
   </div>
 ));
 
-
 // Courses Section Component
 const MemoizedCoursesSection = memo(({ data }) => (
   <div className="max-w-7xl mx-auto py-12">
@@ -168,16 +187,15 @@ const MemoizedCoursesSection = memo(({ data }) => (
             data-aos-delay={index * 50}
           >
             <div className="mb-4">
-            <Image
-  src={course.iconUrl}
-  alt={course.heading}
-  className="w-12 h-12 mx-auto"
-  width={24}  
-  height={24}  
-  layout="intrinsic"  
-  priority  
-/>
-
+              <Image
+                src={course.iconUrl}
+                alt={course.heading}
+                className="w-12 h-12 mx-auto"
+                width={24}  
+                height={24}  
+                layout="intrinsic"  
+                priority  
+              />
             </div>
             <h3 className="text-xl font-semibold mb-2">{course.heading}</h3>
             <p>{course.description}</p>
@@ -221,7 +239,6 @@ const MemoizedStatistics = memo(({ data }) => (
     </div>
   </div>
 ));
-
 
 // Notices and Blogs Component
 const MemoizedNoticesAndBlogs = memo(({ notices, blogs }) => {
@@ -338,16 +355,15 @@ const MemoizedWhyChooseANC = memo(({ data }) => (
         {data.map((item, index) => (
           <div key={index} className={`bg-white p-10 rounded-lg shadow-md flex items-center ${index % 2 === 0 ? 'bg-[#0d1128]' : 'bg-blue-800'} text-black`} data-aos={index % 2 === 0 ? 'fade-right' : 'fade-left'}>
             <div className="mr-4">
-            <Image
-  src={item?.iconUrl}
-  alt="Logo"
-  width={128} 
-  height={128}  
-  className="icon-logo"
-  layout="intrinsic" 
-  priority  
-/>
-
+              <Image
+                src={item?.iconUrl}
+                alt="Logo"
+                width={128} 
+                height={128}  
+                className="icon-logo"
+                layout="intrinsic" 
+                priority  
+              />
             </div>
             <div>
               <h3 className="text-xl font-semibold mb-2">{item.heading}</h3>
@@ -420,16 +436,13 @@ const MemoizedPhotoGallery = ({ data }) => {
       <Slider {...settings}>
         {data.slice(0,8).map((photo, index) => (
           <div key={index} onClick={() => openModal(photo.img, index)}>
-             <Image
+            <Image
               width={500}
               height={400}
               src={photo.img}
               alt={`Photo ${index}`}
               style={{ width: '100%', height: '300px', objectFit: 'cover', cursor: 'pointer' }}
             />
-
-
-
           </div>
         ))}
       </Slider>
@@ -462,17 +475,16 @@ const MemoizedPhotoGallery = ({ data }) => {
               {data.map((photo, index) => (
                 <div key={index}>
                   <Zoom>
-                  <Image
-  width={1000}
-  height={600}
-  src={photo.img}
-  alt={`Modal Image ${index}`}
-  layout="intrinsic"  // লেআউট শিফট এড়াতে
-  objectFit="contain"  // style এর পরিবর্তে Next.js এর property ব্যবহার করা
-  priority={index === 0}  // প্রথম ইমেজকে দ্রুত লোড করতে (অপশনাল)
-  className="w-full h-auto"  // CSS ক্লাসে স্টাইল অ্যাপ্লাই করা
-/>
-
+                    <Image
+                      width={1000}
+                      height={600}
+                      src={photo.img}
+                      alt={`Modal Image ${index}`}
+                      layout="intrinsic" // লেআউট শিফট এড়াতে
+                      objectFit="contain" // style এর পরিবর্তে Next.js এর property ব্যবহার করা
+                      priority={index === 0} // প্রথম ইমেজকে দ্রুত লোড করতে (অপশনাল)
+                      className="w-full h-auto" // CSS ক্লাসে স্টাইল অ্যাপ্লাই করা
+                    />
                   </Zoom>
                 </div>
               ))}

@@ -10,6 +10,21 @@
 html, body {
   overflow-x: hidden;
 }
+/* Custom Scrollbar Styling */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #0a1138; /* Track color */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #4b4ba5; /* Scrollbar color */
+  border-radius: 10px;
+  border: 2px solid #0a1138; /* Adds padding effect */
+}
+
 
 
 body {
@@ -389,4 +404,8 @@ thead th {
 
 .jodit-wysiwyg li {
   margin: 0.5em 0;
+}
+.is-sticky{
+  position: sticky;
+  top: 0;
 }
