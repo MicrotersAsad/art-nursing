@@ -4,6 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { FaBell, FaPhotoVideo, FaUserGraduate, FaBlog, FaUsers, FaFileAlt, FaClipboardList } from 'react-icons/fa';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
+import Link from 'next/link';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -162,62 +163,71 @@ const Dashboard = () => {
       {(user?.role === 'admin' || user?.role === 'super admin') && (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="border border-blue-500 rounded-lg p-6 flex items-center justify-between">
+           <Link href="addnotice">
+           <div className="border border-blue-500 rounded-lg p-6 flex items-center justify-between">
               <div className="flex items-center">
                 <FaBell className="text-blue-500 text-4xl mr-4" />
                 <div>
-                  <h2 className="text-lg font-semibold">Total Notices</h2>
-                  <p className="text-3xl font-bold">{noticeCount}</p>
+                  <h2 className="text-lg text-black font-semibold">Total Notices</h2>
+                  <p className="text-3xl text-black font-bold">{noticeCount}</p>
                 </div>
               </div>
               <FaBell className="text-blue-500" />
-            </div>
-            <div className="border border-green-500 rounded-lg p-6 flex items-center justify-between">
+            </div></Link>
+           <Link href="photo-gallery">
+           
+           <div className="border border-green-500 rounded-lg p-6 flex items-center justify-between">
               <div className="flex items-center">
                 <FaPhotoVideo className="text-green-500 text-4xl mr-4" />
                 <div>
-                  <h2 className="text-lg font-semibold">Total Images</h2>
-                  <p className="text-3xl font-bold">{imageCount}</p>
+                  <h2 className="text-lg font-semibold text-black">Total Images</h2>
+                  <p className="text-3xl font-bold text-black">{imageCount}</p>
                 </div>
               </div>
               <FaPhotoVideo className="text-green-500" />
             </div>
+           </Link>
+            <Link href="teacher">
             <div className="border border-red-500 rounded-lg p-6 flex items-center justify-between">
               <div className="flex items-center">
                 <FaUserGraduate className="text-red-500 text-4xl mr-4" />
                 <div>
-                  <h2 className="text-lg font-semibold">Total Teachers</h2>
-                  <p className="text-3xl font-bold">{teacherCount}</p>
+                  <h2 className="text-lg font-semibold text-black">Total Teachers</h2>
+                  <p className="text-3xl font-bold text-black">{teacherCount}</p>
                 </div>
               </div>
               <FaUserGraduate className="text-red-500" />
-            </div>
-            <div className="border border-orange-500 rounded-lg p-6 flex items-center justify-between">
+            </div></Link>
+           <Link href="all-blogs">
+           <div className="border border-orange-500 rounded-lg p-6 flex items-center justify-between">
               <div className="flex items-center">
                 <FaBlog className="text-orange-500 text-4xl mr-4" />
                 <div>
-                  <h2 className="text-lg font-semibold">Total Articles</h2>
-                  <p className="text-3xl font-bold">{articleCount}</p>
+                  <h2 className="text-lg font-semibold text-black">Total Articles</h2>
+                  <p className="text-3xl font-bold text-black">{articleCount}</p>
                 </div>
               </div>
               <FaBlog className="text-orange-500" />
             </div>
+           </Link>
+            <Link href="#">
             <div className="border border-purple-500 rounded-lg p-6 flex items-center justify-between">
               <div className="flex items-center">
                 <FaUsers className="text-purple-500 text-4xl mr-4" />
                 <div>
-                  <h2 className="text-lg font-semibold">Total Users</h2>
-                  <p className="text-3xl font-bold">{userCount}</p>
+                  <h2 className="text-lg font-semibold text-black">Total Users</h2>
+                  <p className="text-3xl font-bold text-black">{userCount}</p>
                 </div>
               </div>
               <FaUsers className="text-purple-500" />
             </div>
+            </Link>
             <div className="border border-teal-500 rounded-lg p-6 flex items-center justify-between">
               <div className="flex items-center">
                 <FaBlog className="text-teal-500 text-4xl mr-4" />
                 <div>
-                  <h2 className="text-lg font-semibold">Total Blogs</h2>
-                  <p className="text-3xl font-bold">{blogCount}</p>
+                  <h2 className="text-lg font-semibold text-black">Total Blogs</h2>
+                  <p className="text-3xl font-bold text-black">{blogCount}</p>
                 </div>
               </div>
               <FaBlog className="text-teal-500" />
@@ -226,8 +236,8 @@ const Dashboard = () => {
               <div className="flex items-center">
                 <FaFileAlt className="text-yellow-500 text-4xl mr-4" />
                 <div>
-                  <h2 className="text-lg font-semibold">Total Pages</h2>
-                  <p className="text-3xl font-bold">{pageCount}</p>
+                  <h2 className="text-lg font-semibold text-black">Total Pages</h2>
+                  <p className="text-3xl font-bold text-black">{pageCount}</p>
                 </div>
               </div>
               <FaFileAlt className="text-yellow-500" />
@@ -236,8 +246,8 @@ const Dashboard = () => {
               <div className="flex items-center">
                 <FaClipboardList className="text-pink-500 text-4xl mr-4" />
                 <div>
-                  <h2 className="text-lg font-semibold">Total Programs</h2>
-                  <p className="text-3xl font-bold">{programCount}</p>
+                  <h2 className="text-lg font-semibold text-black">Total Programs</h2>
+                  <p className="text-3xl font-bold text-black">{programCount}</p>
                 </div>
               </div>
               <FaClipboardList className="text-pink-500" />
@@ -247,7 +257,7 @@ const Dashboard = () => {
           {/* Charts Section */}
           <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="p-6 border border-blue-500 rounded-lg">
-              <h2 className="text-lg font-semibold mb-4">Total Notices Per Day</h2>
+              <h2 className="text-lg font-semibold text-black mb-4">Total Notices Per Day</h2>
               {noticeChartData ? (
                 <Line data={noticeChartData} options={{ responsive: true }} />
               ) : (
@@ -255,7 +265,7 @@ const Dashboard = () => {
               )}
             </div>
             <div className="p-6 border border-teal-500 rounded-lg">
-              <h2 className="text-lg font-semibold mb-4">Total Blogs Per Day</h2>
+              <h2 className="text-lg font-semibold text-black mb-4">Total Blogs Per Day</h2>
               {blogChartData ? (
                 <Line data={blogChartData} options={{ responsive: true }} />
               ) : (
