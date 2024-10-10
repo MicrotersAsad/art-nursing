@@ -14,8 +14,6 @@ import {
   FaBars,
   FaSearch,
   FaUsers,
-  FaCaretUp,
-  FaCaretDown,
   FaSignOutAlt,
   FaClipboardList,
   FaCircle, 
@@ -27,6 +25,8 @@ import {
   FaArrowUp
 
 } from "react-icons/fa";
+import { FiChevronDown,FiChevronUp } from 'react-icons/fi';
+
 import Image from "next/image";
 import logo from "../../public/img/logo (3).png";
 
@@ -87,48 +87,55 @@ const Layout = React.memo(({ children }) => {
   onMouseLeave={() => isCollapsed && setIsCollapsed(true)}
   style={{ borderRight: '2px solid rgba(255, 255, 255, 0.2)' }}
 >
-<div className="sticky top-0 bg-[#071251] z-50 p-4">
-        {/* Logo */}
-        <div className="flex items-center text-white justify-center mt-8">
-          <Image
-            src={logo}
-            width={isCollapsed ? 40 : 80}
-            height={isCollapsed ? 40 : 80}
-            alt="Logo"
-          />
-        </div>
-        <h6 className="font-bold text-center text-white">
-          Art Nursing College
-        </h6>
-        </div>
-        <div className="flex-1 overflow-y-auto custom-scrollbar">
-       
-        <nav className="mt-4 text-white pr-2 pb-4">
-          {/* Dashboard */}
-          <div className="mt-3">
+  <div className="sticky top-0 bg-[#071251] z-50 p-4">
+    {/* Logo */}
+    <div className="flex items-center text-white justify-center mt-8">
+      <Image
+        src={logo}
+        width={isCollapsed ? 40 : 80}
+        height={isCollapsed ? 40 : 80}
+        alt="Logo"
+      />
+    </div>
+    {/* Heading - only show when sidebar is not collapsed */}
+    {!isCollapsed && (
+      <h6 className="font-bold text-center text-white mt-4">
+        Art Nursing College
+      </h6>
+    )}
+  </div>
+  <div className="flex-1 overflow-y-auto custom-scrollbar">
+    <nav className="mt-4 text-white pb-4">
+
+{/* Dashboard */}
+<div className="mt-2">
   <Link
     href="/dashboard/overview"
     passHref
-    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer rounded-md ${
+    className={`flex items-center py-2 px-6 text-white text-sm  w-full cursor-pointer ${
       isActiveRoute("/dashboard/overview")
         ? "bg-[#4634ff] text-white"
-        : "hover:bg-[#6610f2] hover:text-white"
+        : "hover:bg-[#1d1e8e] hover:text-white"
     }`}
+    style={{ paddingLeft: isCollapsed ? '16px' : '24px' }} // Conditional padding to adjust based on collapsed state
   >
     <FaTachometerAlt className="mr-3 text-white" />
     {!isCollapsed && <span>Dashboard</span>}
   </Link>
 </div>
 
+
+
+
 {/* Notice Board */}
-<div className="mt-3">
+<div className="mt-2">
   <p
-    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer rounded-md ${
+    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer ${
       isActiveRoute("/dashboard/all-notice") || isActiveRoute("/dashboard/addnotice")
         ? "bg-[#4634ff] text-white"
         : menuOpen === "notice"
-        ? "bg-[#6610f2] text-white"
-        : "hover:bg-[#6610f2] hover:text-white"
+        ? "bg-[#1d1e8e] text-white"
+        : "hover:bg-[#1d1e8e] hover:text-white"
     }`}
     onClick={() => toggleMenu("notice")}
   >
@@ -136,14 +143,14 @@ const Layout = React.memo(({ children }) => {
     {!isCollapsed && <span>Notice</span>}
     {!isCollapsed && (
       <span className="ml-auto">
-        {menuOpen === "notice" ? <FaCaretDown className="w-6 h-6" /> : <FaCaretUp className="w-6 h-6"  />}
+        {menuOpen === "notice" ? <FiChevronUp className="w-6 h-6" /> : <FiChevronDown className="w-6 h-6"  />}
       </span>
     )}
   </p>
 
   {/* Dropdown Content with Smooth Opening and Closing Animation */}
   <div
-    className={`ml-6 mt-3 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
+    className={`ml-6  mt-2 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
       (menuOpen === "notice" ||
         isActiveRoute("/dashboard/all-notice") ||
         isActiveRoute("/dashboard/addnotice")) && !isCollapsed
@@ -153,10 +160,10 @@ const Layout = React.memo(({ children }) => {
   >
     <Link href="/dashboard/all-notice"  passHref>
       <p
-        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/all-notice")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -165,10 +172,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/addnotice" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/addnotice")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -181,14 +188,14 @@ const Layout = React.memo(({ children }) => {
 
 
 {/* Result Board */}
-<div className="mt-3">
+<div className="mt-2">
   <p
-    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer rounded-md ${
+    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer ${
       isActiveRoute("/dashboard/all-result") || isActiveRoute("/dashboard/add-result")
         ? "bg-[#4634ff] text-white"
         : menuOpen === "result"
-        ? "bg-[#6610f2] text-white"
-        : "hover:bg-[#6610f2] hover:text-white"
+        ? "bg-[#1d1e8e] text-white"
+        : "hover:bg-[#1d1e8e] hover:text-white"
     }`}
     onClick={() => toggleMenu("result")}
   >
@@ -196,14 +203,14 @@ const Layout = React.memo(({ children }) => {
     {!isCollapsed && <span>Result</span>}
     {!isCollapsed && (
       <span className="ml-auto">
-        {menuOpen === "result" ? <FaCaretDown className="w-6 h-6" /> : <FaCaretUp className="w-6 h-6" />}
+        {menuOpen === "result" ? <FiChevronUp className="w-6 h-6" /> : <FiChevronDown className="w-6 h-6" />}
       </span>
     )}
   </p>
 
   {/* Dropdown Content with Smooth Opening and Closing Animation */}
   <div
-    className={`ml-6 mt-3 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
+    className={`ml-6 mt-2 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
       (menuOpen === "result" ||
         isActiveRoute("/dashboard/all-result") ||
         isActiveRoute("/dashboard/add-result")) && !isCollapsed
@@ -213,10 +220,10 @@ const Layout = React.memo(({ children }) => {
   >
     <Link href="/dashboard/all-result" passHref>
       <p
-        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/all-result")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -225,10 +232,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/add-result" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/add-result")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -241,14 +248,14 @@ const Layout = React.memo(({ children }) => {
 
 
 {/* Gallery */}
-<div className="mt-3">
+<div className="mt-2">
   <p
-    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer rounded-md ${
+    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer ${
       isActiveRoute("/dashboard/photo-gallery") || isActiveRoute("/dashboard/video-gallery")
         ? "bg-[#4634ff] text-white"
         : menuOpen === "gallery"
-        ? "bg-[#6610f2] text-white"
-        : "hover:bg-[#6610f2] hover:text-white"
+        ? "bg-[#1d1e8e] text-white"
+        : "hover:bg-[#1d1e8e] hover:text-white"
     }`}
     onClick={() => toggleMenu("gallery")}
   >
@@ -256,14 +263,14 @@ const Layout = React.memo(({ children }) => {
     {!isCollapsed && <span>Gallery</span>}
     {!isCollapsed && (
       <span className="ml-auto">
-        {menuOpen === "gallery" ? <FaCaretDown className="w-6 h-6" /> : <FaCaretUp className="w-6 h-6" />}
+        {menuOpen === "gallery" ? <FiChevronUp className="w-6 h-6" /> : <FiChevronDown className="w-6 h-6" />}
       </span>
     )}
   </p>
 
   {/* Dropdown Content with Smooth Opening and Closing Animation */}
   <div
-    className={`ml-6 mt-3 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
+    className={`ml-6 mt-2 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
       (menuOpen === "gallery" ||
         isActiveRoute("/dashboard/photo-gallery") ||
         isActiveRoute("/dashboard/video-gallery")) && !isCollapsed
@@ -273,10 +280,10 @@ const Layout = React.memo(({ children }) => {
   >
     <Link href="/dashboard/photo-gallery" passHref>
       <p
-        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/photo-gallery")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -285,10 +292,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/video-gallery" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/video-gallery")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -299,14 +306,14 @@ const Layout = React.memo(({ children }) => {
 </div>
 
 {/* Banner Management */}
-<div className="mt-3">
+<div className="mt-2">
   <p
-    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer rounded-md ${
+    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer ${
       isActiveRoute("/dashboard/banner")
         ? "bg-[#4634ff] text-white"
         : menuOpen === "banner"
-        ? "bg-[#6610f2] text-white"
-        : "hover:bg-[#6610f2] hover:text-white"
+        ? "bg-[#1d1e8e] text-white"
+        : "hover:bg-[#1d1e8e] hover:text-white"
     }`}
     onClick={() => toggleMenu("banner")}
   >
@@ -314,14 +321,14 @@ const Layout = React.memo(({ children }) => {
     {!isCollapsed && <span>Banner</span>}
     {!isCollapsed && (
       <span className="ml-auto">
-        {menuOpen === "banner" ? <FaCaretDown className="w-6 h-6" /> : <FaCaretUp className="w-6 h-6" />}
+        {menuOpen === "banner" ? <FiChevronUp className="w-6 h-6" /> : <FiChevronDown className="w-6 h-6" />}
       </span>
     )}
   </p>
 
   {/* Dropdown Content with Smooth Opening and Closing Animation */}
   <div
-    className={`ml-6 mt-3 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
+    className={`ml-6 mt-2 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
       (menuOpen === "banner" || isActiveRoute("/dashboard/banner")) && !isCollapsed
         ? 'max-h-screen opacity-100 scale-y-100'
         : 'max-h-0 opacity-0 scale-y-0'
@@ -329,10 +336,10 @@ const Layout = React.memo(({ children }) => {
   >
     <Link href="/dashboard/banner" passHref>
       <p
-        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/banner")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -344,31 +351,31 @@ const Layout = React.memo(({ children }) => {
 
 
 {/* Blog */}
-<div className="mt-3">
+<div className="mt-2">
   <p
-    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer rounded-md ${
+    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer ${
       isActiveRoute("/dashboard/categories") ||
       isActiveRoute("/dashboard/all-blogs") ||
       isActiveRoute("/dashboard/blogs")
         ? "bg-[#4634ff] text-white"
         : menuOpen === "blog"
-        ? "bg-[#6610f2] text-white"
-        : "hover:bg-[#6610f2] hover:text-white"
+        ? "bg-[#1d1e8e] text-white"
+        : "hover:bg-[#1d1e8e] hover:text-white"
     }`}
     onClick={() => toggleMenu("blog")}
   >
-    <FaBlog className="mr-3 text-orange-500" />
+    <FaBlog className="mr-3 text-white" />
     {!isCollapsed && <span>Blog</span>}
     {!isCollapsed && (
       <span className="ml-auto">
-        {menuOpen === "blog" ? <FaCaretDown className="w-6 h-6" /> : <FaCaretUp className="w-6 h-6" />}
+        {menuOpen === "blog" ? <FiChevronUp className="w-6 h-6" /> : <FiChevronDown className="w-6 h-6" />}
       </span>
     )}
   </p>
 
   {/* Dropdown Content with Smooth Opening and Closing Animation */}
   <div
-    className={`ml-6 mt-3 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
+    className={`ml-6 mt-2 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
       (menuOpen === "blog" ||
         isActiveRoute("/dashboard/categories") ||
         isActiveRoute("/dashboard/all-blogs") ||
@@ -379,10 +386,10 @@ const Layout = React.memo(({ children }) => {
   >
     <Link href="/dashboard/categories" passHref>
       <p
-        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/categories")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -391,10 +398,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/all-blogs" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/all-blogs")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -403,10 +410,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/blogs" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/blogs")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -419,29 +426,29 @@ const Layout = React.memo(({ children }) => {
 
 
   {/* Pages */}
-<div className="mt-3">
+<div className="mt-2">
   <p
-    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer rounded-md ${
+    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer ${
       isActiveRoute("/dashboard/all-pages") || isActiveRoute("/dashboard/add-page")
         ? "bg-[#4634ff] text-white"
         : menuOpen === "pages"
-        ? "bg-[#6610f2] text-white"
-        : "hover:bg-[#6610f2] hover:text-white"
+        ? "bg-[#1d1e8e] text-white"
+        : "hover:bg-[#1d1e8e] hover:text-white"
     }`}
     onClick={() => toggleMenu("pages")}
   >
-    <FaFileAlt className="mr-3 text-blue-500" />
+    <FaFileAlt className="mr-3 text-white" />
     {!isCollapsed && <span>Pages</span>}
     {!isCollapsed && (
       <span className="ml-auto">
-        {menuOpen === "pages" ? <FaCaretDown className="w-6 h-6" /> : <FaCaretUp className="w-6 h-6" />}
+        {menuOpen === "pages" ? <FiChevronUp className="w-6 h-6" /> : <FiChevronDown className="w-6 h-6" />}
       </span>
     )}
   </p>
 
   {/* Dropdown Content with Smooth Opening and Closing Animation */}
   <div
-    className={`ml-6 mt-3 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
+    className={`ml-6 mt-2 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
       (menuOpen === "pages" ||
         isActiveRoute("/dashboard/all-pages") ||
         isActiveRoute("/dashboard/add-page")) && !isCollapsed
@@ -451,10 +458,10 @@ const Layout = React.memo(({ children }) => {
   >
     <Link href="/dashboard/all-pages" passHref>
       <p
-        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/all-pages")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -463,10 +470,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/add-page" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/add-page")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -477,29 +484,29 @@ const Layout = React.memo(({ children }) => {
 </div>
 
 {/* Manage Users */}
-<div className="mt-3">
+<div className="mt-2">
   <p
-    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer rounded-md ${
+    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer ${
       isActiveRoute("/dashboard/admin-list") || isActiveRoute("/dashboard/add-admin")
         ? "bg-[#4634ff] text-white"
         : menuOpen === "users"
-        ? "bg-[#6610f2] text-white"
-        : "hover:bg-[#6610f2] hover:text-white"
+        ? "bg-[#1d1e8e] text-white"
+        : "hover:bg-[#1d1e8e] hover:text-white"
     }`}
     onClick={() => toggleMenu("users")}
   >
-    <FaUsers className="mr-3 text-green-500" />
+    <FaUsers className="mr-3 text-white" />
     {!isCollapsed && <span>Manage Users</span>}
     {!isCollapsed && (
       <span className="ml-auto">
-        {menuOpen === "users" ? <FaCaretDown className="w-6 h-6" /> : <FaCaretUp className="w-6 h-6" />}
+        {menuOpen === "users" ? <FiChevronUp  className="w-6 h-6" /> : <FiChevronDown className="w-6 h-6" />}
       </span>
     )}
   </p>
 
   {/* Dropdown Content with Smooth Opening and Closing Animation */}
   <div
-    className={`ml-6 mt-3 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
+    className={`ml-6 mt-2 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
       (menuOpen === "users" ||
         isActiveRoute("/dashboard/admin-list") ||
         isActiveRoute("/dashboard/add-admin")) && !isCollapsed
@@ -509,10 +516,10 @@ const Layout = React.memo(({ children }) => {
   >
     <Link href="/dashboard/admin-list" passHref>
       <p
-        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/admin-list")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -521,10 +528,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/add-admin" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/add-admin")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -536,29 +543,29 @@ const Layout = React.memo(({ children }) => {
 
 
 {/* Program */}
-<div className="mt-3">
+<div className="mt-2">
   <p
-    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer rounded-md ${
+    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer ${
       isActiveRoute("/dashboard/add-programme") || isActiveRoute("/dashboard/program-2") || isActiveRoute("/dashboard/program-3")
         ? "bg-[#4634ff] text-white"
         : menuOpen === "program"
-        ? "bg-[#6610f2] text-white"
-        : "hover:bg-[#6610f2] hover:text-white"
+        ? "bg-[#1d1e8e] text-white"
+        : "hover:bg-[#1d1e8e] hover:text-white"
     }`}
     onClick={() => toggleMenu("program")}
   >
-    <FaUserGraduate className="mr-3 text-blue-500" />
+    <FaUserGraduate className="mr-3 text-white" />
     {!isCollapsed && <span>Program</span>}
     {!isCollapsed && (
       <span className="ml-auto">
-        {menuOpen === "program" ? <FaCaretDown className="w-6 h-6" /> : <FaCaretUp className="w-6 h-6" />}
+        {menuOpen === "program" ? <FiChevronUp className="w-6 h-6" /> : <FiChevronDown className="w-6 h-6" />}
       </span>
     )}
   </p>
 
   {/* Dropdown Content with Smooth Opening and Closing Animation */}
   <div
-    className={`ml-6 mt-3 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
+    className={`ml-6 mt-2 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
       (menuOpen === "program" ||
         isActiveRoute("/dashboard/add-programme") ||
         isActiveRoute("/dashboard/program-2") ||
@@ -569,10 +576,10 @@ const Layout = React.memo(({ children }) => {
   >
     <Link href="/dashboard/add-programme" passHref>
       <p
-        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/add-programme")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -581,10 +588,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/program-2" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/program-2")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -593,10 +600,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/program-3" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/program-3")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -609,29 +616,29 @@ const Layout = React.memo(({ children }) => {
 
 
  {/* About */}
-<div className="mt-3">
+<div className="mt-2">
   <p
-    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer rounded-md ${
+    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer ${
       isActiveRoute("/dashboard/about-us") || isActiveRoute("/dashboard/governing") || isActiveRoute("/dashboard/staff") || isActiveRoute("/dashboard/teacher") || isActiveRoute("/dashboard/achievement")
         ? "bg-[#4634ff] text-white"
         : menuOpen === "about"
-        ? "bg-[#6610f2] text-white"
-        : "hover:bg-[#6610f2] hover:text-white"
+        ? "bg-[#1d1e8e] text-white"
+        : "hover:bg-[#1d1e8e] hover:text-white"
     }`}
     onClick={() => toggleMenu("about")}
   >
-    <FaUserGraduate className="mr-3 text-blue-500" />
+    <FaUserGraduate className="mr-3 text-white" />
     {!isCollapsed && <span>About</span>}
     {!isCollapsed && (
       <span className="ml-auto">
-        {menuOpen === "about" ? <FaCaretDown className="w-6 h-6" /> : <FaCaretUp className="w-6 h-6" />}
+        {menuOpen === "about" ? <FiChevronUp className="w-6 h-6" /> : <FiChevronDown className="w-6 h-6" />}
       </span>
     )}
   </p>
 
   {/* Dropdown Content with Smooth Opening and Closing Animation */}
   <div
-    className={`ml-6 mt-3 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
+    className={`ml-6 mt-2 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
       (menuOpen === "about" ||
         isActiveRoute("/dashboard/about-us") ||
         isActiveRoute("/dashboard/governing") ||
@@ -644,10 +651,10 @@ const Layout = React.memo(({ children }) => {
   >
     <Link href="/dashboard/about-us" passHref>
       <p
-        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/about-us")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -656,10 +663,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/governing" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/governing")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -668,10 +675,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/staff" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/staff")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -680,10 +687,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/teacher" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/teacher")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -692,10 +699,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/achievement" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/achievement")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -707,9 +714,9 @@ const Layout = React.memo(({ children }) => {
 
 
 {/* Appearance */}
-<div className="mt-3">
+<div className="mt-2">
   <p
-    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer rounded-md ${
+    className={`flex items-center py-2 text-white text-sm px-6 cursor-pointer ${
       isActiveRoute("/dashboard/setting") ||
       isActiveRoute("/dashboard/fotter-management") ||
       isActiveRoute("/dashboard/contact") ||
@@ -721,23 +728,23 @@ const Layout = React.memo(({ children }) => {
       isActiveRoute("/dashboard/add-menu")
         ? "bg-[#4634ff] text-white"
         : menuOpen === "appearance"
-        ? "bg-[#6610f2] text-white"
-        : "hover:bg-[#6610f2] hover:text-white"
+        ? "bg-[#1d1e8e] text-white"
+        : "hover:bg-[#1d1e8e] hover:text-white"
     }`}
     onClick={() => toggleMenu("appearance")}
   >
-    <FaCogs className="mr-3 text-red-500" />
+    <FaCogs className="mr-3 text-white" />
     {!isCollapsed && <span>Appearance</span>}
     {!isCollapsed && (
       <span className="ml-auto">
-        {menuOpen === "appearance" ? <FaCaretDown className="w-6 h-6" /> : <FaCaretUp className="w-6 h-6" />}
+        {menuOpen === "appearance" ? <FiChevronUp className="w-6 h-6" /> : <FiChevronDown className="w-6 h-6" />}
       </span>
     )}
   </p>
 
   {/* Dropdown Content with Smooth Opening and Closing Animation */}
   <div
-    className={`ml-6 mt-3 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
+    className={`ml-6 mt-2 mb-3 overflow-hidden transform transition-all duration-700 ease-in-out origin-top ${
       (menuOpen === "appearance" ||
         isActiveRoute("/dashboard/setting") ||
         isActiveRoute("/dashboard/fotter-management") ||
@@ -754,10 +761,10 @@ const Layout = React.memo(({ children }) => {
   >
     <Link href="/dashboard/setting" passHref>
       <p
-        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/setting")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -766,10 +773,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/fotter-management" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/fotter-management")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -778,10 +785,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/contact" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/contact")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -790,10 +797,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/allcontact" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/allcontact")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -802,10 +809,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/smtp" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/smtp")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -814,10 +821,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/comment" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/comment")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -826,10 +833,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/media" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/media")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -838,10 +845,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/all-menu" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/all-menu")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -850,10 +857,10 @@ const Layout = React.memo(({ children }) => {
     </Link>
     <Link href="/dashboard/add-menu" passHref>
       <p
-        className={`relative mt-3 flex items-center text-white text-sm py-2 px-6 cursor-pointer rounded-md ${
+        className={`relative mt-2 flex items-center text-white text-sm py-2 px-6 cursor-pointer ${
           isActiveRoute("/dashboard/add-menu")
-            ? "bg-[#6610f2] text-white"
-            : "hover:bg-[#6610f2] hover:text-white"
+            ? "bg-[#1d1e8e] text-white"
+            : "hover:bg-[#1d1e8e] hover:text-white"
         }`}
       >
         <FaCircle className="mr-2 text-xs" />
@@ -944,18 +951,18 @@ const Layout = React.memo(({ children }) => {
             unoptimized
           />
         ) : (
-          <div className="w-10 h-10 rounded-full bg-[#6610f2] flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-[#1d1e8e] flex items-center justify-center">
             <span className="text-white font-bold text-lg">
               {user?.userName?.charAt(0).toUpperCase()}
             </span>
           </div>
         )}
         <p className="text-white text-sm font-semibold"> {user?.username}</p>
-        {profileDropdown ? <FaCaretUp className="text-white" /> : <FaCaretDown className="text-white" />}
+        {profileDropdown ? <FiChevronDown className="text-white" /> : <FiChevronUp className="text-white" />}
       </div>
 
       {profileDropdown && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-20">
+        <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg py-2 z-20">
           <div className="px-4 py-2 flex items-center">
             {user?.profileImage ? (
               <Image
@@ -967,7 +974,7 @@ const Layout = React.memo(({ children }) => {
                 unoptimized
               />
             ) : (
-              <div className="w-6 h-6 rounded-full bg-[#6610f2] flex items-center justify-center">
+              <div className="w-6 h-6 rounded-full bg-[#1d1e8e] flex items-center justify-center">
                 <span className="text-gray-500 font-bold text-sm">
                   {user?.username?.charAt(0).toUpperCase()}
                 </span>
